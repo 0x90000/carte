@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: carte
+      POSTGRES_PASSWORD: carte_local
+      POSTGRES_DB: carte
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - carte_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U carte -d carte"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:56379:6379"
+    volumes:
+      - carte_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://carte:carte_local@postgres:5432/carte?schema=public
+      REDIS_URL: redis://redis:6379
+      PORT: 3000
+    ports:
+      - "3010:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  migrate:
+    profiles: ["tools"]
+    image: node:24-alpine
+    working_dir: /workspace
+    volumes:
+      - ./prisma:/workspace/prisma:ro
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://carte:carte_local@postgres:5432/carte?schema=public
+      REDIS_URL: redis://redis:6379
+    command: ["sh", "-c", "npm init -y >/dev/null 2>&1 && npm install --no-save --ignore-scripts --no-audit --no-fund prisma@6.19.0 >/dev/null 2>&1 && npx prisma migrate deploy --schema /workspace/prisma/schema.prisma"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  carte_postgres_data:
+  carte_redis_data:
