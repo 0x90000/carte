@@ -1,0 +1,100 @@
+{
+  "id": "3c8b3e51-9a1a-4d42-bd12-fd75a4a5d101",
+  "name": "Modern vows",
+  "scene": "wedding",
+  "style": "modern",
+  "description": "A quiet, editorial invitation for a celebration with a sense of place.",
+  "tags": ["minimal", "elegant", "editorial", "gold"],
+  "thumbnailUrl": "/templates/wedding-modern/thumbnail.svg",
+  "previewUrl": "/templates/wedding-modern/preview.svg",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "image",
+      "url": "/templates/wedding-modern/bg.svg",
+      "fit": "cover"
+    }
+  },
+  "layers": [
+    {
+      "id": "veil",
+      "type": "shape",
+      "name": "Soft veil",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 750, "height": 1334 },
+      "content": { "shape": "rectangle", "fill": "rgba(15, 23, 42, 0.32)" },
+      "locked": true,
+      "zIndex": 1
+    },
+    {
+      "id": "title",
+      "type": "text",
+      "name": "Couple names",
+      "position": { "x": 80, "y": 470 },
+      "size": { "width": 590, "height": 150 },
+      "variable": "couple_names",
+      "content": {
+        "text": "Maya & Alex",
+        "font": { "family": "Inter", "size": 58, "weight": 600, "lineHeight": 1.1 },
+        "color": "#ffffff",
+        "align": "center",
+        "maxWidth": 590
+      },
+      "zIndex": 2
+    },
+    {
+      "id": "rule",
+      "type": "shape",
+      "name": "Gold rule",
+      "position": { "x": 305, "y": 655 },
+      "size": { "width": 140, "height": 2 },
+      "content": { "shape": "rectangle", "fill": "#e7c98a" },
+      "zIndex": 2
+    },
+    {
+      "id": "details",
+      "type": "text",
+      "name": "Date and place",
+      "position": { "x": 90, "y": 705 },
+      "size": { "width": 570, "height": 120 },
+      "variable": "event_details",
+      "content": {
+        "text": "Saturday, 14 June 2026\nThe Glasshouse, London",
+        "font": { "family": "Inter", "size": 22, "weight": 400, "lineHeight": 1.6 },
+        "color": "#ffffff",
+        "align": "center",
+        "maxWidth": 570
+      },
+      "zIndex": 2
+    },
+    {
+      "id": "body",
+      "type": "text",
+      "name": "Invitation note",
+      "position": { "x": 110, "y": 1010 },
+      "size": { "width": 530, "height": 130 },
+      "variable": "invitation_text",
+      "content": {
+        "text": "Please join us for an evening of dinner, dancing, and new beginnings.",
+        "font": { "family": "Inter", "size": 20, "weight": 400, "lineHeight": 1.6 },
+        "color": "#ffffff",
+        "align": "center",
+        "maxWidth": 530
+      },
+      "zIndex": 2
+    }
+  ],
+  "variables": [
+    { "key": "couple_names", "type": "text", "label": "Couple names", "defaultValue": "", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "date", "label": "Date and location", "defaultValue": "", "validation": { "required": true } },
+    { "key": "invitation_text", "type": "text", "label": "Invitation note", "defaultValue": "", "aiGenerable": true },
+    { "key": "couple_photo", "type": "image", "label": "Couple photo", "defaultValue": "/templates/wedding-modern/bg.svg" }
+  ],
+  "colorSchemes": [
+    { "id": "champagne", "name": "Champagne", "colors": { "primary": "#e7c98a", "secondary": "#8d7357", "accent": "#f6edda", "text": "#ffffff", "background": "#101827" } },
+    { "id": "rose-gold", "name": "Rose gold", "colors": { "primary": "#e4a8a3", "secondary": "#8c5555", "accent": "#f7e4df", "text": "#ffffff", "background": "#321f29" } },
+    { "id": "silver", "name": "Silver", "colors": { "primary": "#d3d9e2", "secondary": "#697586", "accent": "#edf1f5", "text": "#ffffff", "background": "#17202d" } }
+  ],
+  "settings": { "allowMusic": true, "allowAnimation": false, "rsvpEnabled": true }
+}
