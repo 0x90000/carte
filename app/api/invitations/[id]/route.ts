@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { invalidateInvitationCache } from "@/lib/public-invitation";
 import { getSessionId } from "@/lib/session";
 
 const updateSchema = z.object({
@@ -95,6 +96,7 @@ export async function PATCH(request: Request, context: RouteContext) {
           ...(payload.settings !== undefined ? { settings: payload.settings } : {}),
         },
       });
+      await invalidateInvitationCache(updated.slug);
       return NextResponse.json({ success: true, data: updated, isGuest: false });
     }
 
@@ -137,6 +139,7 @@ export async function DELETE(_request: Request, context: RouteContext) {
       return NextResponse.json({ error: "Invitation not found." }, { status: 404 });
     }
     await prisma.invitation.delete({ where: { id: invitation.id } });
+    await invalidateInvitationCache(invitation.slug);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Failed to delete invitation", error);

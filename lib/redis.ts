@@ -13,16 +13,28 @@ export async function getRedis() {
   }
 
   if (!globalForRedis.redis) {
-    globalForRedis.redis = createClient({ url: process.env.REDIS_URL });
+    globalForRedis.redis = createClient({
+      url: process.env.REDIS_URL,
+      socket: {
+        connectTimeout: 1000,
+        reconnectStrategy: false,
+      },
+    });
     globalForRedis.redis.on("error", (error) => {
       console.error("Redis connection error", error);
     });
   }
 
   if (!globalForRedis.redis.isOpen) {
-    globalForRedis.redisConnection ??= globalForRedis.redis.connect().then(() => globalForRedis.redis!);
-    await globalForRedis.redisConnection;
+    try {
+      globalForRedis.redisConnection ??= globalForRedis.redis.connect().then(() => globalForRedis.redis!);
+      await globalForRedis.redisConnection;
+    } catch (error) {
+      globalForRedis.redisConnection = undefined;
+      console.warn("Could not connect to Redis", error);
+      return null;
+    }
   }
 
-  return globalForRedis.redis;
+  return globalForRedis.redis.isReady ? globalForRedis.redis : null;
 }
