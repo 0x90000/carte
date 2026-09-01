@@ -30,6 +30,7 @@ export async function POST() {
       for (const draft of drafts) {
         await tx.invitation.create({
           data: {
+            id: draft.id,
             userId: session.user.id,
             scene: draft.scene,
             title: draft.title || "Untitled invitation",
