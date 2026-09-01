@@ -5,12 +5,23 @@ import { getFallbackCopy } from "@/lib/ai-fallback";
 import { generateInvitationCopy } from "@/lib/openai";
 import { prisma } from "@/lib/prisma";
 
+const namesSchema = z.union([
+  z.string().trim().max(500),
+  z.array(z.string().trim().max(100)).max(10),
+]).transform((value) => {
+  if (Array.isArray(value)) {
+    return value.filter(Boolean);
+  }
+
+  return value.split(/\s*(?:&|和|,|，)\s*/).map((name) => name.trim()).filter(Boolean).slice(0, 10);
+});
+
 const bodySchema = z.object({
   scene: z.string().trim().min(1).max(50).default("other"),
   style: z.string().trim().max(50).default("modern"),
   locale: z.string().trim().min(2).max(10).default("en"),
   eventInfo: z.object({
-    names: z.array(z.string().trim().max(100)).max(10).optional(),
+    names: namesSchema.optional(),
     date: z.string().trim().max(100).optional(),
     location: z.string().trim().max(300).optional(),
     description: z.string().trim().max(1000).optional(),
