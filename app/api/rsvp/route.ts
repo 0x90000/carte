@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { rsvpRequestSchema } from "@/lib/rsvp";
+import { rsvpSchema } from "@/lib/rsvp";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const parsed = rsvpRequestSchema.safeParse(body);
+  const parsed = rsvpSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
       { success: false, error: { code: "INVALID_RSVP", message: parsed.error.issues[0]?.message ?? "RSVP details are invalid." } },
@@ -23,10 +23,7 @@ export async function POST(request: Request) {
 
   try {
     const invitation = await prisma.invitation.findFirst({
-      where: {
-        status: "published",
-        ...(parsed.data.invitationId ? { id: parsed.data.invitationId } : { slug: parsed.data.invitationSlug }),
-      },
+      where: { slug: parsed.data.invitationSlug, status: "published" },
       select: { id: true },
     });
     if (!invitation) {
