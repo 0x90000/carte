@@ -7,7 +7,8 @@ const guestName = z.string().trim().min(1, "Enter your name.").max(200);
 const guestEmail = contactString.email("Enter a valid email address.").or(z.literal("")).optional();
 const guestPhone = z.string().trim().max(50).optional();
 const attendanceStatus = z.enum(["attending", "declined", "maybe"]);
-const partySize = z.coerce.number().int().min(1).max(20).default(1);
+const partySizeValue = z.coerce.number().int().min(1).max(20);
+const partySize = partySizeValue.default(1);
 const dietaryPreferences = z.string().trim().max(1000).optional();
 const message = z.string().trim().max(500, "Messages must be 500 characters or fewer.").optional();
 
@@ -47,7 +48,7 @@ export const rsvpRequestSchema = z
     email: guestEmail,
     guestPhone,
     status: attendanceStatus,
-    partySize: partySize.optional(),
+    partySize: partySizeValue.optional(),
     guestCount: z.coerce.number().int().min(1).max(20).optional(),
     dietaryPreferences,
     dietary: dietaryPreferences,
