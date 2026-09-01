@@ -431,13 +431,18 @@ export function EditorShell({
       return;
     }
     try {
-      const response = await fetch(`/api/invitations/${invitationId}/publish`, { method: "POST" });
-      const payload = (await response.json()) as { checkoutUrl?: string; error?: string };
+      const response = await fetch("/api/payment/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invitationId }),
+      });
+      const payload = (await response.json()) as { data?: { checkoutUrl?: string }; checkoutUrl?: string; error?: string };
       if (!response.ok) {
         throw new Error(payload.error ?? "We could not start publishing.");
       }
-      if (payload.checkoutUrl) {
-        window.location.assign(payload.checkoutUrl);
+      const checkoutUrl = payload.data?.checkoutUrl ?? payload.checkoutUrl;
+      if (checkoutUrl) {
+        window.location.assign(checkoutUrl);
       } else {
         setError("Payment setup is incomplete. Add Stripe settings before publishing.");
       }
