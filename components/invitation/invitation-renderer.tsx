@@ -1,8 +1,9 @@
 import type { CSSProperties } from "react";
 import type { Invitation, Template } from "@prisma/client";
 import { normalizeEditorContent, type EditorBackground, type EditorContent, type EditorLayer } from "@/components/editor/types";
+import { RSVPForm } from "@/components/invitation/rsvp-form";
 
-type PublicInvitationData = Pick<Invitation, "id" | "title" | "content" | "eventDate" | "eventLocation" | "slug" | "locale"> & {
+type PublicInvitationData = Pick<Invitation, "id" | "title" | "content" | "eventDate" | "eventLocation" | "slug" | "locale" | "settings"> & {
   template: Pick<Template, "previewUrl" | "name"> | null;
 };
 
@@ -95,6 +96,9 @@ export function InvitationRenderer({ invitation }: { invitation: PublicInvitatio
   const { canvas, layers } = content;
   const background = canvas.background;
   const eventDate = invitation.eventDate?.toLocaleDateString(invitation.locale || "en", { dateStyle: "long" });
+  const invitationSettings = invitation.settings && typeof invitation.settings === "object" ? invitation.settings as Record<string, unknown> : {};
+  const contentSettings = content.settings && typeof content.settings === "object" ? content.settings as Record<string, unknown> : {};
+  const rsvpEnabled = invitationSettings.rsvpEnabled === true || contentSettings.rsvpEnabled === true;
 
   return (
     <main className="min-h-screen bg-neutral-950 px-3 py-6 sm:px-6 sm:py-10">
@@ -116,6 +120,7 @@ export function InvitationRenderer({ invitation }: { invitation: PublicInvitatio
         {eventDate || invitation.eventLocation ? <p className="text-sm text-white/70">{[eventDate, invitation.eventLocation].filter(Boolean).join(" · ")}</p> : null}
         <p className="pt-3 text-xs text-white/40">Invitation by Carte</p>
       </section>
+      {rsvpEnabled ? <div className="mx-auto max-w-[750px] px-2 pb-8"><RSVPForm invitationSlug={invitation.slug} /></div> : null}
     </main>
   );
 }
