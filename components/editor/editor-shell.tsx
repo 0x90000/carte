@@ -15,6 +15,7 @@ import {
   Redo2,
   Save,
   Send,
+  Sparkles,
   Undo2,
   Upload,
 } from "lucide-react";
@@ -42,6 +43,9 @@ type EditorShellProps = {
   initialUpdatedAt: string;
   isGuest: boolean;
   templateName?: string | null;
+  scene: string;
+  eventDate?: string | null;
+  eventLocation?: string | null;
   action?: string;
 };
 
@@ -170,6 +174,9 @@ export function EditorShell({
   initialUpdatedAt,
   isGuest,
   templateName,
+  scene,
+  eventDate,
+  eventLocation,
   action,
 }: EditorShellProps) {
   const normalizedInitial = useMemo(() => normalizeEditorContent(initialContent), [initialContent]);
@@ -185,6 +192,9 @@ export function EditorShell({
   const [showPreview, setShowPreview] = useState(true);
   const [hydrated, setHydrated] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiVariations, setAiVariations] = useState<string[]>([]);
+  const [aiSource, setAiSource] = useState<"openai" | "fallback" | "">("");
   const contentRef = useRef(content);
   const titleRef = useRef(title);
   const saveTimerRef = useRef<number | null>(null);
@@ -300,6 +310,37 @@ export function EditorShell({
     [activeSchemeId, content.colorSchemes],
   );
   const selectedLayer = selectedLayerId ? content.layers.find((layer) => layer.id === selectedLayerId) : undefined;
+
+  async function generateCopy() {
+    setAiLoading(true);
+    setError("");
+    try {
+      const response = await fetch("/api/ai/generate-copy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scene,
+          style: typeof content.style === "string" ? content.style : "modern",
+          locale: "en",
+          eventInfo: {
+            date: eventDate ?? undefined,
+            location: eventLocation ?? undefined,
+            description: selectedLayer?.type === "text" ? String(selectedLayer.content.text ?? "") : undefined,
+          },
+        }),
+      });
+      const payload = (await response.json()) as { data?: { variations?: string[]; source?: "openai" | "fallback" }; error?: string };
+      if (!response.ok || !payload.data?.variations?.length) {
+        throw new Error(payload.error ?? "We could not generate copy.");
+      }
+      setAiVariations(payload.data.variations);
+      setAiSource(payload.data.source ?? "fallback");
+    } catch (generationError) {
+      setError(generationError instanceof Error ? generationError.message : "We could not generate copy.");
+    } finally {
+      setAiLoading(false);
+    }
+  }
 
   function undo() {
     const previous = past[past.length - 1];
@@ -491,6 +532,17 @@ export function EditorShell({
               {content.colorSchemes?.map((scheme) => <option key={scheme.id} value={scheme.id}>{scheme.name}</option>)}
             </Select>
             {activeScheme ? <div className="mt-3 flex gap-2" aria-label="Selected color scheme"><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.primary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.secondary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.accent }} /></div> : null}
+          </section>
+
+          <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
+            <div className="mb-2 flex items-center gap-2"><Sparkles className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">AI copy</h2></div>
+            <p className="text-sm leading-6 text-muted-foreground">Generate three options for the selected text layer.</p>
+            <Button variant="outline" className="mt-3 w-full" onClick={() => void generateCopy()} disabled={aiLoading || selectedLayer?.type !== "text"}>
+              {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Sparkles className="h-4 w-4" aria-hidden="true" />}
+              {aiLoading ? "Generating" : "Generate copy"}
+            </Button>
+            {aiSource ? <p className="mt-2 text-xs text-muted-foreground">{aiSource === "fallback" ? "Using a ready-made option while AI is unavailable." : "Generated with OpenAI."}</p> : null}
+            {aiVariations.length > 0 ? <div className="mt-3 space-y-2">{aiVariations.map((variation, index) => <div key={`${variation}-${index}`} className="rounded-md border border-border p-2.5"><p className="text-sm leading-5">{variation}</p><Button variant="ghost" size="sm" className="mt-2 h-8 px-2" onClick={() => { if (selectedLayer?.type === "text") updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: variation } })); }}>Use this option</Button></div>)}</div> : null}
           </section>
 
           {showPreview ? <section className="space-y-3"><div className="flex items-center gap-2"><Eye className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">Live preview</h2></div><PreviewCanvas content={content} /></section> : null}

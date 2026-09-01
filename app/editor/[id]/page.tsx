@@ -31,7 +31,10 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
   let record: {
     id: string;
     title: string | null;
+    scene: string;
     content: unknown;
+    eventDate: Date | null;
+    eventLocation: string | null;
     updatedAt: Date;
     template?: { name: string } | null;
   } | null = null;
@@ -40,14 +43,14 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
   if (session?.user?.id) {
     record = await prisma.invitation.findFirst({
       where: { id, userId: session.user.id },
-      select: { id: true, title: true, content: true, updatedAt: true, template: { select: { name: true } } },
+      select: { id: true, title: true, scene: true, content: true, eventDate: true, eventLocation: true, updatedAt: true, template: { select: { name: true } } },
     });
   } else {
     const sessionId = await getSessionId();
     if (sessionId) {
       record = await prisma.guestDraft.findFirst({
         where: { id, sessionId, expiresAt: { gt: new Date() } },
-        select: { id: true, title: true, content: true, updatedAt: true, template: { select: { name: true } } },
+        select: { id: true, title: true, scene: true, content: true, eventDate: true, eventLocation: true, updatedAt: true, template: { select: { name: true } } },
       });
       isGuest = Boolean(record);
     }
@@ -65,6 +68,9 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
       initialUpdatedAt={record.updatedAt.toISOString()}
       isGuest={isGuest}
       templateName={record.template?.name}
+      scene={record.scene}
+      eventDate={record.eventDate?.toISOString()}
+      eventLocation={record.eventLocation}
       action={action}
     />
   );
