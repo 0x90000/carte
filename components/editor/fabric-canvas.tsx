@@ -10,6 +10,7 @@ type FabricEvent = { target?: FabricObject; selected?: FabricObject[] };
 type FabricCanvasProps = {
   content: EditorContent;
   activeScheme?: EditorColorScheme;
+  selectedLayerId?: string | null;
   onChange: (content: EditorContent) => void;
   onSelect: (layerId: string | null) => void;
 };
@@ -49,7 +50,7 @@ async function addLayer(canvas: Canvas, layer: EditorLayer) {
       fontWeight: String(content.font && typeof content.font === "object" ? (content.font as Record<string, unknown>).weight ?? 400 : 400),
       lineHeight: Number(content.font && typeof content.font === "object" ? (content.font as Record<string, unknown>).lineHeight ?? 1.2 : 1.2),
       fill: String(content.color ?? "#111827"),
-      textAlign: String(content.align ?? "left"),
+      textAlign: String(content.align ?? "left") as "left" | "center" | "right" | "justify",
       angle: layer.rotation ?? 0,
       opacity: layer.opacity ?? 1,
       editable: layer.locked !== true,
@@ -156,7 +157,7 @@ function snapshotCanvas(canvas: Canvas, source: EditorContent): EditorContent {
   };
 }
 
-export function FabricCanvas({ content, activeScheme, onChange, onSelect }: FabricCanvasProps) {
+export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange, onSelect }: FabricCanvasProps) {
   const elementRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<Canvas | null>(null);
   const contentRef = useRef(content);
@@ -256,6 +257,23 @@ export function FabricCanvas({ content, activeScheme, onChange, onSelect }: Fabr
     }
     canvas.renderAll();
   }, [activeScheme]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    if (!selectedLayerId) {
+      canvas.discardActiveObject();
+    } else {
+      const object = canvas.getObjects().find((candidate) => layerId(candidate) === selectedLayerId);
+      if (object && object.selectable) {
+        canvas.setActiveObject(object);
+      }
+    }
+    canvas.renderAll();
+  }, [selectedLayerId]);
 
   return (
     <div className="relative mx-auto w-full max-w-[430px] overflow-hidden rounded-lg border border-border bg-secondary shadow-xl" style={{ aspectRatio: `${content.canvas.width} / ${content.canvas.height}` }}>

@@ -50,7 +50,9 @@ export function cloneEditorContent(content: EditorContent): EditorContent {
 
 export function normalizeEditorContent(value: unknown): EditorContent {
   const content = (value && typeof value === "object" ? value : {}) as Partial<EditorContent>;
-  const canvas = content.canvas && typeof content.canvas === "object" ? content.canvas : {};
+  const canvas = content.canvas && typeof content.canvas === "object"
+    ? content.canvas as Partial<EditorContent["canvas"]>
+    : {};
   const layers = Array.isArray(content.layers) ? content.layers : [];
 
   return {
