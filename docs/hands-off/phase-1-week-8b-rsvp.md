@@ -1,6 +1,6 @@
 # Carte Hands-off: Phase 1, Week 8B RSVP
 
-**状态**: 已完成本地开发与代码验证；测试服务器 Docker/HTTP 验收待执行
+**状态**: 已完成本地开发、Docker 部署和测试服务器 HTTP 验收
 **日期**: 2026-09-01
 **依据**: `docs/tech-spec-detailed.md` 第七章 7.3、第五章 5.2.4、Week 8 RSVP 验收标准，以及 `docs/feature-supplement.md` RSVP 数据面板要求
 
@@ -31,21 +31,21 @@ npm run build      PASS
 - `/dashboard/invitations/[id]/rsvps`
 - H5 路由的 RSVP 客户端组件
 
-## 测试服务器验收待办
+## 测试服务器验收结果
 
 部署目标为 Ubuntu 测试服务器 `/root/carte`，应用端口固定为 `3010`，不使用 80/443。部署时使用 Node.js 24 Docker 镜像，保留 PostgreSQL/Redis 数据卷。
 
-使用临时的 published invitation（内容 settings 开启 RSVP）验证：
+使用临时的 published invitation（内容和 invitation settings 均开启 RSVP）完成验证：
 
-- `/i/{slug}` SSR HTML 显示 RSVP 表单；提交合法姓名、邮箱、状态和人数后返回 HTTP 201，`rsvps` 表新增记录。
-- 仅邮箱、仅手机、三种出席状态、人数边界 1/20 和可选留言均可提交。
-- 缺少姓名/联系方式、非法邮箱、非法状态、人数超出 1–20、留言超过 500 字返回 HTTP 400。
-- 不存在或未发布邀请函的 RSVP 请求返回 HTTP 404。
-- 未登录访问列表和 CSV 接口返回 HTTP 401；非创建者访问返回 HTTP 404。
-- 创建者访问列表返回 RSVP 数据，CSV 返回正确的 `text/csv`、列名和转义内容；Dashboard 数据页包含汇总和明细。
-- app 容器 Node.js 为 v24，PostgreSQL/Redis healthcheck 正常，外部端口为 3010。
+- `/i/week8b-rsvp` 返回 HTTP 200，SSR HTML 包含 `Submit RSVP` 表单。
+- 合法请求返回 HTTP 201，写入 `rsvps` 表的 `Alex Example / attending / partySize=2` 及饮食偏好、留言均正确。
+- 缺少字段返回 HTTP 400；`partySize=21` 返回 HTTP 400；不存在 slug 返回 HTTP 404。
+- 未登录访问列表和 CSV 接口均返回 HTTP 401。
+- 使用测试账号登录后，列表返回 HTTP 200 和 RSVP 数据；CSV 返回 HTTP 200、`text/csv`、完整列名、UTF-8 BOM 和正确转义；Dashboard 数据页返回 HTTP 200 并显示访客。
+- app 容器 Node.js `v24.20.0`；PostgreSQL、Redis 均 healthy；外部端口为 `3010`。
+- 验收结束后已删除临时 invitation、RSVP、Redis key、认证 cookie、归档和构建缓存；未删除任何数据库/Redis volume。
 
-验收完成后清理临时 invitation、RSVP、Redis key 和临时文件，不删除数据库/Redis volume。
+服务器构建期间最低约 894 MB 可用空间；清理 builder cache 和 dangling image 后恢复约 3.3 GB 可用空间。
 
 ## 已知边界
 
