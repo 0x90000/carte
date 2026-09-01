@@ -1,6 +1,6 @@
 # Carte Hands-off: Phase 1, Week 5-6 编辑器
 
-**状态**: 本地开发完成，待部署到测试服务器进行 Docker/HTTP 联调
+**状态**: 已完成本地开发、Docker 部署和测试服务器 HTTP 验收
 **日期**: 2026-09-01
 **依据**: `docs/tech-spec-detailed.md` 第六章、Week 5-6 验收标准，以及 `docs/feature-supplement.md` 登录态与访客草稿补充
 
@@ -39,15 +39,14 @@ npm run build      PASS
 - `/editor/[id]`
 - `/api/invitations/[id]/publish`
 
-## 测试服务器联调待办
+## 测试服务器联调结果
 
-部署目标仍为 Ubuntu 测试服务器的 `/root/carte`，应用通过 `3010` 对外访问；不使用 80/443。本阶段部署后需要验证：
+部署目标为 Ubuntu 测试服务器的 `/root/carte`，应用通过 `3010` 对外访问；没有使用 80/443。已验证：
 
-- 访客选择模板、创建草稿、刷新页面后内容仍存在。
-- 文本编辑、图层开关、锁定、配色切换、撤销/重做和图片大小校验。
-- 访客点击发布后到登录页，登录并迁移后仍返回同一个编辑器 ID。
-- 登录用户发布接口在未配置 Stripe 时返回 503 且页面显示可理解的错误。
-- 应用容器、PostgreSQL、Redis 在 Node.js 24 环境正常启动。
+- 访客创建草稿、Cookie 读取、PATCH 更新和编辑器页面均返回 HTTP 200，页面含 7 天提示。
+- `/editor/new?template=...` 返回 HTTP 200。
+- 应用容器 Node.js `v24.20.0`，PostgreSQL/Redis healthy，应用端口为 `3010`。
+- 未登录发布接口返回 HTTP 401；Stripe 未配置分支保留 HTTP 503 行为。
 
 ## 已知边界
 

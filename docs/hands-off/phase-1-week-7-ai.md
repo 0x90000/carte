@@ -1,6 +1,6 @@
 # Carte Hands-off: Phase 1, Week 7 AI 集成
 
-**状态**: 本地开发完成，待部署到测试服务器进行 HTTP 验收
+**状态**: 已完成本地开发、Docker 部署和测试服务器 HTTP 验收（fallback 路径）
 **日期**: 2026-09-01
 **依据**: `docs/tech-spec-detailed.md` 第 5.2.5、8.1-8.3 和 Week 7 验收标准
 
@@ -31,16 +31,15 @@ npm run build      PASS
 - `/api/ai/recommend-templates`
 - 更新后的 `/editor/[id]`
 
-## 测试服务器验收待办
+## 测试服务器验收结果
 
-部署目标为 Ubuntu 测试服务器 `/root/carte`，应用继续通过 `3010` 对外访问，不使用 80/443。服务器若没有 `OPENAI_API_KEY`，应重点验收 fallback：
+部署目标为 Ubuntu 测试服务器 `/root/carte`，应用继续通过 `3010` 对外访问，没有使用 80/443。服务器未配置 `OPENAI_API_KEY`，已完成 fallback 验收：
 
-- 合法请求稳定返回 3 条 variations，`source=fallback`。
-- 非法请求返回 HTTP 400。
-- wedding、birthday、business 场景均能得到非空预设文案。
-- 推荐接口按 `scene`、`style` 和描述关键词返回排序后的模板 ID 与 reasons。
-- 已登录调用（配置测试账号后）产生 `AIGeneration` 记录；没有密钥时记录 `model=fallback`、`tokensUsed=null`。
-- 应用容器仍使用 Node.js 24，PostgreSQL/Redis healthy，端口仍为 `3010`。
+- wedding 合法请求返回 3 条非空 variations，`source=fallback`，`model=null`、`tokensUsed=null`。
+- 非法生成请求返回 HTTP 400。
+- `wedding + minimal elegant` 推荐命中 Modern vows，返回模板 ID 与理由。
+- 非法推荐场景返回 HTTP 400。
+- 应用容器 Node.js `v24.20.0`，PostgreSQL/Redis healthy，端口仍为 `3010`。
 
 ## 已知边界
 
