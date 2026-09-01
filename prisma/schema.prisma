@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -159,6 +159,7 @@ model Payment {
   currency          String      @default("USD")
   paymentProvider   String      @map("payment_provider")
   providerPaymentId String?     @map("provider_payment_id")
+  providerSessionId String?     @unique @map("provider_session_id")
   status            String      @default("pending")
   user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   invitation        Invitation? @relation(fields: [invitationId], references: [id], onDelete: SetNull)
