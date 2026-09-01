@@ -1,0 +1,10 @@
+FROM node:24-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# The standalone directory is produced by `next build` and already contains
+# the traced server dependencies needed at runtime.
+COPY standalone/ ./
+EXPOSE 3000
+CMD ["node", "server.js"]
