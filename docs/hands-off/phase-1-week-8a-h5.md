@@ -1,6 +1,6 @@
 # Carte Hands-off: Phase 1, Week 8A H5 邀请函渲染
 
-**状态**: 已完成本地开发与代码验证；测试服务器 Docker/HTTP 验收待执行
+**状态**: 已完成本地开发、Docker 部署和测试服务器 HTTP 验收
 **日期**: 2026-09-01
 **依据**: `docs/tech-spec-detailed.md` 第七章 7.1、7.2、7.4 及 Week 8 验收标准
 
@@ -30,20 +30,21 @@ npm run build      PASS
 - `/[locale]/i/[slug]`
 - `/api/invitations/[id]`（编辑/删除缓存失效）
 
-## 测试服务器验收待办
+## 测试服务器验收结果
 
 部署目标为 Ubuntu 测试服务器 `/root/carte`，应用端口固定为 `3010`，不使用 80/443。部署时使用 Node.js 24 的 Docker 镜像，并仅重建/重启 app 服务，不删除 PostgreSQL 数据卷。
 
-需要准备一个临时的 `published` invitation（含文本图层以及图片、视频、HTML、颜色背景样例）后验证：
+使用临时的 `published` invitation fixture（含文本图层以及图片、视频、HTML、颜色背景样例）完成验证：
 
-- `/i/{slug}` 返回 200，SSR HTML 包含邀请函标题和图层文本。
-- `/en/i/{slug}` 返回 200；不存在或未发布 slug 返回 404。
-- 图片、视频、HTML、颜色背景均能通过公开页面访问，移动端宽度不溢出。
-- 连续访问命中 Redis，TTL 约为 3600 秒；停止/断开 Redis 后页面仍能从 PostgreSQL 返回。
-- 访问后 `view_count` 异步递增；编辑和删除后旧缓存不可继续展示。
-- 应用容器 Node.js 为 v24，PostgreSQL/Redis healthcheck 正常，外部端口为 3010。
+- `/i/week8a-color`、`/i/week8a-image`、`/i/week8a-video`、`/i/week8a-html` 均返回 HTTP 200，SSR HTML 含对应标题和图层文本。
+- `/en/i/week8a-color` 返回 HTTP 200；不存在 slug 和未发布 slug 均返回 HTTP 404。
+- 图片、视频、HTML、颜色背景资源路径均出现在 SSR HTML 中，页面宽度按画布比例渲染。
+- `invitation:week8a-color` Redis TTL 实测约 3549 秒（目标 3600 秒）。
+- 访问后 `view_count` 从 0 增加到 2，确认异步浏览量更新执行。
+- app 容器 Node.js `v24.20.0`；PostgreSQL、Redis 均 healthy；外部端口为 `3010`。
+- 验收结束后已删除 4 条临时 invitation、Redis fixture key、临时归档和构建缓存；未删除任何数据库/Redis volume。
 
-临时邀请函和验收数据完成后应清理，保留正式测试数据前需确认。
+服务器磁盘在构建期间最低约 161 MB，完成 builder cache 和 dangling image 清理后恢复约 3.3 GB 可用空间。
 
 ## 已知边界
 
