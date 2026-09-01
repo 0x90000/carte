@@ -1,0 +1,59 @@
+# Carte Hands-off: Phase 1, Week 8 Review Fix
+
+**状态**: 已完成报告核验、兼容修复和测试服务器验收
+**日期**: 2026-09-02
+**依据**: `docs/week8-review-report.md`、`docs/tech-spec-detailed.md` Week 8 规范及 Week 8A-C2 hands-off 文档
+
+## Review 结论
+
+`docs/week8-review-report.md` 的 Review 日期为 2026-08-30，报告中的“编辑器、H5、RSVP、支付均缺失”和访客草稿无法读取等结论对应的是旧部署状态。当前 Week 8A-C2 已实现这些页面和接口，访客数据也已正确写入 `guest_drafts` 并通过 HttpOnly `carte_session_id` Cookie 隔离访问。
+
+报告中 RSVP 请求使用了第一版字段名，和当前技术规范的 canonical 字段不同。为兼容已有客户端和报告中的验收脚本，本阶段保留 canonical schema，同时接受旧字段别名。
+
+## 本阶段代码变更
+
+- `89ca9ed fix: validate legacy Week 8 request shapes`
+  - `POST /api/rsvp` 同时支持 canonical 字段和旧字段：`invitationId`、`name`、`email`、`guestCount`、`dietary`。
+  - 增加旧路径 `POST /api/webhooks/stripe`，转发到规范的 `/api/payment/webhook`，保留原始请求体签名校验。
+- `defe600 fix: preserve legacy RSVP party size`
+  - 修复兼容 schema 中 `guestCount` 被默认值覆盖的问题；旧请求的 `guestCount: 2` 现在正确写入 `party_size = 2`。
+
+## 本地代码验证
+
+以下检查均在本机执行，未启动 Docker、PostgreSQL、Redis 或本地应用服务器：
+
+```text
+npm run lint       PASS
+npx tsc --noEmit   PASS
+npm run build      PASS
+```
+
+生产构建确认包含 RSVP、旧 Webhook 别名、规范支付 Webhook、H5、编辑器、Dashboard 和分享路由。
+
+## 测试服务器验收
+
+目标为 Ubuntu 测试服务器，Carte 仅通过 `3010` 对外提供服务，运行时为 Node.js `v24.20.0`。数据库和 Redis 使用现有数据卷，未删除任何 PostgreSQL/Redis volume。
+
+- 访客创建草稿后，使用同一 `carte_session_id` Cookie：`GET /api/invitations/:id` 返回 200，`GET /api/invitations` 返回草稿。
+- 旧 RSVP 请求返回 HTTP 201，并在数据库中写入 `party_size = 2`。
+- canonical RSVP 请求返回 HTTP 201。
+- 缺少邮箱和手机号的 RSVP 请求返回 HTTP 400。
+- 以临时已发布邀请函验证 H5 和 RSVP 数据写入；验收后已删除临时邀请函及 RSVP。
+- 使用临时 Node 24 容器和合成 Stripe 测试签名验证：
+  - `/api/webhooks/stripe` 有效签名返回 HTTP 200。
+  - 相同 `checkout.session.completed` 事件重复发送到规范 Webhook 仍返回 HTTP 200，数据库只保留 1 条支付记录。
+  - 邀请函从 `draft` 更新为 `published`，并可通过 H5 页面访问。
+  - 无效签名返回 HTTP 400。
+- 主服务未配置 Stripe 密钥时，Webhook 返回明确的 HTTP 503；这是配置边界，不是代码错误。
+- 验收结束后已删除临时 Webhook 容器、测试邀请函、支付记录、Redis 测试 key 和临时 runtime 文件。
+
+## 服务器空间恢复
+
+验收期间服务器曾因磁盘满导致 PostgreSQL recovery。仅清理了明确的临时资源：Docker 事件日志内容、临时 runtime 归档、builder cache、旧 dangling image 和未挂载的匿名 hash volume；保留 Carte PostgreSQL/Redis 及其他正在使用的业务卷。清理后根分区从 100% 恢复到约 78%（约 14GB 可用），PostgreSQL、Redis 和 app 均 healthy。
+
+## 未完成项与后续边界
+
+- 服务器 `.env` 尚未配置 `STRIPE_SECRET_KEY`、`STRIPE_WEBHOOK_SECRET` 和 Stripe Price ID，因此真实 Stripe Checkout 页面及 Stripe Dashboard 回调仍需凭据后验收。
+- RSVP 去重、限流、邮件通知不在本阶段范围内。
+- 测试服务器 root 密码曾在协作信息中暴露，完成部署后应立即轮换密码，并改用 SSH key。
+
