@@ -7,7 +7,8 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "db:seed:templates": "node scripts/import-templates.mjs"
+    "db:seed:templates": "node scripts/import-templates.mjs",
+    "db:cleanup:guest-drafts": "node scripts/cleanup-guest-drafts.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
@@ -22,6 +23,7 @@
     "next": "15.5.24",
     "next-auth": "^5.0.0-beta.32",
     "next-intl": "^4.14.1",
+    "node-cron": "^4.6.0",
     "openai": "^7.8.0",
     "prisma": "^6.19.0",
     "qrcode": "^1.5.4",
