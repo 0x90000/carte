@@ -20,6 +20,7 @@ model User {
   sessions      Session[]
   invitations   Invitation[]
   payments      Payment[]
+  emailSends    EmailSend[]
   aiGenerations AIGeneration[]
   createdAt     DateTime       @default(now()) @map("created_at")
   updatedAt     DateTime       @updatedAt @map("updated_at")
@@ -126,6 +127,7 @@ model Invitation {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   rsvps         RSVP[]
   payments      Payment[]
+  emailSends    EmailSend[]
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
@@ -149,6 +151,29 @@ model RSVP {
 
   @@index([invitationId])
   @@map("rsvps")
+}
+
+model EmailSend {
+  id             String      @id @default(uuid())
+  invitationId   String      @map("invitation_id")
+  userId         String      @map("user_id")
+  recipientEmail String      @map("recipient_email")
+  recipientName  String?     @map("recipient_name")
+  subject        String
+  message        String?     @db.Text
+  status         String      @default("pending")
+  sentAt         DateTime?   @map("sent_at")
+  openedAt       DateTime?   @map("opened_at")
+  clickedAt      DateTime?   @map("clicked_at")
+  errorMessage   String?     @map("error_message") @db.Text
+  invitation     Invitation  @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime    @default(now()) @map("created_at")
+
+  @@index([invitationId])
+  @@index([status])
+  @@index([sentAt])
+  @@map("email_sends")
 }
 
 model Payment {
