@@ -14,9 +14,20 @@ function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
+function getConfiguredTestCode() {
+  const configuredCode = process.env.E2E_TEST_EMAIL_CODE?.trim();
+  return process.env.E2E_TEST_MODE === "1" && configuredCode && /^\d{6}$/.test(configuredCode)
+    ? configuredCode
+    : null;
+}
+
+function createEmailCode() {
+  return getConfiguredTestCode() ?? randomInt(100000, 1000000).toString();
+}
+
 export async function issueEmailCode(rawEmail: string) {
   const email = normalizeEmail(rawEmail);
-  const code = randomInt(100000, 1000000).toString();
+  const code = createEmailCode();
   const redis = await getRedis();
 
   if (redis) {
@@ -66,6 +77,10 @@ export async function verifyEmailCode(rawEmail: string, code: string) {
 }
 
 async function sendEmailCode(email: string, code: string) {
+  if (getConfiguredTestCode()) {
+    return;
+  }
+
   if (!process.env.RESEND_API_KEY) {
     if (process.env.NODE_ENV !== "production") {
       console.info(`[Carte] Development email code for ${email}: ${code}`);
