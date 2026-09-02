@@ -252,5 +252,35 @@
       "messageLength": "Message must be 500 characters or fewer.",
       "submit": "We could not submit your RSVP."
     }
+  },
+  "rsvpDashboard": {
+    "metadataTitle": "RSVP responses | Carte",
+    "metadataDescription": "Review guest responses for your Carte invitation.",
+    "backDashboard": "Dashboard",
+    "exportCsv": "Export CSV",
+    "eyebrow": "RSVP responses",
+    "summaryLabel": "RSVP summary",
+    "summary": {
+      "responses": "Responses",
+      "attending": "Attending",
+      "partySize": "Party size",
+      "maybeDeclined": "Maybe / declined"
+    },
+    "noResponses": "No responses yet",
+    "noContact": "No contact provided",
+    "noMessage": "No message",
+    "table": {
+      "guest": "Guest",
+      "contact": "Contact",
+      "status": "Status",
+      "party": "Party",
+      "message": "Message",
+      "submitted": "Submitted"
+    },
+    "statuses": {
+      "attending": "Attending",
+      "declined": "Unable to attend",
+      "maybe": "Maybe"
+    }
   }
 }

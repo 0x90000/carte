@@ -249,5 +249,35 @@
       "messageLength": "留言不能超过 500 个字符。",
       "submit": "无法提交 RSVP，请稍后重试。"
     }
+  },
+  "rsvpDashboard": {
+    "metadataTitle": "RSVP 回复 | Carte",
+    "metadataDescription": "查看 Carte 邀请函的宾客回复。",
+    "backDashboard": "控制台",
+    "exportCsv": "导出 CSV",
+    "eyebrow": "RSVP 回复",
+    "summaryLabel": "RSVP 汇总",
+    "summary": {
+      "responses": "回复数",
+      "attending": "确认出席",
+      "partySize": "出席人数",
+      "maybeDeclined": "待定 / 无法出席"
+    },
+    "noResponses": "暂时还没有回复",
+    "noContact": "未提供联系方式",
+    "noMessage": "未留言",
+    "table": {
+      "guest": "宾客",
+      "contact": "联系方式",
+      "status": "状态",
+      "party": "人数",
+      "message": "留言",
+      "submitted": "提交时间"
+    },
+    "statuses": {
+      "attending": "确认出席",
+      "declined": "无法出席",
+      "maybe": "待定"
+    }
   }
 }
