@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { defaultLocale, locales } from "@/i18n/routing";
 
 const SESSION_COOKIE = "carte_session_id";
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7;
+const intlMiddleware = createMiddleware({ locales, defaultLocale, localePrefix: "always" });
 
 export function middleware(request: NextRequest) {
-  if (request.cookies.has(SESSION_COOKIE)) {
-    return NextResponse.next();
-  }
-
-  const response = NextResponse.next();
+  const isApiRequest = request.nextUrl.pathname.startsWith("/api/");
+  const response = isApiRequest ? NextResponse.next() : intlMiddleware(request);
+  if (request.cookies.has(SESSION_COOKIE)) return response;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.AUTH_URL ?? "";
   response.cookies.set(SESSION_COOKIE, crypto.randomUUID(), {
     httpOnly: true,
@@ -22,5 +23,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/create", "/templates/:path*", "/editor/:path*", "/api/invitations/:path*"],
+  matcher: ["/((?!_next|_vercel|.*\\..*).*)"],
 };

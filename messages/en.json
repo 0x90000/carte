@@ -1,0 +1,50 @@
+{
+  "common": {
+    "brandTagline": "Invitations with intention",
+    "dashboard": "Dashboard",
+    "signIn": "Sign in",
+    "startCreating": "Start creating",
+    "createInvitation": "Create invitation",
+    "language": "Language",
+    "english": "English",
+    "chinese": "中文"
+  },
+  "home": {
+    "eyebrow": "Digital invitations with intention",
+    "title": "Make room for the moments that matter.",
+    "description": "Carte helps you create a considered invitation in minutes, then share it with everyone who makes the moment meaningful.",
+    "createCta": "Create your invitation",
+    "howItWorksCta": "See how it works",
+    "benefits": { "copy": "AI-assisted copy", "responsive": "Beautiful on every screen", "share": "One shareable link" },
+    "preview": { "saveTheDate": "Save the date", "details": "Saturday, 14 June 2026", "location": "The Glasshouse, London", "invited": "You are invited", "story": "Your story, beautifully told" },
+    "howItWorks": "How it works",
+    "howItWorksTitle": "A little help for a big feeling.",
+    "steps": {
+      "feeling": { "title": "Start with a feeling", "body": "Tell us what you are gathering for and the atmosphere you want to create." },
+      "yours": { "title": "Make it yours", "body": "Shape the details, words, and visual rhythm until it feels unmistakably you." },
+      "share": { "title": "Share the moment", "body": "Send one beautiful link to every guest and keep the conversation together." }
+    }
+  },
+  "create": {
+    "eyebrow": "Start with a feeling",
+    "title": "What are you celebrating?",
+    "description": "Choose the moment you're making room for.",
+    "noAccount": "No account needed to start. We'll ask when you're ready to publish.",
+    "scenes": {
+      "wedding": { "name": "Wedding", "description": "Celebrate your love story with those who matter most.", "examples": ["Engagement", "Ceremony", "Reception"] },
+      "birthday": { "name": "Birthday", "description": "Mark another year with the people who make it bright.", "examples": ["Milestone", "Surprise", "Kids party"] },
+      "business": { "name": "Business event", "description": "Gather for growth, connection, and shared purpose.", "examples": ["Conference", "Launch", "Networking"] },
+      "other": { "name": "Other gathering", "description": "Any moment worth coming together for.", "examples": ["Baby shower", "Graduation", "Housewarming"] }
+    }
+  },
+  "templates": {
+    "title": "A considered starting point.", "eyebrow": "Template library", "description": "Choose a visual direction, then make every detail your own.",
+    "allScenes": "All scenes", "allStyles": "All styles", "scene": "Scene", "style": "Style", "apply": "Apply filters", "backScenes": "Back to scenes", "backCarte": "Back to Carte",
+    "noMatch": "No templates match those filters.", "tryAnother": "Try another scene or style to see the collection.", "viewAll": "View all templates",
+    "sceneNames": { "wedding": "Wedding", "birthday": "Birthday", "business": "Business event", "baby": "Baby", "other": "Other gathering" },
+    "styleNames": { "modern": "Modern", "playful": "Playful", "formal": "Formal" }
+  },
+  "login": {
+    "eyebrow": "Welcome back", "title": "Sign in to your studio", "description": "Your invitations, drafts, and guest lists in one place.", "back": "Back to Carte", "terms": "By continuing, you agree to Carte's terms and privacy policy."
+  }
+}

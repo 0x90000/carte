@@ -1,0 +1,47 @@
+{
+  "common": {
+    "brandTagline": "用心设计每一份邀请",
+    "dashboard": "控制台",
+    "signIn": "登录",
+    "startCreating": "开始创作",
+    "createInvitation": "创建邀请函",
+    "language": "语言",
+    "english": "English",
+    "chinese": "中文"
+  },
+  "home": {
+    "eyebrow": "用心设计的数字邀请函",
+    "title": "为值得珍惜的时刻留出空间。",
+    "description": "Carte 帮你在几分钟内制作一份恰到好处的邀请函，再分享给让这一刻有意义的每一个人。",
+    "createCta": "创建邀请函",
+    "howItWorksCta": "了解使用方式",
+    "benefits": { "copy": "AI 辅助文案", "responsive": "每块屏幕都好看", "share": "一个分享链接" },
+    "preview": { "saveTheDate": "记下这个日期", "details": "2026 年 6 月 14 日，星期六", "location": "伦敦 Glasshouse", "invited": "诚邀您的到来", "story": "把你的故事说得恰到好处" },
+    "howItWorks": "使用方式",
+    "howItWorksTitle": "为重要的心意，添一份恰到好处的帮助。",
+    "steps": {
+      "feeling": { "title": "从感受开始", "body": "告诉我们你为何相聚，以及想营造怎样的氛围。" },
+      "yours": { "title": "做成你的样子", "body": "调整细节、文字和视觉节奏，直到它真正属于你。" },
+      "share": { "title": "分享这一刻", "body": "把一条漂亮的链接发给每位宾客，让交流始终在一起。" }
+    }
+  },
+  "create": {
+    "eyebrow": "从感受开始", "title": "你在庆祝什么？", "description": "选择你想为之留出空间的时刻。", "noAccount": "无需账户即可开始。准备发布时，我们再请你登录。",
+    "scenes": {
+      "wedding": { "name": "婚礼", "description": "和最重要的人一起庆祝你的爱情故事。", "examples": ["订婚", "仪式", "宴会"] },
+      "birthday": { "name": "生日", "description": "和让这一年闪耀的人一起庆祝新的里程碑。", "examples": ["里程碑", "惊喜派对", "儿童派对"] },
+      "business": { "name": "商务活动", "description": "为成长、连接和共同目标相聚。", "examples": ["会议", "发布会", "交流会"] },
+      "other": { "name": "其他聚会", "description": "任何值得相聚的时刻，都可以从这里开始。", "examples": ["宝宝派对", "毕业", "乔迁"] }
+    }
+  },
+  "templates": {
+    "title": "从一个恰到好处的起点开始。", "eyebrow": "模板库", "description": "选择视觉方向，再让每个细节都成为你的表达。",
+    "allScenes": "全部场景", "allStyles": "全部风格", "scene": "场景", "style": "风格", "apply": "应用筛选", "backScenes": "返回场景", "backCarte": "返回 Carte",
+    "noMatch": "没有符合筛选条件的模板。", "tryAnother": "换一个场景或风格，看看其他模板。", "viewAll": "查看全部模板",
+    "sceneNames": { "wedding": "婚礼", "birthday": "生日", "business": "商务活动", "baby": "宝宝派对", "other": "其他聚会" },
+    "styleNames": { "modern": "现代", "playful": "活泼", "formal": "正式" }
+  },
+  "login": {
+    "eyebrow": "欢迎回来", "title": "登录你的工作室", "description": "你的邀请函、草稿和宾客名单都在这里。", "back": "返回 Carte", "terms": "继续即表示你同意 Carte 的服务条款和隐私政策。"
+  }
+}

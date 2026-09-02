@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Sparkles } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { LoginForm } from "@/components/auth/login-form";
 import { getSafeContinueUrl } from "@/lib/auth-redirect";
 
@@ -15,6 +16,7 @@ type LoginPageProps = {
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = searchParams ? await searchParams : {};
+  const t = await getTranslations("login");
   const continueUrl = getSafeContinueUrl(params.continue);
   const migrateAfterSignIn = params.migrate === "1";
 
@@ -36,15 +38,15 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <section className="flex items-center justify-center p-5 sm:p-8">
           <div className="w-full max-w-md">
             <Link href="/" className="mb-10 inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground lg:hidden">
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Back to Carte
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" /> {t("back")}
             </Link>
             <div className="mb-8 space-y-2">
-              <p className="text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground">Welcome back</p>
-              <h1 className="text-3xl font-semibold tracking-normal">Sign in to your studio</h1>
-              <p className="text-base text-muted-foreground">Your invitations, drafts, and guest lists in one place.</p>
+              <p className="text-sm font-medium uppercase tracking-[0.16em] text-muted-foreground">{t("eyebrow")}</p>
+              <h1 className="text-3xl font-semibold tracking-normal">{t("title")}</h1>
+              <p className="text-base text-muted-foreground">{t("description")}</p>
             </div>
             <LoginForm continueUrl={continueUrl} migrateAfterSignIn={migrateAfterSignIn} />
-            <p className="mt-8 text-center text-xs leading-5 text-muted-foreground">By continuing, you agree to Carte&apos;s terms and privacy policy.</p>
+            <p className="mt-8 text-center text-xs leading-5 text-muted-foreground">{t("terms")}</p>
           </div>
         </section>
       </div>
