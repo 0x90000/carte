@@ -14,6 +14,13 @@ export const metadata: Metadata = {
     template: "%s | Carte",
   },
   description: "Create thoughtful digital invitations for the moments worth gathering for.",
+  openGraph: {
+    type: "website",
+    title: "Carte | Invitations with intention",
+    description: "Create thoughtful digital invitations for the moments worth gathering for.",
+    siteName: "Carte",
+    url: "/",
+  },
 };
 
 export default function RootLayout({
