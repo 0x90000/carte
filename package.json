@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test:e2e": "playwright test",
     "test:e2e:report": "playwright show-report",
+    "db:backup": "bash scripts/backup-postgres.sh",
     "db:seed:templates": "node scripts/import-templates.mjs",
     "db:cleanup:guest-drafts": "node scripts/cleanup-guest-drafts.mjs"
   },
