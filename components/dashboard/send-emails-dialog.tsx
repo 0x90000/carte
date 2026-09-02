@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Mail, RefreshCw, Send, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -25,10 +26,6 @@ type EmailApiResponse = {
   error?: { message?: string } | string;
 };
 
-function getErrorMessage(payload: EmailApiResponse) {
-  return typeof payload.error === "string" ? payload.error : payload.error?.message ?? "We could not process the email request.";
-}
-
 function parseRecipients(value: string) {
   return Array.from(new Set(value.split(/\r?\n/).map((line) => line.trim().toLowerCase()).filter(Boolean)));
 }
@@ -40,6 +37,7 @@ function statusClass(status: string) {
 }
 
 export function SendEmailsDialog({ invitationId, invitationTitle }: { invitationId: string; invitationTitle: string }) {
+  const t = useTranslations("dashboard");
   const [open, setOpen] = useState(false);
   const [recipients, setRecipients] = useState("");
   const [subject, setSubject] = useState("");
@@ -55,15 +53,15 @@ export function SendEmailsDialog({ invitationId, invitationTitle }: { invitation
     try {
       const response = await fetch(`/api/invitations/${encodeURIComponent(invitationId)}/send-emails`, { cache: "no-store" });
       const payload = (await response.json()) as EmailApiResponse;
-      if (!response.ok) throw new Error(getErrorMessage(payload));
+      if (!response.ok || payload.error) throw new Error(t("email.loadError"));
       const data = Array.isArray(payload.data) ? payload.data : payload.data?.sends ?? [];
       setSends(data);
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "We could not load email history.");
+      setError(requestError instanceof Error ? requestError.message : t("email.loadError"));
     } finally {
       setAction(null);
     }
-  }, [invitationId]);
+  }, [invitationId, t]);
 
   useEffect(() => {
     if (!open) return;
@@ -75,7 +73,7 @@ export function SendEmailsDialog({ invitationId, invitationTitle }: { invitation
   async function submit(sendImmediately: boolean) {
     const emailRecipients = parseRecipients(recipients);
     if (emailRecipients.length === 0) {
-      setError("Add at least one email address.");
+      setError(t("email.addRecipient"));
       return;
     }
 
@@ -95,12 +93,12 @@ export function SendEmailsDialog({ invitationId, invitationTitle }: { invitation
         }),
       });
       const payload = (await response.json()) as EmailApiResponse;
-      if (!response.ok) throw new Error(getErrorMessage(payload));
+      if (!response.ok || payload.error) throw new Error(t("email.processError"));
       const created = payload.data && !Array.isArray(payload.data) ? payload.data.sends ?? [] : [];
       setSends((current) => [...created, ...current].slice(0, 100));
-      setNotice(sendImmediately ? "Email delivery queued." : `${emailRecipients.length} email draft${emailRecipients.length === 1 ? "" : "s"} created.`);
+      setNotice(sendImmediately ? t("email.queued") : t("email.draftCreated", { count: emailRecipients.length }));
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "We could not process the email request.");
+      setError(requestError instanceof Error ? requestError.message : t("email.processError"));
     } finally {
       setIsLoading(false);
       setAction(null);
@@ -110,39 +108,39 @@ export function SendEmailsDialog({ invitationId, invitationTitle }: { invitation
   return (
     <>
       <Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
-        <Mail className="h-4 w-4" aria-hidden="true" /> Send via email
+        <Mail className="h-4 w-4" aria-hidden="true" /> {t("email.send")}
       </Button>
       <Dialog open={open} onClose={setOpen}>
         <DialogContent className="max-h-[calc(100vh-2rem)] max-w-2xl overflow-y-auto">
           <DialogHeader className="relative pr-10">
-            <DialogTitle>Send “{invitationTitle}” via email</DialogTitle>
-            <DialogDescription>Prepare invitation emails for your guests.</DialogDescription>
-            <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={() => setOpen(false)} aria-label="Close email dialog" title="Close">
+          <DialogTitle>{t("email.title", { title: invitationTitle })}</DialogTitle>
+          <DialogDescription>{t("email.description")}</DialogDescription>
+            <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={() => setOpen(false)} aria-label={t("email.close")} title={t("email.close")}>
               <X className="h-4 w-4" aria-hidden="true" />
             </Button>
           </DialogHeader>
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor={`email-recipients-${invitationId}`}>Recipients</Label>
+              <Label htmlFor={`email-recipients-${invitationId}`}>{t("email.recipients")}</Label>
               <Textarea
                 id={`email-recipients-${invitationId}`}
                 rows={5}
-                placeholder="guest@example.com\nfriend@example.com"
+                placeholder={t("email.recipientPlaceholder")}
                 value={recipients}
                 onChange={(event) => setRecipients(event.target.value)}
               />
-              <p className="text-xs text-muted-foreground">{parseRecipients(recipients).length} recipient{parseRecipients(recipients).length === 1 ? "" : "s"}</p>
+              <p className="text-xs text-muted-foreground">{t("email.recipientCount", { count: parseRecipients(recipients).length })}</p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor={`email-subject-${invitationId}`}>Subject</Label>
-              <Input id={`email-subject-${invitationId}`} value={subject} onChange={(event) => setSubject(event.target.value)} placeholder={`You're invited: ${invitationTitle}`} maxLength={200} />
+              <Label htmlFor={`email-subject-${invitationId}`}>{t("email.subject")}</Label>
+              <Input id={`email-subject-${invitationId}`} value={subject} onChange={(event) => setSubject(event.target.value)} placeholder={t("email.subjectPlaceholder", { title: invitationTitle })} maxLength={200} />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor={`email-message-${invitationId}`}>Personal message</Label>
-              <Textarea id={`email-message-${invitationId}`} rows={4} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="Add a personal note (optional)" maxLength={2000} />
+              <Label htmlFor={`email-message-${invitationId}`}>{t("email.message")}</Label>
+              <Textarea id={`email-message-${invitationId}`} rows={4} value={message} onChange={(event) => setMessage(event.target.value)} placeholder={t("email.messagePlaceholder")} maxLength={2000} />
             </div>
 
             {error ? <p className="text-sm text-red-700" role="alert">{error}</p> : null}
@@ -150,21 +148,21 @@ export function SendEmailsDialog({ invitationId, invitationTitle }: { invitation
 
             <div className="flex flex-wrap justify-end gap-2 border-t border-border pt-4">
               <Button variant="outline" onClick={() => void submit(false)} disabled={isLoading}>
-                <Mail className="h-4 w-4" aria-hidden="true" /> {action === "preview" ? "Preparing" : "Create preview"}
+                <Mail className="h-4 w-4" aria-hidden="true" /> {action === "preview" ? t("email.preparing") : t("email.createPreview")}
               </Button>
               <Button onClick={() => void submit(true)} disabled={isLoading}>
-                <Send className="h-4 w-4" aria-hidden="true" /> {action === "send" ? "Sending" : "Send now"}
+                <Send className="h-4 w-4" aria-hidden="true" /> {action === "send" ? t("email.sending") : t("email.sendNow")}
               </Button>
             </div>
 
             <section className="space-y-3 border-t border-border pt-4" aria-labelledby={`email-history-${invitationId}`}>
               <div className="flex items-center justify-between gap-3">
-                <h3 id={`email-history-${invitationId}`} className="text-sm font-semibold">Recent email status</h3>
-                <Button variant="ghost" size="icon" onClick={() => void loadSends()} disabled={action !== null} aria-label="Refresh email status" title="Refresh">
+                <h3 id={`email-history-${invitationId}`} className="text-sm font-semibold">{t("email.history")}</h3>
+                <Button variant="ghost" size="icon" onClick={() => void loadSends()} disabled={action !== null} aria-label={t("email.refresh")} title={t("email.refresh")}>
                   <RefreshCw className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </div>
-              {sends.length === 0 ? <p className="text-sm text-muted-foreground">No email sends yet.</p> : (
+              {sends.length === 0 ? <p className="text-sm text-muted-foreground">{t("email.empty")}</p> : (
                 <ul className="divide-y divide-border rounded-md border border-border">
                   {sends.map((send) => (
                     <li key={send.id} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 text-sm">

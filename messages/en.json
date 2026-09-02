@@ -46,5 +46,109 @@
   },
   "login": {
     "eyebrow": "Welcome back", "title": "Sign in to your studio", "description": "Your invitations, drafts, and guest lists in one place.", "back": "Back to Carte", "terms": "By continuing, you agree to Carte's terms and privacy policy."
+  },
+  "dashboard": {
+    "metadataTitle": "Dashboard | Carte",
+    "metadataDescription": "Manage your Carte invitations.",
+    "brand": "Carte",
+    "signOut": "Sign out",
+    "fallbackName": "there",
+    "studioEyebrow": "Your studio",
+    "greeting": "Good morning, {name}.",
+    "subtitle": "Bring your next gathering to life.",
+    "createInvitation": "Create invitation",
+    "paymentSuccess": "Payment received. Your invitation is now published.",
+    "overviewLabel": "Invitation overview",
+    "stats": {
+      "totalInvitations": "Total invitations",
+      "published": "Published",
+      "guestResponses": "Guest responses",
+      "totalViews": "Total views"
+    },
+    "filters": {
+      "label": "Filter invitations",
+      "search": "Search invitations",
+      "searchPlaceholder": "Search by title",
+      "status": "Status",
+      "all": "All",
+      "published": "Published",
+      "draft": "Draft",
+      "submit": "Filter",
+      "clear": "Clear"
+    },
+    "invitations": {
+      "heading": "Your invitations",
+      "createAnother": "Create another",
+      "noMatchingTitle": "No matching invitations",
+      "noMatchingDescription": "Try another title or status filter.",
+      "firstTitle": "Your first invitation starts here",
+      "firstDescription": "Choose a scene and let Carte help you shape the details, words, and atmosphere.",
+      "showAll": "Show all invitations",
+      "exploreTemplates": "Explore templates",
+      "publishedMeta": "{path} · {views} views · {responses} responses",
+      "draftMeta": "Last edited {date}",
+      "edit": "Edit",
+      "share": "Share",
+      "responses": "Responses",
+      "status": {
+        "published": "Published",
+        "draft": "Draft"
+      }
+    },
+    "payments": {
+      "heading": "Payment history",
+      "viewApiData": "View API data",
+      "invitation": "Invitation",
+      "amount": "Amount",
+      "status": "Status",
+      "date": "Date",
+      "defaultInvitation": "Invitation",
+      "statuses": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      }
+    },
+    "actions": {
+      "duplicate": "Duplicate invitation",
+      "duplicateFor": "Duplicate {title}",
+      "delete": "Delete invitation",
+      "deleteFor": "Delete {title}",
+      "deleteTitle": "Delete “{title}”?",
+      "deleteDescription": "This permanently removes the invitation and its RSVP responses.",
+      "closeDelete": "Close delete confirmation",
+      "cancel": "Cancel",
+      "deleting": "Deleting",
+      "deleteConfirm": "Delete invitation",
+      "duplicateError": "We could not duplicate this invitation.",
+      "deleteError": "We could not delete this invitation.",
+      "updateError": "We could not update this invitation."
+    },
+    "email": {
+      "send": "Send via email",
+      "title": "Send “{title}” via email",
+      "description": "Prepare invitation emails for your guests.",
+      "recipients": "Recipients",
+      "recipientPlaceholder": "guest@example.com\nfriend@example.com",
+      "recipientCount": "{count, plural, =1 {# recipient} other {# recipients}}",
+      "subject": "Subject",
+      "subjectPlaceholder": "You're invited: {title}",
+      "message": "Personal message",
+      "messagePlaceholder": "Add a personal note (optional)",
+      "close": "Close email dialog",
+      "addRecipient": "Add at least one email address.",
+      "createPreview": "Create preview",
+      "preparing": "Preparing",
+      "sendNow": "Send now",
+      "sending": "Sending",
+      "queued": "Email delivery queued.",
+      "draftCreated": "{count, plural, =1 {# email draft created.} other {# email drafts created.}}",
+      "history": "Recent email status",
+      "refresh": "Refresh email status",
+      "empty": "No email sends yet.",
+      "loadError": "We could not load email history.",
+      "processError": "We could not process the email request."
+    }
   }
 }

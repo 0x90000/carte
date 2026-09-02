@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Copy, Loader2, Trash2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -11,13 +12,14 @@ type InvitationActionsProps = {
   invitationTitle: string;
 };
 
-type ApiError = { error?: { message?: string } | string };
+type ApiError = { error?: { code?: string; message?: string } | string };
 
-function getErrorMessage(payload: ApiError) {
-  return typeof payload.error === "string" ? payload.error : payload.error?.message ?? "We could not update this invitation.";
+function hasApiError(payload: ApiError) {
+  return Boolean(payload.error);
 }
 
 export function InvitationActions({ invitationId, invitationTitle }: InvitationActionsProps) {
+  const t = useTranslations("dashboard");
   const router = useRouter();
   const [pending, setPending] = useState<"duplicate" | "delete" | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -29,10 +31,10 @@ export function InvitationActions({ invitationId, invitationTitle }: InvitationA
     try {
       const response = await fetch(`/api/invitations/${encodeURIComponent(invitationId)}/duplicate`, { method: "POST" });
       const payload = (await response.json()) as ApiError;
-      if (!response.ok) throw new Error(getErrorMessage(payload));
+      if (!response.ok || hasApiError(payload)) throw new Error(t("actions.duplicateError"));
       router.refresh();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "We could not duplicate this invitation.");
+      setError(requestError instanceof Error ? requestError.message : t("actions.duplicateError"));
     } finally {
       setPending(null);
     }
@@ -44,11 +46,11 @@ export function InvitationActions({ invitationId, invitationTitle }: InvitationA
     try {
       const response = await fetch(`/api/invitations/${encodeURIComponent(invitationId)}`, { method: "DELETE" });
       const payload = (await response.json()) as ApiError;
-      if (!response.ok) throw new Error(getErrorMessage(payload));
+      if (!response.ok || hasApiError(payload)) throw new Error(t("actions.deleteError"));
       setConfirmOpen(false);
       router.refresh();
     } catch (requestError) {
-      setError(requestError instanceof Error ? requestError.message : "We could not delete this invitation.");
+      setError(requestError instanceof Error ? requestError.message : t("actions.deleteError"));
     } finally {
       setPending(null);
     }
@@ -57,10 +59,10 @@ export function InvitationActions({ invitationId, invitationTitle }: InvitationA
   return (
     <>
       <div className="flex items-center gap-1">
-        <Button variant="ghost" size="icon" onClick={() => void duplicate()} disabled={pending !== null} aria-label={`Duplicate ${invitationTitle}`} title="Duplicate invitation">
+        <Button variant="ghost" size="icon" onClick={() => void duplicate()} disabled={pending !== null} aria-label={t("actions.duplicateFor", { title: invitationTitle })} title={t("actions.duplicate")}>
           {pending === "duplicate" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Copy className="h-4 w-4" aria-hidden="true" />}
         </Button>
-        <Button variant="ghost" size="icon" onClick={() => { setError(""); setConfirmOpen(true); }} disabled={pending !== null} aria-label={`Delete ${invitationTitle}`} title="Delete invitation">
+        <Button variant="ghost" size="icon" onClick={() => { setError(""); setConfirmOpen(true); }} disabled={pending !== null} aria-label={t("actions.deleteFor", { title: invitationTitle })} title={t("actions.delete")}>
           <Trash2 className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
@@ -68,17 +70,17 @@ export function InvitationActions({ invitationId, invitationTitle }: InvitationA
       <Dialog open={confirmOpen} onClose={setConfirmOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader className="relative pr-10">
-            <DialogTitle>Delete “{invitationTitle}”?</DialogTitle>
-            <DialogDescription>This permanently removes the invitation and its RSVP responses.</DialogDescription>
-            <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={() => setConfirmOpen(false)} aria-label="Close delete confirmation" title="Close">
+          <DialogTitle>{t("actions.deleteTitle", { title: invitationTitle })}</DialogTitle>
+          <DialogDescription>{t("actions.deleteDescription")}</DialogDescription>
+            <Button variant="ghost" size="icon" className="absolute right-0 top-0" onClick={() => setConfirmOpen(false)} aria-label={t("actions.closeDelete")} title={t("actions.closeDelete")}>
               <X className="h-4 w-4" aria-hidden="true" />
             </Button>
           </DialogHeader>
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={pending !== null}>Cancel</Button>
+            <Button variant="outline" onClick={() => setConfirmOpen(false)} disabled={pending !== null}>{t("actions.cancel")}</Button>
             <Button variant="destructive" onClick={() => void remove()} disabled={pending !== null}>
               {pending === "delete" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Trash2 className="h-4 w-4" aria-hidden="true" />}
-              {pending === "delete" ? "Deleting" : "Delete invitation"}
+              {pending === "delete" ? t("actions.deleting") : t("actions.deleteConfirm")}
             </Button>
           </div>
         </DialogContent>

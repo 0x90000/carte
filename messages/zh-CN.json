@@ -43,5 +43,109 @@
   },
   "login": {
     "eyebrow": "欢迎回来", "title": "登录你的工作室", "description": "你的邀请函、草稿和宾客名单都在这里。", "back": "返回 Carte", "terms": "继续即表示你同意 Carte 的服务条款和隐私政策。"
+  },
+  "dashboard": {
+    "metadataTitle": "控制台 | Carte",
+    "metadataDescription": "管理你的 Carte 邀请函。",
+    "brand": "Carte",
+    "signOut": "退出登录",
+    "fallbackName": "朋友",
+    "studioEyebrow": "你的工作室",
+    "greeting": "早上好，{name}。",
+    "subtitle": "让下一场相聚从这里开始。",
+    "createInvitation": "创建邀请函",
+    "paymentSuccess": "付款已收到，你的邀请函现已发布。",
+    "overviewLabel": "邀请函概览",
+    "stats": {
+      "totalInvitations": "邀请函总数",
+      "published": "已发布",
+      "guestResponses": "宾客回复",
+      "totalViews": "浏览总数"
+    },
+    "filters": {
+      "label": "筛选邀请函",
+      "search": "搜索邀请函",
+      "searchPlaceholder": "按标题搜索",
+      "status": "状态",
+      "all": "全部",
+      "published": "已发布",
+      "draft": "草稿",
+      "submit": "筛选",
+      "clear": "清除"
+    },
+    "invitations": {
+      "heading": "你的邀请函",
+      "createAnother": "再创建一份",
+      "noMatchingTitle": "没有匹配的邀请函",
+      "noMatchingDescription": "换一个标题或状态筛选条件试试。",
+      "firstTitle": "从第一份邀请函开始",
+      "firstDescription": "选择一个场景，让 Carte 帮你整理细节、文字和氛围。",
+      "showAll": "显示全部邀请函",
+      "exploreTemplates": "浏览模板",
+      "publishedMeta": "{path} · {views} 次浏览 · {responses} 条回复",
+      "draftMeta": "上次编辑于 {date}",
+      "edit": "编辑",
+      "share": "分享",
+      "responses": "回复",
+      "status": {
+        "published": "已发布",
+        "draft": "草稿"
+      }
+    },
+    "payments": {
+      "heading": "付款记录",
+      "viewApiData": "查看 API 数据",
+      "invitation": "邀请函",
+      "amount": "金额",
+      "status": "状态",
+      "date": "日期",
+      "defaultInvitation": "邀请函",
+      "statuses": {
+        "pending": "处理中",
+        "paid": "已付款",
+        "failed": "失败",
+        "refunded": "已退款"
+      }
+    },
+    "actions": {
+      "duplicate": "复制邀请函",
+      "duplicateFor": "复制 {title}",
+      "delete": "删除邀请函",
+      "deleteFor": "删除 {title}",
+      "deleteTitle": "删除“{title}”？",
+      "deleteDescription": "这会永久删除邀请函及其 RSVP 回复。",
+      "closeDelete": "关闭删除确认",
+      "cancel": "取消",
+      "deleting": "删除中",
+      "deleteConfirm": "删除邀请函",
+      "duplicateError": "无法复制这份邀请函。",
+      "deleteError": "无法删除这份邀请函。",
+      "updateError": "无法更新这份邀请函。"
+    },
+    "email": {
+      "send": "通过邮件发送",
+      "title": "通过邮件发送“{title}”",
+      "description": "为宾客准备邀请函邮件。",
+      "recipients": "收件人",
+      "recipientPlaceholder": "guest@example.com\nfriend@example.com",
+      "recipientCount": "共 {count} 位收件人",
+      "subject": "主题",
+      "subjectPlaceholder": "你受邀参加：{title}",
+      "message": "个性化留言",
+      "messagePlaceholder": "添加一段留言（可选）",
+      "close": "关闭邮件对话框",
+      "addRecipient": "请至少添加一个邮箱地址。",
+      "createPreview": "创建预览",
+      "preparing": "准备中",
+      "sendNow": "立即发送",
+      "sending": "发送中",
+      "queued": "邮件已加入发送队列。",
+      "draftCreated": "已创建 {count} 个邮件草稿。",
+      "history": "最近邮件状态",
+      "refresh": "刷新邮件状态",
+      "empty": "还没有发送记录。",
+      "loadError": "无法加载邮件记录。",
+      "processError": "无法处理邮件请求。"
+    }
   }
 }
