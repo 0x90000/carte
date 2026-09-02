@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { CalendarPlus, CheckCircle2, CircleDashed, Edit3, ExternalLink, FileText, LogOut, Plus, Sparkles, Users } from "lucide-react";
+import { BarChart3, CalendarPlus, CheckCircle2, CircleDashed, Edit3, ExternalLink, LayoutGrid, LogOut, Plus, Search, Sparkles, Users } from "lucide-react";
 import { auth, signOut } from "@/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { SendEmailsDialog } from "@/components/dashboard/send-emails-dialog";
+import { InvitationActions } from "@/components/dashboard/invitation-actions";
+import { Select } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -31,14 +34,27 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   if (!session?.user?.id) {
     redirect("/login");
   }
+  const params = searchParams ? await searchParams : {};
   const firstName = session.user.name?.split(" ")[0] ?? "there";
-  const paymentState = firstParam(searchParams ? (await searchParams).payment : undefined);
+  const paymentState = firstParam(params.payment);
+  const requestedStatus = firstParam(params.status);
+  const status = requestedStatus === "published" || requestedStatus === "draft" ? requestedStatus : "all";
+  const query = (firstParam(params.q) ?? "").trim().slice(0, 100);
+  const invitationWhere = {
+    userId: session.user.id,
+    ...(status === "all" ? {} : { status }),
+    ...(query ? { title: { contains: query, mode: "insensitive" as const } } : {}),
+  };
 
-  const [invitations, payments] = await Promise.all([
+  const [invitations, allInvitations, payments] = await Promise.all([
     prisma.invitation.findMany({
-      where: { userId: session.user.id },
+      where: invitationWhere,
       orderBy: { updatedAt: "desc" },
       include: { _count: { select: { rsvps: true } } },
+    }),
+    prisma.invitation.findMany({
+      where: { userId: session.user.id },
+      select: { status: true, viewCount: true, _count: { select: { rsvps: true } } },
     }),
     prisma.payment.findMany({
       where: { userId: session.user.id },
@@ -48,8 +64,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     }),
   ]);
 
-  const publishedCount = invitations.filter((invitation) => invitation.status === "published").length;
-  const guestCount = invitations.reduce((total, invitation) => total + invitation._count.rsvps, 0);
+  const publishedCount = allInvitations.filter((invitation) => invitation.status === "published").length;
+  const guestCount = allInvitations.reduce((total, invitation) => total + invitation._count.rsvps, 0);
+  const viewCount = allInvitations.reduce((total, invitation) => total + invitation.viewCount, 0);
+  const hasFilters = status !== "all" || query.length > 0;
 
   return (
     <main className="min-h-screen bg-secondary/40">
@@ -87,11 +105,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </div>
         ) : null}
 
-        <section className="grid gap-4 py-8 sm:grid-cols-3" aria-label="Invitation overview">
+        <section className="grid gap-4 py-8 sm:grid-cols-2 xl:grid-cols-4" aria-label="Invitation overview">
           {[
-            { label: "Drafts", value: invitations.filter((invitation) => invitation.status === "draft").length, icon: FileText },
+            { label: "Total invitations", value: allInvitations.length, icon: LayoutGrid },
             { label: "Published", value: publishedCount, icon: CalendarPlus },
             { label: "Guest responses", value: guestCount, icon: Users },
+            { label: "Total views", value: viewCount, icon: BarChart3 },
           ].map(({ label, value, icon: Icon }) => (
             <div key={label} className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 shadow-sm">
               <span className="flex h-11 w-11 items-center justify-center rounded-md bg-secondary text-foreground"><Icon className="h-5 w-5" aria-hidden="true" /></span>
@@ -99,6 +118,23 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </div>
           ))}
         </section>
+
+        <form method="get" className="mb-8 flex flex-col gap-3 rounded-lg border border-border bg-card p-4 shadow-sm sm:flex-row sm:items-end" aria-label="Filter invitations">
+          <div className="min-w-0 flex-1 space-y-2">
+            <label htmlFor="dashboard-search" className="text-sm font-medium">Search invitations</label>
+            <Input id="dashboard-search" name="q" defaultValue={query} placeholder="Search by title" maxLength={100} />
+          </div>
+          <div className="w-full space-y-2 sm:w-44">
+            <label htmlFor="dashboard-status" className="text-sm font-medium">Status</label>
+            <Select id="dashboard-status" name="status" defaultValue={status}>
+              <option value="all">All</option>
+              <option value="published">Published</option>
+              <option value="draft">Draft</option>
+            </Select>
+          </div>
+          <Button type="submit" variant="secondary"><Search className="h-4 w-4" aria-hidden="true" /> Filter</Button>
+          {hasFilters ? <Link href="/dashboard" className={buttonVariants({ variant: "ghost" })}>Clear</Link> : null}
+        </form>
 
         <section className="space-y-4" aria-labelledby="invitations-heading">
           <div className="flex items-center justify-between gap-4">
@@ -108,9 +144,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           {invitations.length === 0 ? (
             <div className="flex min-h-80 flex-col items-center justify-center rounded-lg border border-dashed border-border bg-card px-6 py-12 text-center">
               <span className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-secondary"><Sparkles className="h-6 w-6" aria-hidden="true" /></span>
-              <h3 className="text-xl font-semibold">Your first invitation starts here</h3>
-              <p className="mt-2 max-w-md text-base text-muted-foreground">Choose a scene and let Carte help you shape the details, words, and atmosphere.</p>
-              <Link href="/create" className={buttonVariants({ variant: "outline", className: "mt-6" })}>Explore templates <Plus className="h-4 w-4" /></Link>
+              <h3 className="text-xl font-semibold">{hasFilters ? "No matching invitations" : "Your first invitation starts here"}</h3>
+              <p className="mt-2 max-w-md text-base text-muted-foreground">{hasFilters ? "Try another title or status filter." : "Choose a scene and let Carte help you shape the details, words, and atmosphere."}</p>
+              {hasFilters ? <Link href="/dashboard" className={buttonVariants({ variant: "outline", className: "mt-6" })}>Show all invitations</Link> : <Link href="/create" className={buttonVariants({ variant: "outline", className: "mt-6" })}>Explore templates <Plus className="h-4 w-4" /></Link>}
             </div>
           ) : (
             <div className="space-y-3">
@@ -133,6 +169,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                         <SendEmailsDialog invitationId={invitation.id} invitationTitle={invitation.title} />
                         <Link href={`/dashboard/invitations/${invitation.id}/rsvps`} className={buttonVariants({ variant: "outline", size: "sm" })}><Users className="h-4 w-4" aria-hidden="true" /> Responses</Link>
                       </> : null}
+                      <InvitationActions invitationId={invitation.id} invitationTitle={invitation.title} />
                     </div>
                   </article>
                 );
