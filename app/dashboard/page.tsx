@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { CalendarPlus, CheckCircle2, CircleDashed, Edit3, ExternalLink, FileText, LogOut, Plus, Sparkles, Users } from "lucide-react";
 import { auth, signOut } from "@/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { SendEmailsDialog } from "@/components/dashboard/send-emails-dialog";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -129,6 +130,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                       <Link href={`/editor/${invitation.id}`} className={buttonVariants({ variant: "outline", size: "sm" })}><Edit3 className="h-4 w-4" aria-hidden="true" /> Edit</Link>
                       {isPublished ? <>
                         <Link href={`/dashboard/invitations/${invitation.id}/share`} className={buttonVariants({ variant: "secondary", size: "sm" })}><ExternalLink className="h-4 w-4" aria-hidden="true" /> Share</Link>
+                        <SendEmailsDialog invitationId={invitation.id} invitationTitle={invitation.title} />
                         <Link href={`/dashboard/invitations/${invitation.id}/rsvps`} className={buttonVariants({ variant: "outline", size: "sm" })}><Users className="h-4 w-4" aria-hidden="true" /> Responses</Link>
                       </> : null}
                     </div>
