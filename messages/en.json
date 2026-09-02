@@ -282,5 +282,21 @@
       "declined": "Unable to attend",
       "maybe": "Maybe"
     }
+  },
+  "share": {
+    "metadataTitle": "Share invitation | Carte",
+    "metadataDescription": "Share your published Carte invitation.",
+    "metadataInvitationTitle": "Share {title} | Carte",
+    "backDashboard": "Dashboard",
+    "openInvitation": "Open invitation",
+    "eyebrow": "Share invitation",
+    "description": "Your invitation is live and ready to send.",
+    "publicLink": "Public link",
+    "qrCode": "QR code",
+    "qrAlt": "QR code for {title}",
+    "scanPrompt": "Scan to open the invitation.",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "share": "Share"
   }
 }

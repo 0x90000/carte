@@ -279,5 +279,21 @@
       "declined": "无法出席",
       "maybe": "待定"
     }
+  },
+  "share": {
+    "metadataTitle": "分享邀请函 | Carte",
+    "metadataDescription": "分享你的 Carte 已发布邀请函。",
+    "metadataInvitationTitle": "分享 {title} | Carte",
+    "backDashboard": "控制台",
+    "openInvitation": "打开邀请函",
+    "eyebrow": "分享邀请函",
+    "description": "邀请函已上线，可以发送给宾客了。",
+    "publicLink": "公开链接",
+    "qrCode": "二维码",
+    "qrAlt": "{title} 的二维码",
+    "scanPrompt": "扫码打开邀请函。",
+    "copyLink": "复制链接",
+    "copied": "已复制",
+    "share": "分享"
   }
 }
