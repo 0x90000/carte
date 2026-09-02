@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/auth";
-import { buildInvitationEmail, getInvitationEmailSender, getResendClient } from "@/lib/invitation-email";
+import { buildInvitationEmail } from "@/lib/invitation-email";
+import { enqueueInvitationEmails } from "@/lib/invitation-email-queue";
 import { prisma } from "@/lib/prisma";
 
 const recipientSchema = z.object({
@@ -65,10 +66,6 @@ export async function POST(request: Request, context: RouteContext) {
     const recipients = Array.from(new Map(payload.recipients.map((recipient) => [recipient.email, recipient])).values());
     const email = buildInvitationEmail(invitation, payload.message);
     const subject = payload.subject?.trim() || email.subject;
-    if (payload.sendImmediately && !getResendClient()) {
-      return errorResponse("EMAIL_NOT_CONFIGURED", "Email delivery is not configured.", 503);
-    }
-
     const sends = await Promise.all(recipients.map((recipient) => prisma.emailSend.create({
       data: {
         invitationId: invitation.id,
@@ -82,28 +79,17 @@ export async function POST(request: Request, context: RouteContext) {
     })));
 
     if (payload.sendImmediately) {
-      const resend = getResendClient();
-      if (!resend) {
-        return errorResponse("EMAIL_NOT_CONFIGURED", "Email delivery is not configured.", 503);
-      }
-      for (const send of sends) {
-        try {
-          const result = await resend.emails.send({
-            from: getInvitationEmailSender(),
-            to: send.recipientEmail,
-            subject: send.subject,
-            html: send.message ?? email.html,
-          });
-          if (result.error) {
-            throw new Error(result.error.message);
-          }
-          await prisma.emailSend.update({ where: { id: send.id }, data: { status: "sent", sentAt: new Date() } });
-        } catch (error) {
-          await prisma.emailSend.update({
-            where: { id: send.id },
-            data: { status: "failed", errorMessage: error instanceof Error ? error.message : "Email delivery failed." },
-          });
+      try {
+        await enqueueInvitationEmails(sends.map((send) => send.id));
+      } catch (error) {
+        await prisma.emailSend.updateMany({
+          where: { id: { in: sends.map((send) => send.id) } },
+          data: { status: "failed", errorMessage: "Email queue is unavailable." },
+        });
+        if (error instanceof Error && error.message === "EMAIL_QUEUE_UNAVAILABLE") {
+          return errorResponse("EMAIL_QUEUE_UNAVAILABLE", "Email delivery queue is not available.", 503);
         }
+        throw error;
       }
     }
 
@@ -116,7 +102,7 @@ export async function POST(request: Request, context: RouteContext) {
         preview: !payload.sendImmediately,
         sends: latest,
       },
-    }, { status: 201 });
+    }, { status: payload.sendImmediately ? 202 : 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return errorResponse("INVALID_EMAIL_REQUEST", error.issues[0]?.message ?? "Email request is invalid.", 400);

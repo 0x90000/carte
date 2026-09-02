@@ -98,7 +98,7 @@ export function SendEmailsDialog({ invitationId, invitationTitle }: { invitation
       if (!response.ok) throw new Error(getErrorMessage(payload));
       const created = payload.data && !Array.isArray(payload.data) ? payload.data.sends ?? [] : [];
       setSends((current) => [...created, ...current].slice(0, 100));
-      setNotice(sendImmediately ? "Email delivery requests completed." : `${emailRecipients.length} email draft${emailRecipients.length === 1 ? "" : "s"} created.`);
+      setNotice(sendImmediately ? "Email delivery queued." : `${emailRecipients.length} email draft${emailRecipients.length === 1 ? "" : "s"} created.`);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "We could not process the email request.");
     } finally {

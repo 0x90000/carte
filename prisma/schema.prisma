@@ -162,6 +162,8 @@ model EmailSend {
   subject        String
   message        String?     @db.Text
   status         String      @default("pending")
+  attemptCount   Int         @default(0) @map("attempt_count")
+  lastAttemptAt  DateTime?   @map("last_attempt_at")
   sentAt         DateTime?   @map("sent_at")
   openedAt       DateTime?   @map("opened_at")
   clickedAt      DateTime?   @map("clicked_at")
@@ -173,6 +175,7 @@ model EmailSend {
   @@index([invitationId])
   @@index([status])
   @@index([sentAt])
+  @@index([lastAttemptAt])
   @@map("email_sends")
 }
 
