@@ -10,6 +10,8 @@
     "chinese": "中文"
   },
   "home": {
+    "metadataTitle": "Carte｜用心设计的邀请函",
+    "metadataDescription": "为值得相聚的时刻，制作一份恰到好处的数字邀请函。",
     "eyebrow": "用心设计的数字邀请函",
     "title": "为值得珍惜的时刻留出空间。",
     "description": "Carte 帮你在几分钟内制作一份恰到好处的邀请函，再分享给让这一刻有意义的每一个人。",
@@ -35,6 +37,7 @@
     }
   },
   "templates": {
+    "metadataTitle": "模板库 | Carte", "metadataDescription": "从恰到好处的起点开始制作下一份邀请函。",
     "title": "从一个恰到好处的起点开始。", "eyebrow": "模板库", "description": "选择视觉方向，再让每个细节都成为你的表达。",
     "allScenes": "全部场景", "allStyles": "全部风格", "scene": "场景", "style": "风格", "apply": "应用筛选", "backScenes": "返回场景", "backCarte": "返回 Carte",
     "noMatch": "没有符合筛选条件的模板。", "tryAnother": "换一个场景或风格，看看其他模板。", "viewAll": "查看全部模板",

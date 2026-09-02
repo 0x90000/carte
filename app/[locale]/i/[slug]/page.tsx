@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { InvitationRenderer } from "@/components/invitation/invitation-renderer";
 import { getPublishedInvitation } from "@/lib/public-invitation";
 import { prisma } from "@/lib/prisma";
+import { absoluteSiteUrl } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +26,13 @@ export async function generateMetadata({ params }: LocalizedInvitationPageProps)
       description,
       images: invitation.template?.previewUrl ? [invitation.template.previewUrl] : undefined,
       url: `/${locale}/i/${invitation.slug}`,
+    },
+    alternates: {
+      canonical: absoluteSiteUrl(`/${locale}/i/${encodeURIComponent(invitation.slug)}`),
+      languages: {
+        en: absoluteSiteUrl(`/en/i/${encodeURIComponent(invitation.slug)}`),
+        "zh-CN": absoluteSiteUrl(`/zh-CN/i/${encodeURIComponent(invitation.slug)}`),
+      },
     },
   };
 }

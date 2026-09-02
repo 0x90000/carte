@@ -6,7 +6,8 @@ test.describe("SEO surfaces", () => {
     expect(sitemapResponse.ok()).toBeTruthy();
     expect(sitemapResponse.headers()["content-type"]).toContain("xml");
     const sitemap = await sitemapResponse.text();
-    expect(sitemap).toContain("/templates");
+    expect(sitemap).toContain("/en/templates");
+    expect(sitemap).toContain("/zh-CN/templates");
     expect(sitemap).not.toContain("/dashboard");
     expect(sitemap).not.toContain("/editor");
 
@@ -33,5 +34,16 @@ test.describe("SEO surfaces", () => {
       "content",
       "Create thoughtful digital invitations for the moments worth gathering for.",
     );
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/en$/);
+    await expect(page.locator('link[rel="alternate"][hreflang="zh-CN"]')).toHaveAttribute("href", /\/zh-CN$/);
+
+    await page.goto("/zh-CN");
+    await expect(page).toHaveTitle("Carte｜用心设计的邀请函");
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+      "content",
+      "为值得相聚的时刻，制作一份恰到好处的数字邀请函。",
+    );
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/zh-CN$/);
+    await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", /\/en$/);
   });
 });

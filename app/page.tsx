@@ -1,8 +1,26 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, Check, Palette, Send, Sparkles } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { buttonVariants } from "@/components/ui/button";
+import { absoluteSiteUrl } from "@/lib/site-url";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations("home")]);
+  const canonicalPath = `/${locale}`;
+  return {
+    title: t("metadataTitle"),
+    description: t("metadataDescription"),
+    alternates: {
+      canonical: absoluteSiteUrl(canonicalPath),
+      languages: {
+        en: absoluteSiteUrl("/en"),
+        "zh-CN": absoluteSiteUrl("/zh-CN"),
+      },
+    },
+  };
+}
 
 const steps = [
   { icon: Sparkles, title: "steps.feeling.title", body: "steps.feeling.body" },

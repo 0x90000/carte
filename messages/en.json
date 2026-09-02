@@ -10,6 +10,8 @@
     "chinese": "中文"
   },
   "home": {
+    "metadataTitle": "Carte | Invitations with intention",
+    "metadataDescription": "Create thoughtful digital invitations for the moments worth gathering for.",
     "eyebrow": "Digital invitations with intention",
     "title": "Make room for the moments that matter.",
     "description": "Carte helps you create a considered invitation in minutes, then share it with everyone who makes the moment meaningful.",
@@ -38,6 +40,7 @@
     }
   },
   "templates": {
+    "metadataTitle": "Templates | Carte", "metadataDescription": "Choose a considered starting point for your next invitation.",
     "title": "A considered starting point.", "eyebrow": "Template library", "description": "Choose a visual direction, then make every detail your own.",
     "allScenes": "All scenes", "allStyles": "All styles", "scene": "Scene", "style": "Style", "apply": "Apply filters", "backScenes": "Back to scenes", "backCarte": "Back to Carte",
     "noMatch": "No templates match those filters.", "tryAnother": "Try another scene or style to see the collection.", "viewAll": "View all templates",

@@ -1,20 +1,31 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Sparkles } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { TemplateCard } from "@/components/templates/template-card";
 import { getTemplateList, templateScenes, type TemplateScene } from "@/lib/templates";
+import { absoluteSiteUrl } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Templates | Carte",
-  description: "Choose a considered starting point for your next invitation.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations("templates")]);
+  return {
+    title: t("metadataTitle"),
+    description: t("metadataDescription"),
+    alternates: {
+      canonical: absoluteSiteUrl(`/${locale}/templates`),
+      languages: {
+        en: absoluteSiteUrl("/en/templates"),
+        "zh-CN": absoluteSiteUrl("/zh-CN/templates"),
+      },
+    },
+  };
+}
 
 const styleOptions = ["modern", "playful", "formal"];
 
