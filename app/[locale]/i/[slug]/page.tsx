@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { InvitationRenderer } from "@/components/invitation/invitation-renderer";
 import { getPublishedInvitation } from "@/lib/public-invitation";
 import { prisma } from "@/lib/prisma";
@@ -10,16 +11,18 @@ type LocalizedInvitationPageProps = { params: Promise<{ locale: string; slug: st
 
 export async function generateMetadata({ params }: LocalizedInvitationPageProps): Promise<Metadata> {
   const { slug, locale } = await params;
+  const t = await getTranslations("invitation");
   const invitation = await getPublishedInvitation(slug);
   if (!invitation) {
-    return { title: "Invitation not found | Carte" };
+    return { title: t("notFoundTitle") };
   }
+  const description = t("invitedDescription", { title: invitation.title });
   return {
     title: invitation.title,
-    description: `You're invited to ${invitation.title}`,
+    description,
     openGraph: {
       title: invitation.title,
-      description: `You're invited to ${invitation.title}`,
+      description,
       images: invitation.template?.previewUrl ? [invitation.template.previewUrl] : undefined,
       url: `/${locale}/i/${invitation.slug}`,
     },

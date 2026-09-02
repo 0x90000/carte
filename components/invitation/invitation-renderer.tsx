@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { Invitation, Template } from "@prisma/client";
+import { getLocale, getTranslations } from "next-intl/server";
 import { normalizeEditorContent, type EditorBackground, type EditorContent, type EditorLayer } from "@/components/editor/types";
 import { RSVPSection } from "@/components/invitation/rsvp-section";
 
@@ -91,11 +92,12 @@ function InvitationLayer({ layer, canvas }: { layer: EditorLayer; canvas: Editor
   return null;
 }
 
-export function InvitationRenderer({ invitation }: { invitation: PublicInvitationData }) {
+export async function InvitationRenderer({ invitation }: { invitation: PublicInvitationData }) {
+  const [locale, t] = await Promise.all([getLocale(), getTranslations("invitation")]);
   const content = normalizeEditorContent(invitation.content) as EditorContent;
   const { canvas, layers } = content;
   const background = canvas.background;
-  const eventDate = invitation.eventDate?.toLocaleDateString(invitation.locale || "en", { dateStyle: "long" });
+  const eventDate = invitation.eventDate ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(invitation.eventDate) : undefined;
   const invitationSettings = invitation.settings && typeof invitation.settings === "object" ? invitation.settings as Record<string, unknown> : {};
   const contentSettings = content.settings && typeof content.settings === "object" ? content.settings as Record<string, unknown> : {};
   const rsvpEnabled = invitationSettings.rsvpEnabled === true || contentSettings.rsvpEnabled === true;
@@ -105,7 +107,7 @@ export function InvitationRenderer({ invitation }: { invitation: PublicInvitatio
       <article className="mx-auto w-full max-w-[750px] overflow-hidden bg-white shadow-2xl" style={{ aspectRatio: `${canvas.width} / ${canvas.height}`, containerType: "inline-size" }}>
         <div className="relative h-full w-full overflow-hidden" style={backgroundStyle(background)}>
           {background.type === "video" && background.url ? (
-            <video className="absolute inset-0 h-full w-full object-cover" src={background.url} poster={background.poster} autoPlay loop={background.loop !== false} muted={background.muted !== false} playsInline aria-label="Invitation video background" />
+            <video className="absolute inset-0 h-full w-full object-cover" src={background.url} poster={background.poster} autoPlay loop={background.loop !== false} muted={background.muted !== false} playsInline aria-label={t("videoBackground")} />
           ) : null}
           {background.type === "html" && background.html ? <div className="absolute inset-0" dangerouslySetInnerHTML={{ __html: background.html }} /> : null}
           {background.type === "html" && background.css ? <style>{background.css}</style> : null}
@@ -115,10 +117,10 @@ export function InvitationRenderer({ invitation }: { invitation: PublicInvitatio
         </div>
       </article>
       <section className="mx-auto max-w-[750px] space-y-2 px-2 py-7 text-center text-white">
-        <p className="text-xs uppercase tracking-[0.18em] text-white/55">You are invited</p>
+        <p className="text-xs uppercase tracking-[0.18em] text-white/55">{t("youAreInvited")}</p>
         <h1 className="text-2xl font-semibold">{invitation.title}</h1>
         {eventDate || invitation.eventLocation ? <p className="text-sm text-white/70">{[eventDate, invitation.eventLocation].filter(Boolean).join(" · ")}</p> : null}
-        <p className="pt-3 text-xs text-white/40">Invitation by Carte</p>
+        <p className="pt-3 text-xs text-white/40">{t("invitationBy")}</p>
       </section>
       {rsvpEnabled ? <RSVPSection invitationSlug={invitation.slug} /> : null}
     </main>

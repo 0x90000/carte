@@ -218,5 +218,39 @@
       "loading": "Loading editor",
       "browse": "Browse templates"
     }
+  },
+  "invitation": {
+    "videoBackground": "Invitation video background",
+    "youAreInvited": "You are invited",
+    "invitationBy": "Invitation by Carte",
+    "notFoundTitle": "Invitation not found | Carte",
+    "invitedDescription": "You're invited to {title}"
+  },
+  "rsvp": {
+    "title": "RSVP",
+    "description": "Let the host know whether you can make it.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "contactHint": "Email or phone is required.",
+    "attendance": "Attendance",
+    "attending": "Attending",
+    "declined": "Unable to attend",
+    "maybe": "Maybe",
+    "partySize": "Party size",
+    "dietaryPreferences": "Dietary preferences",
+    "message": "Message",
+    "submit": "Submit RSVP",
+    "submitting": "Submitting...",
+    "successTitle": "Thank you for your RSVP.",
+    "successDescription": "Your response has been recorded.",
+    "errors": {
+      "nameRequired": "Name is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "contactRequired": "Enter an email or phone number.",
+      "partySize": "Party size must be between 1 and 20.",
+      "messageLength": "Message must be 500 characters or fewer.",
+      "submit": "We could not submit your RSVP."
+    }
   }
 }

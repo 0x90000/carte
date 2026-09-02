@@ -215,5 +215,39 @@
       "loading": "正在加载编辑器",
       "browse": "浏览模板"
     }
+  },
+  "invitation": {
+    "videoBackground": "邀请函视频背景",
+    "youAreInvited": "诚邀您的到来",
+    "invitationBy": "邀请函由 Carte 制作",
+    "notFoundTitle": "找不到邀请函 | Carte",
+    "invitedDescription": "诚邀你参加 {title}"
+  },
+  "rsvp": {
+    "title": "RSVP 回复",
+    "description": "告诉主办方你是否能够到场。",
+    "name": "姓名",
+    "email": "邮箱",
+    "phone": "电话",
+    "contactHint": "邮箱或电话至少填写一项。",
+    "attendance": "出席情况",
+    "attending": "确认出席",
+    "declined": "无法出席",
+    "maybe": "待定",
+    "partySize": "同行人数",
+    "dietaryPreferences": "饮食偏好",
+    "message": "留言",
+    "submit": "提交 RSVP",
+    "submitting": "提交中...",
+    "successTitle": "感谢你的 RSVP 回复。",
+    "successDescription": "你的回复已记录。",
+    "errors": {
+      "nameRequired": "请填写姓名。",
+      "emailInvalid": "请输入有效的邮箱地址。",
+      "contactRequired": "请填写邮箱或电话。",
+      "partySize": "同行人数需为 1 至 20 人。",
+      "messageLength": "留言不能超过 500 个字符。",
+      "submit": "无法提交 RSVP，请稍后重试。"
+    }
   }
 }
