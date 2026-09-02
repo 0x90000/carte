@@ -1,6 +1,6 @@
 # Carte Hands-off: Phase 2 公开邀请函与 RSVP 本地化
 
-**状态**: 公开邀请函 H5、RSVP 表单和公开邀请函 metadata 已完成 `en`/`zh-CN` 本地化，服务器验收待部署后补充
+**状态**: 公开邀请函 H5、RSVP 表单和公开邀请函 metadata 已完成 `en`/`zh-CN` 本地化，并通过测试服务器验收
 **日期**: 2026-09-03
 **依据**: `docs/tech-spec-detailed.md` 第九章国际化与 SEO、Phase 2 多语言支持清单，以及 Week 8 H5/RSVP 验收标准
 
@@ -25,7 +25,7 @@
 npm run lint                         PASS
 npx tsc --noEmit                    PASS
 npm run build                        PASS（32 个静态 locale 页面）
-npx playwright test --list           PASS（8 个测试）
+npx playwright test --list           PASS（9 个测试）
 git diff --check                     PASS
 ```
 
@@ -39,12 +39,14 @@ git diff --check                     PASS
 
 部署目标为 Ubuntu 测试服务器 `/root/carte`，Carte 继续通过 `3010` 对外访问，没有使用 80/443；Node.js runtime 为 `v24.20.0`。
 
-服务器 Docker、HTTP 和 Chromium 验收结果将在本阶段部署完成后补充。验收应覆盖：
+部署使用本机已通过构建的 Node 24 standalone 产物，候选容器仅绑定服务器回环 `127.0.0.1:3011`；正式 app 继续通过 `3010` 对外访问，没有使用 80/443。验收结果：
 
-- `/en/i/[slug]` 与 `/zh-CN/i/[slug]` 的 SSR 内容、标题和日期格式。
-- RSVP 表单英文/中文文案、校验错误、成功提交及数据库写入。
-- PostgreSQL、Redis healthy，正式 app 未开启 `E2E_TEST_MODE`。
-- 临时容器、测试数据和 staging 归档清理，不改变 80/443 或数据库/Redis 数据卷。
+- 候选和正式 `3010` app 的 `/en/i/[slug]`、`/zh-CN/i/[slug]` 均返回 HTTP 200；非法 slug 返回 HTTP 404。
+- SSR HTML 包含当前语言的邀请函标识、活动日期、描述和 Open Graph metadata；英文日期为 `December 24, 2026`，中文日期为 `2026年12月24日`。
+- 使用服务器 Chromium 执行 `invitation-i18n.spec.ts`：候选 `3011` 与正式 `3010` 各 `1 passed`，覆盖英文/中文文案、表单校验、成功提交和 metadata。
+- RSVP fixture 验收期间写入 4 条记录，完成后删除邀请函、RSVP 和测试用户，数据库复核为 0 条残留。
+- 正式 app 镜像为 `carte-app:public-rsvp-i18n-20260903`，容器 Node.js `v24.20.0`；PostgreSQL、Redis 均为 `healthy`，正式 app 未开启 `E2E_TEST_MODE`。
+- 候选容器、staging 目录、测试归档和旧 app 镜像已清理；未删除 PostgreSQL/Redis 数据卷，也未改变 80/443。
 
 ## 当前边界与下一步
 
@@ -54,4 +56,5 @@ git diff --check                     PASS
 
 ## 提交
 
-- 本阶段代码和文档提交信息将在服务器验收完成后更新。
+- 本阶段代码提交：`63844d5 feat: localize public invitation and rsvp`
+- 本阶段 E2E 提交：`6d00e2b test: cover localized invitation rsvp`、`21ff58e test: stabilize invitation locale assertions`
