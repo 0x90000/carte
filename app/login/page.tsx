@@ -6,7 +6,7 @@ import { LoginForm } from "@/components/auth/login-form";
 import { getSafeContinueUrl } from "@/lib/auth-redirect";
 
 export const metadata: Metadata = {
-  title: "Sign in | Carte",
+  title: { absolute: "Sign in | Carte" },
   description: "Sign in to create and manage your invitations.",
 };
 

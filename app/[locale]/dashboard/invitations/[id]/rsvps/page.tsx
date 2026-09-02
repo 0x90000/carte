@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("rsvpDashboard");
-  return { title: t("metadataTitle"), description: t("metadataDescription") };
+  return { title: { absolute: t("metadataTitle") }, description: t("metadataDescription") };
 }
 
 export default async function LocalizedRSVPPage({ params }: { params: Promise<{ locale: string; id: string }> }) {

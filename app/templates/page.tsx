@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations("templates")]);
   return {
-    title: t("metadataTitle"),
+    title: { absolute: t("metadataTitle") },
     description: t("metadataDescription"),
     alternates: {
       canonical: absoluteSiteUrl(`/${locale}/templates`),

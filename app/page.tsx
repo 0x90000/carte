@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const [locale, t] = await Promise.all([getLocale(), getTranslations("home")]);
   const canonicalPath = `/${locale}`;
   return {
-    title: t("metadataTitle"),
+    title: { absolute: t("metadataTitle") },
     description: t("metadataDescription"),
     alternates: {
       canonical: absoluteSiteUrl(canonicalPath),

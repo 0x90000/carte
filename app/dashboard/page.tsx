@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("dashboard");
-  return { title: t("metadataTitle"), description: t("metadataDescription") };
+  return { title: { absolute: t("metadataTitle") }, description: t("metadataDescription") };
 }
 
 type DashboardPageProps = {

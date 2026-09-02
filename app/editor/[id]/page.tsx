@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: EditorPageProps): Promise<Met
   const { id } = await params;
   const t = await getTranslations("editor");
   const invitation = await prisma.invitation.findUnique({ where: { id }, select: { title: true } });
-  return { title: invitation?.title ? `${invitation.title} | Carte` : t("metadataTitle") };
+  return { title: { absolute: invitation?.title ? `${invitation.title} | Carte` : t("metadataTitle") } };
 }
 
 export default async function EditorPage({ params, searchParams }: EditorPageProps) {

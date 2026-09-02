@@ -26,12 +26,12 @@ export async function generateMetadata({ params }: SharePageProps): Promise<Meta
   const t = await getTranslations("share");
   const session = await auth();
   if (!session?.user?.id) {
-    return { title: t("metadataTitle"), description: t("metadataDescription") };
+    return { title: { absolute: t("metadataTitle") }, description: t("metadataDescription") };
   }
   const { id } = await params;
   const invitation = await findInvitation(id, session.user.id);
   return {
-    title: invitation ? t("metadataInvitationTitle", { title: invitation.title }) : t("metadataTitle"),
+    title: { absolute: invitation ? t("metadataInvitationTitle", { title: invitation.title }) : t("metadataTitle") },
     description: t("metadataDescription"),
   };
 }

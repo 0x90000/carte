@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PublicInvitationPageProps): P
   const t = await getTranslations("invitation");
   const invitation = await findInvitation(slug);
   if (!invitation) {
-    return { title: t("notFoundTitle") };
+    return { title: { absolute: t("notFoundTitle") } };
   }
   const description = t("invitedDescription", { title: invitation.title });
   return {
