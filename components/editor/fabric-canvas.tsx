@@ -13,6 +13,7 @@ type FabricCanvasProps = {
   selectedLayerId?: string | null;
   onChange: (content: EditorContent) => void;
   onSelect: (layerId: string | null) => void;
+  labels?: { videoBackground: string; editorCanvas: string };
 };
 
 function layerId(object: FabricObject | undefined) {
@@ -157,7 +158,7 @@ function snapshotCanvas(canvas: Canvas, source: EditorContent): EditorContent {
   };
 }
 
-export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange, onSelect }: FabricCanvasProps) {
+export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange, onSelect, labels }: FabricCanvasProps) {
   const elementRef = useRef<HTMLCanvasElement>(null);
   const canvasRef = useRef<Canvas | null>(null);
   const contentRef = useRef(content);
@@ -279,11 +280,11 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
     <div className="relative mx-auto w-full max-w-[430px] overflow-hidden rounded-lg border border-border bg-secondary shadow-xl" style={{ aspectRatio: `${content.canvas.width} / ${content.canvas.height}` }}>
       <div className="absolute inset-0 overflow-hidden" style={backgroundStyle}>
         {background.type === "video" && background.url ? (
-          <video className="absolute inset-0 h-full w-full object-cover" src={background.url} poster={background.poster} autoPlay={false} loop={background.loop} muted={background.muted !== false} playsInline aria-label="Invitation video background" />
+          <video className="absolute inset-0 h-full w-full object-cover" src={background.url} poster={background.poster} autoPlay={false} loop={background.loop} muted={background.muted !== false} playsInline aria-label={labels?.videoBackground ?? "Invitation video background"} />
         ) : null}
         {background.type === "html" && background.html ? <div className="absolute inset-0" dangerouslySetInnerHTML={{ __html: background.html }} /> : null}
         {background.type === "html" && background.css ? <style>{background.css}</style> : null}
-        <canvas ref={elementRef} className="relative block h-full w-full" aria-label="Invitation editor canvas" />
+        <canvas ref={elementRef} className="relative block h-full w-full" aria-label={labels?.editorCanvas ?? "Invitation editor canvas"} />
       </div>
     </div>
   );

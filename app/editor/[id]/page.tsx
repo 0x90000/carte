@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { EditorShell } from "@/components/editor/editor-shell";
 import { normalizeEditorContent } from "@/components/editor/types";
@@ -19,12 +20,14 @@ function firstParam(value: string | string[] | undefined) {
 
 export async function generateMetadata({ params }: EditorPageProps): Promise<Metadata> {
   const { id } = await params;
+  const t = await getTranslations("editor");
   const invitation = await prisma.invitation.findUnique({ where: { id }, select: { title: true } });
-  return { title: invitation?.title ? `${invitation.title} | Carte` : "Edit invitation | Carte" };
+  return { title: invitation?.title ? `${invitation.title} | Carte` : t("metadataTitle") };
 }
 
 export default async function EditorPage({ params, searchParams }: EditorPageProps) {
   const { id } = await params;
+  const t = await getTranslations("editor");
   const session = await auth();
   const action = firstParam(searchParams ? (await searchParams).action : undefined);
 
@@ -63,7 +66,7 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
   return (
     <EditorShell
       invitationId={record.id}
-      initialTitle={record.title ?? record.template?.name ?? "Untitled invitation"}
+      initialTitle={record.title ?? record.template?.name ?? t("untitled")}
       initialContent={normalizeEditorContent(record.content)}
       initialUpdatedAt={record.updatedAt.toISOString()}
       isGuest={isGuest}

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowLeft,
   Check,
@@ -33,6 +34,7 @@ import {
   type EditorContent,
   type EditorLayer,
 } from "@/components/editor/types";
+import { localePath } from "@/lib/i18n";
 
 type SaveState = "idle" | "unsaved" | "saving" | "saved" | "error";
 
@@ -56,7 +58,7 @@ function isRgba(value: unknown) {
   return typeof value === "string" && value.trim().startsWith("rgba");
 }
 
-function PreviewCanvas({ content }: { content: EditorContent }) {
+function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoLabel: string }) {
   const { canvas, layers } = content;
   const background = canvas.background;
   const backgroundStyle: CSSProperties =
@@ -80,7 +82,7 @@ function PreviewCanvas({ content }: { content: EditorContent }) {
             loop={background.loop}
             muted={background.muted !== false}
             playsInline
-            aria-label="Invitation video preview"
+            aria-label={videoLabel}
           />
         ) : null}
         {background.type === "html" && background.html ? (
@@ -151,20 +153,20 @@ function PreviewCanvas({ content }: { content: EditorContent }) {
   );
 }
 
-function SaveIndicator({ state }: { state: SaveState }) {
+function SaveIndicator({ state, labels }: { state: SaveState; labels: Record<SaveState, string> }) {
   if (state === "saving") {
-    return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> Saving</span>;
+    return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> {labels.saving}</span>;
   }
   if (state === "saved") {
-    return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Check className="h-3.5 w-3.5" aria-hidden="true" /> Saved</span>;
+    return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Check className="h-3.5 w-3.5" aria-hidden="true" /> {labels.saved}</span>;
   }
   if (state === "unsaved") {
-    return <span className="text-xs text-muted-foreground">Unsaved changes</span>;
+    return <span className="text-xs text-muted-foreground">{labels.unsaved}</span>;
   }
   if (state === "error") {
-    return <span className="text-xs text-destructive">Save failed</span>;
+    return <span className="text-xs text-destructive">{labels.error}</span>;
   }
-  return <span className="text-xs text-muted-foreground">Ready</span>;
+  return <span className="text-xs text-muted-foreground">{labels.idle}</span>;
 }
 
 export function EditorShell({
@@ -179,9 +181,11 @@ export function EditorShell({
   eventLocation,
   action,
 }: EditorShellProps) {
+  const locale = useLocale();
+  const t = useTranslations("editor");
   const normalizedInitial = useMemo(() => normalizeEditorContent(initialContent), [initialContent]);
   const [content, setContent] = useState<EditorContent>(normalizedInitial);
-  const [title, setTitle] = useState(initialTitle || templateName || "Untitled invitation");
+  const [title, setTitle] = useState(initialTitle || templateName || t("untitled"));
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
   const [activeSchemeId, setActiveSchemeId] = useState<string | undefined>(normalizedInitial.colorSchemes?.[0]?.id);
   const [past, setPast] = useState<EditorContent[]>([]);
@@ -321,7 +325,7 @@ export function EditorShell({
         body: JSON.stringify({
           scene,
           style: typeof content.style === "string" ? content.style : "modern",
-          locale: "en",
+          locale,
           eventInfo: {
             date: eventDate ?? undefined,
             location: eventLocation ?? undefined,
@@ -331,12 +335,12 @@ export function EditorShell({
       });
       const payload = (await response.json()) as { data?: { variations?: string[]; source?: "openai" | "fallback" }; error?: string };
       if (!response.ok || !payload.data?.variations?.length) {
-        throw new Error(payload.error ?? "We could not generate copy.");
+        throw new Error(t("errors.generate"));
       }
       setAiVariations(payload.data.variations);
       setAiSource(payload.data.source ?? "fallback");
     } catch (generationError) {
-      setError(generationError instanceof Error ? generationError.message : "We could not generate copy.");
+      setError(generationError instanceof Error ? generationError.message : t("errors.generate"));
     } finally {
       setAiLoading(false);
     }
@@ -399,11 +403,11 @@ export function EditorShell({
       return;
     }
     if (!(file.type === "image/jpeg" || file.type === "image/png")) {
-      setError("Please choose a JPG or PNG image.");
+      setError(t("errors.invalidImage"));
       return;
     }
     if (file.size > MAX_IMAGE_BYTES) {
-      setError("Images must be 5 MB or smaller.");
+      setError(t("errors.imageTooLarge"));
       return;
     }
     const reader = new FileReader();
@@ -413,20 +417,20 @@ export function EditorShell({
         updateLayer(selectedLayerId, (layer) => ({ ...layer, content: { ...layer.content, url: reader.result } }));
       }
     };
-    reader.onerror = () => setError("We could not read that image.");
+    reader.onerror = () => setError(t("errors.readImage"));
     reader.readAsDataURL(file);
   }
 
   const publishInvitation = useCallback(async () => {
     if (isGuest) {
-      window.location.assign(`/login?continue=${encodeURIComponent(`/editor/${invitationId}?action=publish`)}`);
+      window.location.assign(`${localePath(locale, "/login")}?continue=${encodeURIComponent(localePath(locale, `/editor/${invitationId}?action=publish`))}`);
       return;
     }
     setIsPublishing(true);
     setError("");
     const saved = await saveNow();
     if (!saved) {
-      setError("Save your latest changes before publishing.");
+      setError(t("errors.saveLatest"));
       setIsPublishing(false);
       return;
     }
@@ -438,20 +442,20 @@ export function EditorShell({
       });
       const payload = (await response.json()) as { data?: { checkoutUrl?: string }; checkoutUrl?: string; error?: string };
       if (!response.ok) {
-        throw new Error(payload.error ?? "We could not start publishing.");
+        throw new Error(t("errors.startPublish"));
       }
       const checkoutUrl = payload.data?.checkoutUrl ?? payload.checkoutUrl;
       if (checkoutUrl) {
         window.location.assign(checkoutUrl);
       } else {
-        setError("Payment setup is incomplete. Add Stripe settings before publishing.");
+        setError(t("errors.paymentIncomplete"));
       }
     } catch (publishError) {
-      setError(publishError instanceof Error ? publishError.message : "We could not start publishing.");
+      setError(publishError instanceof Error ? publishError.message : t("errors.startPublish"));
     } finally {
       setIsPublishing(false);
     }
-  }, [invitationId, isGuest, saveNow]);
+  }, [invitationId, isGuest, locale, saveNow, t]);
 
   useEffect(() => {
     if (!hydrated || action !== "publish" || autoPublishRef.current) {
@@ -465,39 +469,39 @@ export function EditorShell({
     <main className="min-h-screen bg-secondary/40">
       <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur">
         <div className="mx-auto flex min-h-16 max-w-[1600px] flex-wrap items-center gap-3 px-4 py-2 sm:px-6 lg:px-8">
-          <Link href="/templates" className={buttonVariants({ variant: "ghost", size: "icon" })} aria-label="Back to templates" title="Back to templates">
+          <Link href={localePath(locale, "/templates")} className={buttonVariants({ variant: "ghost", size: "icon" })} aria-label={t("backToTemplates")} title={t("backToTemplates")}>
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           </Link>
           <div className="min-w-0 flex-1 sm:max-w-[260px]">
-            <Label htmlFor="invitation-title" className="sr-only">Invitation title</Label>
+            <Label htmlFor="invitation-title" className="sr-only">{t("invitationTitle")}</Label>
             <Input id="invitation-title" value={title} onChange={(event) => { setTitle(event.target.value); titleRef.current = event.target.value; setSaveState("unsaved"); }} className="h-10 bg-transparent font-medium shadow-none" />
           </div>
-          <SaveIndicator state={saveState} />
+          <SaveIndicator state={saveState} labels={{ idle: t("saveState.ready"), saving: t("saveState.saving"), saved: t("saveState.saved"), unsaved: t("saveState.unsaved"), error: t("saveState.error") }} />
           <div className="ml-auto flex items-center gap-1">
-            <Button variant="ghost" size="icon" onClick={undo} disabled={past.length === 0} aria-label="Undo" title="Undo"><Undo2 className="h-4 w-4" aria-hidden="true" /></Button>
-            <Button variant="ghost" size="icon" onClick={redo} disabled={future.length === 0} aria-label="Redo" title="Redo"><Redo2 className="h-4 w-4" aria-hidden="true" /></Button>
-            <Button variant="outline" size="sm" onClick={() => void saveNow()} disabled={saveState === "saving"}><Save className="h-4 w-4" aria-hidden="true" /> Save</Button>
-            <Button variant={showPreview ? "secondary" : "outline"} size="sm" onClick={() => setShowPreview((value) => !value)}><Eye className="h-4 w-4" aria-hidden="true" /> Preview</Button>
-            <Button size="sm" onClick={() => void publishInvitation()} disabled={isPublishing}><Send className="h-4 w-4" aria-hidden="true" /> {isPublishing ? "Preparing" : "Publish"}</Button>
+            <Button variant="ghost" size="icon" onClick={undo} disabled={past.length === 0} aria-label={t("undo")} title={t("undo")}><Undo2 className="h-4 w-4" aria-hidden="true" /></Button>
+            <Button variant="ghost" size="icon" onClick={redo} disabled={future.length === 0} aria-label={t("redo")} title={t("redo")}><Redo2 className="h-4 w-4" aria-hidden="true" /></Button>
+            <Button variant="outline" size="sm" onClick={() => void saveNow()} disabled={saveState === "saving"}><Save className="h-4 w-4" aria-hidden="true" /> {t("save")}</Button>
+            <Button variant={showPreview ? "secondary" : "outline"} size="sm" onClick={() => setShowPreview((value) => !value)}><Eye className="h-4 w-4" aria-hidden="true" /> {t("preview")}</Button>
+            <Button size="sm" onClick={() => void publishInvitation()} disabled={isPublishing}><Send className="h-4 w-4" aria-hidden="true" /> {isPublishing ? t("preparing") : t("publish")}</Button>
           </div>
         </div>
       </header>
 
-      {isGuest ? <div className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-950">Not logged in. Your draft will be saved for 7 days.</div> : null}
+      {isGuest ? <div className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-950">{t("guestBanner")}</div> : null}
 
       <div className="mx-auto grid max-w-[1600px] gap-5 px-4 py-5 sm:px-6 lg:px-8 xl:grid-cols-[240px_minmax(0,1fr)_300px]">
-        <aside className="rounded-lg border border-border bg-card p-4 shadow-sm" aria-label="Layers">
-          <div className="mb-4 flex items-center gap-2"><Layers3 className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">Layers</h2></div>
+        <aside className="rounded-lg border border-border bg-card p-4 shadow-sm" aria-label={t("layers")}>
+          <div className="mb-4 flex items-center gap-2"><Layers3 className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("layers")}</h2></div>
           <div className="space-y-1">
             {[...content.layers].sort((a, b) => (b.zIndex ?? 0) - (a.zIndex ?? 0)).map((layer) => (
               <div key={layer.id} className={`flex items-center gap-1 rounded-md border px-2 py-1.5 ${selectedLayerId === layer.id ? "border-ring bg-secondary" : "border-transparent"}`}>
-                <button type="button" className="min-w-0 flex-1 truncate text-left text-sm" onClick={() => setSelectedLayerId(layer.id)} aria-label={`Select ${layer.name}`}>
+                <button type="button" className="min-w-0 flex-1 truncate text-left text-sm" onClick={() => setSelectedLayerId(layer.id)} aria-label={t("selectLayer", { name: layer.name })}>
                   <span className={layer.visible === false ? "text-muted-foreground line-through" : "text-foreground"}>{layer.name}</span>
                 </button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => updateLayer(layer.id, (current) => ({ ...current, visible: current.visible === false }))} aria-label={layer.visible === false ? `Show ${layer.name}` : `Hide ${layer.name}`} title={layer.visible === false ? "Show layer" : "Hide layer"}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => updateLayer(layer.id, (current) => ({ ...current, visible: current.visible === false }))} aria-label={layer.visible === false ? t("showLayer", { name: layer.name }) : t("hideLayer", { name: layer.name })} title={layer.visible === false ? t("showLayer", { name: layer.name }) : t("hideLayer", { name: layer.name })}>
                   {layer.visible === false ? <EyeOff className="h-3.5 w-3.5" aria-hidden="true" /> : <Eye className="h-3.5 w-3.5" aria-hidden="true" />}
                 </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => updateLayer(layer.id, (current) => ({ ...current, locked: current.locked !== true }))} aria-label={layer.locked ? `Unlock ${layer.name}` : `Lock ${layer.name}`} title={layer.locked ? "Unlock layer" : "Lock layer"}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => updateLayer(layer.id, (current) => ({ ...current, locked: current.locked !== true }))} aria-label={layer.locked ? t("unlockLayer", { name: layer.name }) : t("lockLayer", { name: layer.name })} title={layer.locked ? t("unlockLayer", { name: layer.name }) : t("lockLayer", { name: layer.name })}>
                   {layer.locked ? <Lock className="h-3.5 w-3.5" aria-hidden="true" /> : <LockOpen className="h-3.5 w-3.5" aria-hidden="true" />}
                 </Button>
               </div>
@@ -505,13 +509,13 @@ export function EditorShell({
           </div>
         </aside>
 
-        <section className="flex min-h-[620px] items-start justify-center rounded-lg border border-border bg-background p-4 shadow-sm sm:p-8" aria-label="Invitation canvas">
-          <FabricCanvas key={canvasRevision} content={content} activeScheme={activeScheme} selectedLayerId={selectedLayerId} onChange={commitContent} onSelect={setSelectedLayerId} />
+        <section className="flex min-h-[620px] items-start justify-center rounded-lg border border-border bg-background p-4 shadow-sm sm:p-8" aria-label={t("canvas")}>
+          <FabricCanvas key={canvasRevision} content={content} activeScheme={activeScheme} selectedLayerId={selectedLayerId} onChange={commitContent} onSelect={setSelectedLayerId} labels={{ videoBackground: t("videoBackground"), editorCanvas: t("editorCanvas") }} />
         </section>
 
-        <aside className="space-y-5" aria-label="Editor inspector">
+        <aside className="space-y-5" aria-label={t("inspector")}>
           <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold">Inspector</h2>
+            <h2 className="mb-4 text-sm font-semibold">{t("inspector")}</h2>
             {selectedLayer?.type === "text" ? (
               <div className="space-y-2">
                 <Label htmlFor="layer-text">{selectedLayer.name}</Label>
@@ -520,41 +524,41 @@ export function EditorShell({
             ) : null}
             {selectedLayer?.type === "image" ? (
               <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">Replace {selectedLayer.name} with a JPG or PNG up to 5 MB.</p>
+                <p className="text-sm text-muted-foreground">{t("replaceImage", { name: selectedLayer.name })}</p>
                 <input ref={imageInputRef} type="file" accept="image/jpeg,image/png" className="hidden" onChange={onImageSelected} />
-                <Button variant="outline" className="w-full" onClick={() => imageInputRef.current?.click()}><Upload className="h-4 w-4" aria-hidden="true" /> Upload image</Button>
-                {selectedLayer.content.url ? <div className="flex items-center gap-2 text-xs text-muted-foreground"><FileImage className="h-4 w-4" aria-hidden="true" /> Image loaded</div> : null}
+                <Button variant="outline" className="w-full" onClick={() => imageInputRef.current?.click()}><Upload className="h-4 w-4" aria-hidden="true" /> {t("uploadImage")}</Button>
+                {selectedLayer.content.url ? <div className="flex items-center gap-2 text-xs text-muted-foreground"><FileImage className="h-4 w-4" aria-hidden="true" /> {t("imageLoaded")}</div> : null}
               </div>
             ) : null}
-            {!selectedLayer ? <p className="text-sm leading-6 text-muted-foreground">Select a layer to edit its content.</p> : null}
-            {selectedLayer && selectedLayer.type !== "text" && selectedLayer.type !== "image" ? <p className="text-sm leading-6 text-muted-foreground">This layer can be moved, resized, and rotated directly on the canvas.</p> : null}
+            {!selectedLayer ? <p className="text-sm leading-6 text-muted-foreground">{t("selectLayerPrompt")}</p> : null}
+            {selectedLayer && selectedLayer.type !== "text" && selectedLayer.type !== "image" ? <p className="text-sm leading-6 text-muted-foreground">{t("movableLayerPrompt")}</p> : null}
           </section>
 
           <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <Label htmlFor="color-scheme">Color scheme</Label>
+            <Label htmlFor="color-scheme">{t("colorScheme")}</Label>
             <Select id="color-scheme" className="mt-2" value={activeScheme?.id ?? ""} onChange={(event) => applyScheme(event.target.value)} disabled={!content.colorSchemes?.length}>
-              {!content.colorSchemes?.length ? <option value="">No color schemes</option> : null}
+              {!content.colorSchemes?.length ? <option value="">{t("noColorSchemes")}</option> : null}
               {content.colorSchemes?.map((scheme) => <option key={scheme.id} value={scheme.id}>{scheme.name}</option>)}
             </Select>
-            {activeScheme ? <div className="mt-3 flex gap-2" aria-label="Selected color scheme"><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.primary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.secondary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.accent }} /></div> : null}
+            {activeScheme ? <div className="mt-3 flex gap-2" aria-label={t("selectedColorScheme")}><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.primary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.secondary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.accent }} /></div> : null}
           </section>
 
           <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <div className="mb-2 flex items-center gap-2"><Sparkles className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">AI copy</h2></div>
-            <p className="text-sm leading-6 text-muted-foreground">Generate three options for the selected text layer.</p>
+            <div className="mb-2 flex items-center gap-2"><Sparkles className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("aiTitle")}</h2></div>
+            <p className="text-sm leading-6 text-muted-foreground">{t("aiDescription")}</p>
             <Button variant="outline" className="mt-3 w-full" onClick={() => void generateCopy()} disabled={aiLoading || selectedLayer?.type !== "text"}>
               {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Sparkles className="h-4 w-4" aria-hidden="true" />}
-              {aiLoading ? "Generating" : "Generate copy"}
+              {aiLoading ? t("generating") : t("generateCopy")}
             </Button>
-            {aiSource ? <p className="mt-2 text-xs text-muted-foreground">{aiSource === "fallback" ? "Using a ready-made option while AI is unavailable." : "Generated with OpenAI."}</p> : null}
-            {aiVariations.length > 0 ? <div className="mt-3 space-y-2">{aiVariations.map((variation, index) => <div key={`${variation}-${index}`} className="rounded-md border border-border p-2.5"><p className="text-sm leading-5">{variation}</p><Button variant="ghost" size="sm" className="mt-2 h-8 px-2" onClick={() => { if (selectedLayer?.type === "text") updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: variation } })); }}>Use this option</Button></div>)}</div> : null}
+            {aiSource ? <p className="mt-2 text-xs text-muted-foreground">{aiSource === "fallback" ? t("aiFallback") : t("aiOpenai")}</p> : null}
+            {aiVariations.length > 0 ? <div className="mt-3 space-y-2">{aiVariations.map((variation, index) => <div key={`${variation}-${index}`} className="rounded-md border border-border p-2.5"><p className="text-sm leading-5">{variation}</p><Button variant="ghost" size="sm" className="mt-2 h-8 px-2" onClick={() => { if (selectedLayer?.type === "text") updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: variation } })); }}>{t("useOption")}</Button></div>)}</div> : null}
           </section>
 
-          {showPreview ? <section className="space-y-3"><div className="flex items-center gap-2"><Eye className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">Live preview</h2></div><PreviewCanvas content={content} /></section> : null}
+          {showPreview ? <section className="space-y-3"><div className="flex items-center gap-2"><Eye className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("livePreview")}</h2></div><PreviewCanvas content={content} videoLabel={t("videoPreview")} /></section> : null}
         </aside>
       </div>
 
-      {error ? <div className="fixed bottom-4 left-1/2 z-30 flex w-[min(92vw,520px)] -translate-x-1/2 items-center justify-between gap-4 rounded-md border border-destructive/30 bg-background px-4 py-3 text-sm text-destructive shadow-lg" role="alert"><span>{error}</span><Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setError("")} aria-label="Dismiss error" title="Dismiss"><span aria-hidden="true">×</span></Button></div> : null}
+      {error ? <div className="fixed bottom-4 left-1/2 z-30 flex w-[min(92vw,520px)] -translate-x-1/2 items-center justify-between gap-4 rounded-md border border-destructive/30 bg-background px-4 py-3 text-sm text-destructive shadow-lg" role="alert"><span>{error}</span><Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setError("")} aria-label={t("dismissError")} title={t("dismissError")}><span aria-hidden="true">×</span></Button></div> : null}
     </main>
   );
 }

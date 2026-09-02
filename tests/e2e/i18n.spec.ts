@@ -13,6 +13,12 @@ test("serves localized public pages and negotiates the browser locale", async ({
   await expect(page.getByRole("navigation", { name: "语言" })).toBeVisible();
   await expect(page.getByRole("link", { name: "English", exact: true })).toHaveAttribute("href", "/en");
 
+  await page.goto("/en/editor/new");
+  await expect(page.getByRole("heading", { name: "Choose a template first.", exact: true })).toBeVisible();
+
+  await page.goto("/zh-CN/editor/new");
+  await expect(page.getByRole("heading", { name: "请先选择一个模板。", exact: true })).toBeVisible();
+
   const negotiated = await request.get("/", { maxRedirects: 0, headers: { "accept-language": "zh-CN,zh;q=0.9,en;q=0.8" } });
   expect([307, 308]).toContain(negotiated.status());
   expect(negotiated.headers().location).toContain("/zh-CN");
