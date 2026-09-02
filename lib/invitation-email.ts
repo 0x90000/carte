@@ -18,8 +18,18 @@ function escapeHtml(value: string) {
 }
 
 function getAppUrl() {
-  const value = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "");
+  const value = readEnv("NEXT_PUBLIC_APP_URL")?.replace(/\/$/, "");
   return value || null;
+}
+
+function readEnv(name: string) {
+  const value = process.env[name]?.trim();
+  if (!value) return null;
+  if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+    const unquoted = value.slice(1, -1).trim();
+    return unquoted || null;
+  }
+  return value;
 }
 
 function formatEventDate(eventDate: Date | null) {
@@ -57,10 +67,10 @@ export function buildInvitationEmail(invitation: InvitationEmailData, customMess
 }
 
 export function getInvitationEmailSender() {
-  return process.env.EMAIL_FROM?.trim() || "Carte <noreply@carte.app>";
+  return readEnv("EMAIL_FROM") || "Carte <noreply@carte.app>";
 }
 
 export function getResendClient() {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
+  const apiKey = readEnv("RESEND_API_KEY");
   return apiKey ? new Resend(apiKey) : null;
 }
