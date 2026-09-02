@@ -19,7 +19,7 @@ test("localizes the RSVP management dashboard", async ({ page }) => {
   await expect(page.getByRole("heading", { name: invitationTitle, exact: true })).toBeVisible();
   await expect(page.getByText("RSVP 回复", { exact: true })).toBeVisible();
   await expect(page.getByText("回复数", { exact: true }).locator("..")).toContainText("3");
-  await expect(page.getByText("确认出席", { exact: true }).locator("..")).toContainText("1");
+  await expect(page.getByText("确认出席", { exact: true }).first().locator("..")).toContainText("1");
   await expect(page.getByText("无法出席", { exact: true })).toBeVisible();
   await expect(page.getByRole("columnheader", { name: "宾客", exact: true })).toBeVisible();
   await expect(page.getByRole("cell", { name: "中文访客", exact: true })).toBeVisible();
