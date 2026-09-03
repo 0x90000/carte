@@ -6,6 +6,7 @@ import { templateBackgroundType, type TemplateListItem } from "@/lib/templates";
 
 export type TemplateCardLabels = {
   sceneNames: Record<string, string>;
+  styleNames: Record<string, string>;
   backgroundNames: Record<string, string>;
   premium: string;
   customBackground: string;
@@ -46,7 +47,7 @@ export function TemplateCard({ template, href, labels }: { template: TemplateLis
             <ArrowUpRight className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" aria-hidden="true" />
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-            <span className="rounded-full bg-secondary px-2.5 py-1 capitalize">{template.style}</span>
+            <span className="rounded-full bg-secondary px-2.5 py-1">{labels.styleNames[template.style] ?? template.style}</span>
             <span>{labels.backgroundNames[backgroundType] ?? labels.customBackground}</span>
           </div>
         </CardContent>

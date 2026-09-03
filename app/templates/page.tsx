@@ -106,6 +106,7 @@ export default async function TemplatesPage({ searchParams }: TemplatesPageProps
               href={localePath(locale, `/templates/${encodeURIComponent(template.id)}`)}
               labels={{
                 sceneNames: sceneLabels,
+                styleNames: styleLabels,
                 backgroundNames: backgroundLabels,
                 premium: t("detail.premium"),
                 customBackground: t("detail.customBackground"),
