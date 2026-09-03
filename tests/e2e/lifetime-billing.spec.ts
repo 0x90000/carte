@@ -24,7 +24,7 @@ test.describe.serial("single-publish and lifetime billing", () => {
 
     await page.goto(`/en/editor/${standardInvitationId}`);
     await page.getByRole("button", { name: "Publish", exact: true }).click();
-    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Choose how to publish" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "One-time publish" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Lifetime access" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Pay $9.90 and publish" })).toBeVisible();
