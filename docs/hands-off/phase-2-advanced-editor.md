@@ -1,6 +1,6 @@
 # Carte Hands-off: Phase 2 高级编辑器文字控件
 
-**状态**: 已完成本地开发、代码检查、生产构建和测试场景发现；服务器 Docker 浏览器验收待本阶段部署
+**状态**: 已完成本地开发、代码检查、生产构建、服务器 Docker 浏览器验收和隔离数据清理
 **日期**: 2026-09-04
 **依据**: `docs/tech-spec-detailed.md` 第六章 Phase 2 编辑器清单
 
@@ -43,12 +43,25 @@ E2E 场景为 `tests/e2e/advanced-editor.spec.ts`，仅在设置 `ADVANCED_EDITO
 
 ## 服务器验收
 
-本阶段尚未执行服务器 Docker 部署和浏览器验收；执行时应使用 Node.js 24、独立测试数据和非 80 端口，并验证：
+部署目标为 Ubuntu 测试服务器 `139.180.215.236`。正式应用继续通过 `3010` 对外访问，没有使用 80/443；候选容器绑定服务器回环 `127.0.0.1:3011`，Node.js runtime 为 `v24.20.0`。
+
+- 使用本机已通过生产构建的 Node 24 standalone 产物启动隔离候选容器，并连接现有 PostgreSQL/Redis；没有替换正式 app 容器。
+- 使用服务器官方 Chromium 容器执行 `advanced-editor.spec.ts`：
+
+```text
+Running 1 test using 1 worker
+1 passed (7.7s)
+```
+
+- 验证了英文编辑器中字体选择、字号输入、颜色选择、保存后 API 内容一致性，并验证了中文编辑器对应的本地化控件标签。
+- 验收后删除 2 条本阶段产生的 guest draft，停止并删除候选容器、测试归档和 E2E staging；正式 `3010` smoke 返回 HTTP 200。
+
+本次服务器验收覆盖：
 
 - 文字图层的字体选择、字号限制和颜色选择器均可操作。
 - 保存后重新读取邀请函内容，`font.family`、`font.size` 和 `color` 与控件值一致。
 - 中英文编辑器标签均正确显示。
-- 验收结束后清理临时用户、邀请函、容器、镜像和 staging 数据。
+- 验收结束后清理临时邀请函、容器、归档和 staging 数据。
 
 ## 当前边界
 
