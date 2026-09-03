@@ -4,34 +4,26 @@ import { ArrowUpRight, Crown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { templateBackgroundType, type TemplateListItem } from "@/lib/templates";
 
-const sceneLabels: Record<string, string> = {
-  wedding: "Wedding",
-  birthday: "Birthday",
-  business: "Business",
-  baby: "Baby",
-  other: "Other",
+export type TemplateCardLabels = {
+  sceneNames: Record<string, string>;
+  backgroundNames: Record<string, string>;
+  premium: string;
+  customBackground: string;
+  previewAlt: string;
 };
 
-const backgroundLabels: Record<string, string> = {
-  image: "Image background",
-  html: "Animated background",
-  video: "Video background",
-  color: "Color background",
-  gradient: "Gradient background",
-};
-
-export function TemplateCard({ template }: { template: TemplateListItem & { structure: unknown } }) {
+export function TemplateCard({ template, href, labels }: { template: TemplateListItem & { structure: unknown }; href: string; labels: TemplateCardLabels }) {
   const backgroundType = templateBackgroundType(template);
   const imageUrl = template.thumbnailUrl || template.previewUrl;
 
   return (
-    <Link href={`/templates/${template.id}`} className="group block h-full">
+    <Link href={href} className="group block h-full">
       <Card className="h-full overflow-hidden transition-transform duration-150 group-hover:-translate-y-1 group-hover:shadow-lg">
         <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
           {imageUrl ? (
             <Image
               src={imageUrl}
-              alt={`${template.name} template preview`}
+              alt={labels.previewAlt}
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
               className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
@@ -40,9 +32,9 @@ export function TemplateCard({ template }: { template: TemplateListItem & { stru
           ) : null}
           <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3">
             <span className="rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-foreground backdrop-blur">
-              {sceneLabels[template.scene] ?? template.scene}
+              {labels.sceneNames[template.scene] ?? template.scene}
             </span>
-            {template.isPremium ? <Crown className="h-4 w-4 text-amber-300 drop-shadow" aria-label="Premium template" /> : null}
+            {template.isPremium ? <Crown className="h-4 w-4 text-amber-300 drop-shadow" aria-label={labels.premium} /> : null}
           </div>
         </div>
         <CardContent className="space-y-4 p-5">
@@ -55,7 +47,7 @@ export function TemplateCard({ template }: { template: TemplateListItem & { stru
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <span className="rounded-full bg-secondary px-2.5 py-1 capitalize">{template.style}</span>
-            <span>{backgroundLabels[backgroundType] ?? "Custom background"}</span>
+            <span>{labels.backgroundNames[backgroundType] ?? labels.customBackground}</span>
           </div>
         </CardContent>
       </Card>

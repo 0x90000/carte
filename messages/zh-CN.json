@@ -40,9 +40,28 @@
     "metadataTitle": "模板库 | Carte", "metadataDescription": "从恰到好处的起点开始制作下一份邀请函。",
     "title": "从一个恰到好处的起点开始。", "eyebrow": "模板库", "description": "选择视觉方向，再让每个细节都成为你的表达。",
     "allScenes": "全部场景", "allStyles": "全部风格", "scene": "场景", "style": "风格", "apply": "应用筛选", "backScenes": "返回场景", "backCarte": "返回 Carte",
-    "noMatch": "没有符合筛选条件的模板。", "tryAnother": "换一个场景或风格，看看其他模板。", "viewAll": "查看全部模板",
+    "noMatch": "没有符合筛选条件的模板。", "tryAnother": "换一个场景或风格，看看其他模板。", "viewAll": "查看全部模板", "listLabel": "邀请函模板",
     "sceneNames": { "wedding": "婚礼", "birthday": "生日", "business": "商务活动", "baby": "宝宝派对", "other": "其他聚会" },
-    "styleNames": { "modern": "现代", "playful": "活泼", "formal": "正式" }
+    "styleNames": { "modern": "现代", "playful": "活泼", "formal": "正式" },
+    "backgroundNames": { "image": "图片背景", "html": "动态背景", "video": "视频背景", "color": "纯色背景", "gradient": "渐变背景" },
+    "detail": {
+      "metadataNotFoundTitle": "找不到模板 | Carte",
+      "metadataSuffix": "模板",
+      "metadataFallbackDescription": "从恰到好处的起点开始制作下一份邀请函。",
+      "back": "全部模板",
+      "layers": "图层",
+      "editableFields": "可编辑字段",
+      "colorways": "配色方案",
+      "background": "{type}背景",
+      "customBackground": "自定义背景",
+      "useTemplate": "使用此模板",
+      "premiumStatus": "高级模板状态",
+      "premium": "高级",
+      "included": "已包含",
+      "previewAlt": "{name}完整预览",
+      "templatePreviewAlt": "{name}模板预览",
+      "features": ["适配各种屏幕的邀请函画布", "编辑文案、颜色和活动详情", "发布后即可收集 RSVP 回复"]
+    }
   },
   "login": {
     "eyebrow": "欢迎回来", "title": "登录你的工作室", "description": "你的邀请函、草稿和宾客名单都在这里。", "back": "返回 Carte", "terms": "继续即表示你同意 Carte 的服务条款和隐私政策。"

@@ -43,9 +43,28 @@
     "metadataTitle": "Templates | Carte", "metadataDescription": "Choose a considered starting point for your next invitation.",
     "title": "A considered starting point.", "eyebrow": "Template library", "description": "Choose a visual direction, then make every detail your own.",
     "allScenes": "All scenes", "allStyles": "All styles", "scene": "Scene", "style": "Style", "apply": "Apply filters", "backScenes": "Back to scenes", "backCarte": "Back to Carte",
-    "noMatch": "No templates match those filters.", "tryAnother": "Try another scene or style to see the collection.", "viewAll": "View all templates",
+    "noMatch": "No templates match those filters.", "tryAnother": "Try another scene or style to see the collection.", "viewAll": "View all templates", "listLabel": "Invitation templates",
     "sceneNames": { "wedding": "Wedding", "birthday": "Birthday", "business": "Business event", "baby": "Baby", "other": "Other gathering" },
-    "styleNames": { "modern": "Modern", "playful": "Playful", "formal": "Formal" }
+    "styleNames": { "modern": "Modern", "playful": "Playful", "formal": "Formal" },
+    "backgroundNames": { "image": "Image background", "html": "Animated background", "video": "Video background", "color": "Color background", "gradient": "Gradient background" },
+    "detail": {
+      "metadataNotFoundTitle": "Template not found | Carte",
+      "metadataSuffix": "template",
+      "metadataFallbackDescription": "A considered starting point for your next invitation.",
+      "back": "All templates",
+      "layers": "Layers",
+      "editableFields": "Editable fields",
+      "colorways": "Colorways",
+      "background": "{type} background",
+      "customBackground": "Custom background",
+      "useTemplate": "Use this template",
+      "premiumStatus": "Premium status",
+      "premium": "Premium",
+      "included": "Included",
+      "previewAlt": "{name} full preview",
+      "templatePreviewAlt": "{name} template preview",
+      "features": ["Responsive invitation canvas", "Edit copy, colors, and event details", "Ready for RSVP when you publish"]
+    }
   },
   "login": {
     "eyebrow": "Welcome back", "title": "Sign in to your studio", "description": "Your invitations, drafts, and guest lists in one place.", "back": "Back to Carte", "terms": "By continuing, you agree to Carte's terms and privacy policy."

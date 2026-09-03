@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { TemplateCard } from "@/components/templates/template-card";
 import { getTemplateList, templateScenes, type TemplateScene } from "@/lib/templates";
+import { localePath } from "@/lib/i18n";
 import { absoluteSiteUrl } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
@@ -38,31 +39,31 @@ type TemplatesPageProps = {
 };
 
 export default async function TemplatesPage({ searchParams }: TemplatesPageProps) {
-  const session = await auth();
-  const t = await getTranslations("templates");
+  const [locale, session, t] = await Promise.all([getLocale(), auth(), getTranslations("templates")]);
   const common = await getTranslations("common");
   const sceneLabels = t.raw("sceneNames") as Record<TemplateScene, string>;
   const styleLabels = t.raw("styleNames") as Record<string, string>;
+  const backgroundLabels = t.raw("backgroundNames") as Record<string, string>;
   const params = searchParams ? await searchParams : {};
   const rawScene = firstParam(params.scene);
   const scene = templateScenes.includes(rawScene as TemplateScene) ? (rawScene as TemplateScene) : undefined;
   const rawStyle = firstParam(params.style)?.trim().toLowerCase();
   const style = rawStyle && styleOptions.includes(rawStyle) ? rawStyle : undefined;
   const templates = await getTemplateList({ scene, style });
-  const backHref = scene ? "/create" : "/";
+  const backHref = scene ? localePath(locale, "/create") : localePath(locale);
 
   return (
     <main className="min-h-screen bg-secondary/40">
       <header className="border-b border-border bg-background">
         <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-base font-semibold tracking-wide">
+          <Link href={localePath(locale)} className="inline-flex items-center gap-2 text-base font-semibold tracking-wide">
             <Sparkles className="h-5 w-5" aria-hidden="true" /> Carte
           </Link>
           <div className="flex items-center gap-2">
-            <Link href={session?.user ? "/dashboard" : "/login"} className={buttonVariants({ variant: "ghost", size: "sm" })}>
+            <Link href={localePath(locale, session?.user ? "/dashboard" : "/login")} className={buttonVariants({ variant: "ghost", size: "sm" })}>
               {session?.user ? common("dashboard") : common("signIn")}
             </Link>
-            <Link href="/create" className={buttonVariants({ size: "sm" })}>{common("startCreating")}</Link>
+            <Link href={localePath(locale, "/create")} className={buttonVariants({ size: "sm" })}>{common("startCreating")}</Link>
           </div>
         </div>
       </header>
@@ -78,7 +79,7 @@ export default async function TemplatesPage({ searchParams }: TemplatesPageProps
             <p className="text-base leading-7 text-muted-foreground">{t("description")}</p>
           </div>
 
-          <form action="/templates" method="get" className="grid w-full gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] lg:w-auto">
+          <form action={localePath(locale, "/templates")} method="get" className="grid w-full gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] lg:w-auto">
             <div className="space-y-1.5">
               <Label htmlFor="scene">{t("scene")}</Label>
               <Select id="scene" name="scene" defaultValue={scene ?? ""} aria-label={t("scene")}>
@@ -98,15 +99,26 @@ export default async function TemplatesPage({ searchParams }: TemplatesPageProps
         </div>
 
         {templates.length > 0 ? (
-          <section className="grid gap-5 pt-8 sm:grid-cols-2 lg:grid-cols-3" aria-label="Invitation templates">
-            {templates.map((template) => <TemplateCard key={template.id} template={template} />)}
+          <section className="grid gap-5 pt-8 sm:grid-cols-2 lg:grid-cols-3" aria-label={t("listLabel")}>
+            {templates.map((template) => <TemplateCard
+              key={template.id}
+              template={template}
+              href={localePath(locale, `/templates/${encodeURIComponent(template.id)}`)}
+              labels={{
+                sceneNames: sceneLabels,
+                backgroundNames: backgroundLabels,
+                premium: t("detail.premium"),
+                customBackground: t("detail.customBackground"),
+                previewAlt: t("detail.templatePreviewAlt", { name: template.name }),
+              }}
+            />)}
           </section>
         ) : (
           <section className="flex min-h-72 flex-col items-center justify-center border-b border-border py-16 text-center">
             <Sparkles className="h-7 w-7 text-muted-foreground" aria-hidden="true" />
             <h2 className="mt-5 text-xl font-semibold">{t("noMatch")}</h2>
             <p className="mt-2 text-sm text-muted-foreground">{t("tryAnother")}</p>
-            <Link href="/templates" className={buttonVariants({ variant: "outline", className: "mt-6" })}>{t("viewAll")}</Link>
+            <Link href={localePath(locale, "/templates")} className={buttonVariants({ variant: "outline", className: "mt-6" })}>{t("viewAll")}</Link>
           </section>
         )}
       </div>

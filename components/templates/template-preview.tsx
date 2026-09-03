@@ -10,13 +10,18 @@ type PreviewTemplate = {
   structure: unknown;
 };
 
+type TemplatePreviewLabels = {
+  backgroundLabel: string;
+  previewAlt: string;
+};
+
 const backgroundIcons: Record<string, typeof ImageIcon> = {
   image: ImageIcon,
   video: Film,
   html: Sparkles,
 };
 
-export function TemplatePreview({ template }: { template: PreviewTemplate }) {
+export function TemplatePreview({ template, labels }: { template: PreviewTemplate; labels: TemplatePreviewLabels }) {
   const backgroundType = templateBackgroundType(template);
   const Icon = backgroundIcons[backgroundType] ?? Sparkles;
   const imageUrl = template.previewUrl ?? template.thumbnailUrl;
@@ -24,10 +29,10 @@ export function TemplatePreview({ template }: { template: PreviewTemplate }) {
   return (
     <Card className="overflow-hidden border-border bg-foreground p-3 shadow-xl sm:p-5">
       <div className="relative mx-auto aspect-[750/1334] w-full max-w-[520px] overflow-hidden rounded-md bg-secondary">
-        <Image src={imageUrl} alt={`${template.name} full preview`} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" unoptimized />
+        <Image src={imageUrl} alt={labels.previewAlt} fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" unoptimized />
         <div className="absolute bottom-3 left-3 inline-flex items-center gap-2 rounded-full bg-background/90 px-3 py-1.5 text-xs font-medium text-foreground backdrop-blur">
           <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-          <span className="capitalize">{backgroundType} background</span>
+          <span>{labels.backgroundLabel}</span>
         </div>
       </div>
     </Card>
