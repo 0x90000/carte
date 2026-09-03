@@ -15,6 +15,9 @@ test("localizes template detail pages and exposes locale SEO metadata", async ({
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/en/templates/${templateId}$`));
   await expect(page.locator('link[rel="alternate"][hreflang="zh-CN"]')).toHaveAttribute("href", new RegExp(`/zh-CN/templates/${templateId}$`));
 
+  await page.goto("/zh-CN/templates");
+  await expect(page.locator('section[aria-label="邀请函模板"]').getByText("现代", { exact: true })).toBeVisible();
+
   await page.goto(`/zh-CN/templates/${templateId}`);
   await expect(page).toHaveTitle("Modern vows 模板 | Carte");
   await expect(page.getByRole("heading", { name: "Modern vows", exact: true })).toBeVisible();
