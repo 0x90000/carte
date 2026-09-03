@@ -57,6 +57,23 @@ type EditorShellProps = {
 
 const LOCAL_STORAGE_PREFIX = "carte:editor:";
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MIN_FONT_SIZE = 8;
+const MAX_FONT_SIZE = 160;
+const FONT_FAMILY_OPTIONS = ["Inter", "Arial", "Georgia", "Times New Roman", "Trebuchet MS", "Courier New"];
+
+function getTextFont(layer: EditorLayer) {
+  return layer.content.font && typeof layer.content.font === "object"
+    ? layer.content.font as Record<string, unknown>
+    : {};
+}
+
+function clampFontSize(value: string) {
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isFinite(parsed)) {
+    return MIN_FONT_SIZE;
+  }
+  return Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, parsed));
+}
 
 function isRgba(value: unknown) {
   return typeof value === "string" && value.trim().startsWith("rgba");
@@ -320,6 +337,8 @@ export function EditorShell({
     [activeSchemeId, content.colorSchemes],
   );
   const selectedLayer = selectedLayerId ? content.layers.find((layer) => layer.id === selectedLayerId) : undefined;
+  const selectedTextFont = selectedLayer?.type === "text" ? getTextFont(selectedLayer) : undefined;
+  const selectedTextColor = selectedLayer?.type === "text" ? String(selectedLayer.content.color ?? "#111827") : "#111827";
 
   async function generateCopy() {
     setAiLoading(true);
@@ -558,6 +577,52 @@ export function EditorShell({
               <div className="space-y-2">
                 <Label htmlFor="layer-text">{selectedLayer.name}</Label>
                 <Textarea id="layer-text" value={String(selectedLayer.content.text ?? "")} onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: event.target.value } }))} rows={5} />
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="layer-font-family">{t("fontFamily")}</Label>
+                    <Select
+                      id="layer-font-family"
+                      value={String(selectedTextFont?.family ?? "Inter")}
+                      onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({
+                        ...layer,
+                        content: { ...layer.content, font: { ...getTextFont(layer), family: event.target.value } },
+                      }))}
+                    >
+                      {FONT_FAMILY_OPTIONS.map((family) => <option key={family} value={family}>{family}</option>)}
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="layer-font-size">{t("fontSize")}</Label>
+                    <Input
+                      id="layer-font-size"
+                      type="number"
+                      min={MIN_FONT_SIZE}
+                      max={MAX_FONT_SIZE}
+                      step={1}
+                      value={String(Number(selectedTextFont?.size ?? 24))}
+                      onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({
+                        ...layer,
+                        content: { ...layer.content, font: { ...getTextFont(layer), size: clampFontSize(event.target.value) } },
+                      }))}
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2 pt-1">
+                  <Label htmlFor="layer-text-color">{t("textColor")}</Label>
+                  <div className="flex items-center gap-3">
+                    <Input
+                      id="layer-text-color"
+                      type="color"
+                      value={/^#[0-9a-f]{6}$/i.test(selectedTextColor) ? selectedTextColor : "#111827"}
+                      onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({
+                        ...layer,
+                        content: { ...layer.content, color: event.target.value },
+                      }))}
+                      className="h-11 w-14 cursor-pointer p-1"
+                    />
+                    <span className="font-mono text-xs text-muted-foreground">{selectedTextColor}</span>
+                  </div>
+                </div>
               </div>
             ) : null}
             {selectedLayer?.type === "image" ? (
