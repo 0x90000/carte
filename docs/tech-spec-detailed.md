@@ -58,7 +58,7 @@
 6. 预览 → 点击"发布"
 7. ⚠️ 跳转到登录页 /login?continue=/editor/[draftId]?action=publish
 8. 登录成功 → 自动迁移 guest_drafts 到 invitations 表
-9. 继续支付流程 → Stripe 支付($9.9)
+9. 继续支付流程 → Stripe 按次支付($9.9)或终身买断($299)
 10. 支付成功 → 生成短链接(carte.app/i/abc123)
 11. 分享链接(复制/二维码/社交媒体)
 ```
@@ -155,7 +155,7 @@
 - 编辑已发布的邀请函(修改内容,自动刷新 H5 缓存)
 - 复制邀请函(快速创建相似活动)
 - 账户设置(修改邮箱/密码/偏好语言)
-- 付费记录(订单列表、套餐余额)
+- 付费记录(订单列表、终身权益状态、当日剩余发布次数)
 
 **对比:未登录用户无法访问**:
 - 未登录用户没有 Dashboard
@@ -557,11 +557,13 @@ model User {
   // 认证相关(Auth.js)
   emailVerified DateTime?  @map("email_verified")
   image         String?
+  lifetimeAccessAt DateTime? @map("lifetime_access_at")
   accounts      Account[]
   sessions      Session[]
   
   invitations   Invitation[]
   payments      Payment[]
+  dailyPublishUsages DailyPublishUsage[]
   aiGenerations AIGeneration[]
   emailSends    EmailSend[]  // v2.1 新增
   
@@ -765,6 +767,7 @@ model Payment {
   
   amountCents       Int    @map("amount_cents")
   currency          String @default("USD")
+  purchaseType      String @map("purchase_type") // single_publish/lifetime
   
   paymentProvider   String  @map("payment_provider") // stripe
   providerPaymentId String? @map("provider_payment_id")
@@ -779,6 +782,19 @@ model Payment {
   @@index([userId, status])
   @@index([providerPaymentId])
   @@map("payments")
+}
+
+// 终身买断用户每日发布计数(按 UTC 自然日)
+model DailyPublishUsage {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  usageDate DateTime @db.Date @map("usage_date")
+  count     Int      @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, usageDate])
+  @@map("daily_publish_usages")
 }
 
 // AI 生成历史(可选,用于优化和成本跟踪)
@@ -916,7 +932,9 @@ DELETE /api/invitations/:id          删除邀请函(需登录)
 
 POST   /api/invitations/:id/publish  发布邀请函(触发支付)
   - 未登录用户: 返回 401,前端跳转到 /login?continue=...
-  - 已登录: Response: { data: { checkoutUrl, paymentIntentId } }
+  - 终身用户且当日未达上限: 原子记录一次额度并直接发布
+  - 终身用户且当日已发布 10 份: 返回 429
+  - 非终身用户: 返回 402,前端显示按次付费/终身买断选项
 
 POST   /api/invitations/:id/duplicate 复制邀请函(需登录)
 
@@ -959,7 +977,8 @@ POST   /api/ai/recommend-templates   推荐模板
 
 ```
 POST   /api/payment/create-checkout  创建 Stripe Checkout Session
-  Body: { invitationId, priceId }
+  Body: { purchaseType: 'single_publish', invitationId }
+      | { purchaseType: 'lifetime', invitationId? }
   Response: { data: { checkoutUrl } }
 
 POST   /api/payment/webhook          Stripe Webhook 回调(验证签名)
@@ -1895,8 +1914,9 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 // 创建 Checkout Session
 export async function createCheckoutSession(params: {
   userId: string;
-  invitationId: string;
-  priceId: string;  // 单次发布 or 套餐
+  purchaseType: 'single_publish' | 'lifetime';
+  invitationId?: string;
+  priceId: string;  // 服务端根据 purchaseType 选择,不接受任意客户端 Price ID
   successUrl: string;
   cancelUrl: string;
 }) {
@@ -1911,7 +1931,8 @@ export async function createCheckoutSession(params: {
     ],
     metadata: {
       userId: params.userId,
-      invitationId: params.invitationId,
+      purchaseType: params.purchaseType,
+      ...(params.invitationId ? { invitationId: params.invitationId } : {}),
     },
     success_url: params.successUrl,
     cancel_url: params.cancelUrl,
@@ -1987,13 +2008,14 @@ export async function POST(req: Request) {
 }
 
 async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
-  const { userId, invitationId } = session.metadata!;
+  const { userId, invitationId, purchaseType } = session.metadata!;
   
   // 1. 创建支付记录
   await prisma.payment.create({
     data: {
       userId,
       invitationId,
+      purchaseType,
       amountCents: session.amount_total!,
       currency: session.currency!.toUpperCase(),
       paymentProvider: 'stripe',
@@ -2002,14 +2024,9 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     },
   });
   
-  // 2. 更新邀请函状态为已发布
-  await prisma.invitation.update({
-    where: { id: invitationId },
-    data: {
-      status: 'published',
-      publishedAt: new Date(),
-    },
-  });
+  // 2. single_publish 直接发布关联邀请函;
+  //    lifetime 为用户写入终身权益,并在有关联邀请函时计入当日额度后发布。
+  //    每日额度在数据库事务中原子更新,上限为每个 UTC 自然日 10 次。
   
   // 3. 清除缓存(如果之前有预览缓存)
   const invitation = await prisma.invitation.findUnique({
@@ -2035,16 +2052,18 @@ Product: Single Invitation
 - Amount: $9.90 USD
 - Billing: One-time
 
-Product: 3-Pack
-- Price ID: price_3pack_usd
-- Amount: $24.90 USD
-- Billing: One-time
-
-Product: 10-Pack
-- Price ID: price_10pack_usd
-- Amount: $69.90 USD
+Product: Lifetime Access
+- Price ID: price_lifetime_usd
+- Amount: $299.00 USD
 - Billing: One-time
 ```
+
+终身权益规则:
+- 支付成功后立即生效,不设置到期时间。
+- 每个 UTC 自然日最多发布 10 份此前未发布的邀请函。
+- 编辑或重新保存已经发布的邀请函不占用每日额度。
+- 每日计数必须通过数据库事务原子更新,防止并发绕过上限。
+- 本阶段不自动处理退款后的权益撤销,退款流程上线前另行定义。
 
 ---
 
@@ -2252,7 +2271,7 @@ Product: 10-Pack
   - 发送状态追踪
   - 打开/点击追踪(可选)
 - [ ] 多语言支持(next-intl,中英文切换)
-- [ ] 套餐购买(3次/10次)
+- [ ] 终身买断($299,每天最多发布10次)
 - [ ] 更多模板(每个场景至少 10 个)
 - [ ] 邮件通知(RSVP 提醒发给创建者)
 - [ ] 高级编辑器(字体选择器/颜色选择器)
@@ -2625,8 +2644,7 @@ GOOGLE_CLIENT_SECRET=""
 STRIPE_SECRET_KEY="sk_test_..."
 STRIPE_WEBHOOK_SECRET="whsec_..."
 STRIPE_PRICE_ID_SINGLE="price_..."
-STRIPE_PRICE_ID_3PACK="price_..."
-STRIPE_PRICE_ID_10PACK="price_..."
+STRIPE_PRICE_ID_LIFETIME="price_..."
 
 # OpenAI
 OPENAI_API_KEY="sk-..."
