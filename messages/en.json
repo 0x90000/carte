@@ -106,7 +106,20 @@
     "greeting": "Good morning, {name}.",
     "subtitle": "Bring your next gathering to life.",
     "createInvitation": "Create invitation",
-    "paymentSuccess": "Payment received. Your invitation is now published.",
+    "paymentSuccessSingle": "Payment received. Your invitation will be published after Stripe confirmation.",
+    "paymentSuccessLifetime": "Payment received. Lifetime access will activate after Stripe confirmation.",
+    "paymentCancelled": "Checkout was cancelled. No payment was taken.",
+    "billing": {
+      "title": "Lifetime publishing",
+      "description": "Pay $299 once, then publish up to 10 new invitations every UTC day for life.",
+      "activeTitle": "Lifetime access",
+      "activeBadge": "Active",
+      "usage": "{remaining} of {limit} publications remaining today ({used} used).",
+      "buy": "Buy lifetime access for $299",
+      "redirecting": "Opening checkout",
+      "notConfigured": "Lifetime checkout is not configured yet.",
+      "checkoutError": "We could not open checkout. Please try again."
+    },
     "overviewLabel": "Invitation overview",
     "stats": {
       "totalInvitations": "Total invitations",
@@ -147,11 +160,12 @@
     "payments": {
       "heading": "Payment history",
       "viewApiData": "View API data",
-      "invitation": "Invitation",
+      "product": "Purchase",
       "amount": "Amount",
       "status": "Status",
       "date": "Date",
-      "defaultInvitation": "Invitation",
+      "singlePublish": "Single invitation publish",
+      "lifetime": "Lifetime access",
       "statuses": {
         "pending": "Pending",
         "paid": "Paid",
@@ -221,6 +235,24 @@
     "preview": "Preview",
     "preparing": "Preparing",
     "publish": "Publish",
+    "payment": {
+      "title": "Choose how to publish",
+      "description": "Pay for this invitation once, or unlock lifetime publishing for your account.",
+      "close": "Close payment options",
+      "redirecting": "Opening checkout",
+      "single": {
+        "title": "One-time publish",
+        "price": "$9.90",
+        "description": "Publish this invitation with permanent access to its public link.",
+        "action": "Pay $9.90 and publish"
+      },
+      "lifetime": {
+        "title": "Lifetime access",
+        "price": "$299",
+        "description": "Pay once and publish up to 10 new invitations every UTC day for life.",
+        "action": "Buy lifetime and publish"
+      }
+    },
     "guestBanner": "Not logged in. Your draft will be saved for 7 days.",
     "layers": "Layers",
     "selectLayer": "Select {name}",
@@ -255,6 +287,9 @@
       "generate": "We could not generate copy.",
       "saveLatest": "Save your latest changes before publishing.",
       "startPublish": "We could not start publishing.",
+      "publishIncomplete": "Publishing did not finish. Please try again.",
+      "dailyLimit": "You have used all 10 lifetime publications for today. The limit resets at 00:00 UTC.",
+      "startCheckout": "We could not open checkout. Please try again.",
       "paymentIncomplete": "Payment setup is incomplete. Add Stripe settings before publishing."
     },
     "new": {

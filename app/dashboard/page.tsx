@@ -7,9 +7,11 @@ import { auth, signOut } from "@/auth";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { SendEmailsDialog } from "@/components/dashboard/send-emails-dialog";
 import { InvitationActions } from "@/components/dashboard/invitation-actions";
+import { LifetimeBilling } from "@/components/dashboard/lifetime-billing";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { localePath } from "@/lib/i18n";
+import { getLifetimeBillingStatus } from "@/lib/publishing";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -47,6 +49,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const params = searchParams ? await searchParams : {};
   const firstName = session.user.name?.split(" ")[0] ?? t("fallbackName");
   const paymentState = firstParam(params.payment);
+  const purchaseType = firstParam(params.purchase);
   const requestedStatus = firstParam(params.status);
   const status = requestedStatus === "published" || requestedStatus === "draft" ? requestedStatus : "all";
   const query = (firstParam(params.q) ?? "").trim().slice(0, 100);
@@ -56,7 +59,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     ...(query ? { title: { contains: query, mode: "insensitive" as const } } : {}),
   };
 
-  const [invitations, allInvitations, payments] = await Promise.all([
+  const [invitations, allInvitations, payments, billing] = await Promise.all([
     prisma.invitation.findMany({
       where: invitationWhere,
       orderBy: { updatedAt: "desc" },
@@ -72,6 +75,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       take: 10,
       include: { invitation: { select: { id: true, title: true, slug: true } } },
     }),
+    getLifetimeBillingStatus(session.user.id),
   ]);
 
   const publishedCount = allInvitations.filter((invitation) => invitation.status === "published").length;
@@ -111,9 +115,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
         {paymentState === "success" ? (
           <div className="mt-6 flex items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950" role="status">
-            <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" /> {t("paymentSuccess")}
+            <CheckCircle2 className="h-5 w-5 shrink-0" aria-hidden="true" /> {purchaseType === "lifetime" ? t("paymentSuccessLifetime") : t("paymentSuccessSingle")}
           </div>
         ) : null}
+        {paymentState === "cancelled" ? (
+          <div className="mt-6 rounded-lg border border-border bg-background px-4 py-3 text-sm text-muted-foreground" role="status">{t("paymentCancelled")}</div>
+        ) : null}
+
+        <div className="pt-8">
+          <LifetimeBilling {...billing} />
+        </div>
 
         <section className="grid gap-4 py-8 sm:grid-cols-2 xl:grid-cols-4" aria-label={t("overviewLabel")}>
           {[
@@ -198,9 +209,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </div>
             <div className="overflow-x-auto rounded-lg border border-border bg-card shadow-sm">
               <table className="w-full min-w-[640px] text-left text-sm">
-                <thead className="border-b border-border bg-secondary/50 text-xs uppercase tracking-wide text-muted-foreground"><tr><th className="px-5 py-3 font-medium">{t("payments.invitation")}</th><th className="px-5 py-3 font-medium">{t("payments.amount")}</th><th className="px-5 py-3 font-medium">{t("payments.status")}</th><th className="px-5 py-3 font-medium">{t("payments.date")}</th></tr></thead>
+                <thead className="border-b border-border bg-secondary/50 text-xs uppercase tracking-wide text-muted-foreground"><tr><th className="px-5 py-3 font-medium">{t("payments.product")}</th><th className="px-5 py-3 font-medium">{t("payments.amount")}</th><th className="px-5 py-3 font-medium">{t("payments.status")}</th><th className="px-5 py-3 font-medium">{t("payments.date")}</th></tr></thead>
                 <tbody className="divide-y divide-border">
-                  {payments.map((payment) => <tr key={payment.id}><td className="px-5 py-4 font-medium">{payment.invitation?.title ?? t("payments.defaultInvitation")}</td><td className="px-5 py-4">{formatAmount(payment.amountCents, payment.currency, locale)}</td><td className="px-5 py-4">{t(`payments.statuses.${paymentStatusKey(payment.status)}`)}</td><td className="whitespace-nowrap px-5 py-4 text-muted-foreground">{new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(payment.createdAt)}</td></tr>)}
+                  {payments.map((payment) => <tr key={payment.id}><td className="px-5 py-4 font-medium">{payment.purchaseType === "lifetime" ? t("payments.lifetime") : payment.invitation?.title ?? t("payments.singlePublish")}</td><td className="px-5 py-4">{formatAmount(payment.amountCents, payment.currency, locale)}</td><td className="px-5 py-4">{t(`payments.statuses.${paymentStatusKey(payment.status)}`)}</td><td className="whitespace-nowrap px-5 py-4 text-muted-foreground">{new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(payment.createdAt)}</td></tr>)}
                 </tbody>
               </table>
             </div>

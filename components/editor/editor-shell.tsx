@@ -6,9 +6,11 @@ import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowLeft,
   Check,
+  CreditCard,
   Eye,
   EyeOff,
   FileImage,
+  Infinity as InfinityIcon,
   Layers3,
   Loader2,
   Lock,
@@ -19,9 +21,11 @@ import {
   Sparkles,
   Undo2,
   Upload,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
@@ -196,6 +200,8 @@ export function EditorShell({
   const [showPreview, setShowPreview] = useState(true);
   const [hydrated, setHydrated] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
+  const [checkoutType, setCheckoutType] = useState<"single_publish" | "lifetime" | null>(null);
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiVariations, setAiVariations] = useState<string[]>([]);
   const [aiSource, setAiSource] = useState<"openai" | "fallback" | "">("");
@@ -435,20 +441,27 @@ export function EditorShell({
       return;
     }
     try {
-      const response = await fetch("/api/payment/create-checkout", {
+      const response = await fetch(`/api/invitations/${invitationId}/publish`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ invitationId }),
       });
-      const payload = (await response.json()) as { data?: { checkoutUrl?: string }; checkoutUrl?: string; error?: string };
+      const payload = (await response.json()) as {
+        data?: { published?: boolean; slug?: string };
+        error?: { code?: string; message?: string };
+      };
+      if (response.status === 402 && payload.error?.code === "PAYMENT_REQUIRED") {
+        setShowPaymentOptions(true);
+        return;
+      }
+      if (response.status === 429 && payload.error?.code === "DAILY_LIMIT_REACHED") {
+        throw new Error(t("errors.dailyLimit"));
+      }
       if (!response.ok) {
         throw new Error(t("errors.startPublish"));
       }
-      const checkoutUrl = payload.data?.checkoutUrl ?? payload.checkoutUrl;
-      if (checkoutUrl) {
-        window.location.assign(checkoutUrl);
+      if (payload.data?.published) {
+        window.location.assign(localePath(locale, `/dashboard/invitations/${invitationId}/share`));
       } else {
-        setError(t("errors.paymentIncomplete"));
+        setError(t("errors.publishIncomplete"));
       }
     } catch (publishError) {
       setError(publishError instanceof Error ? publishError.message : t("errors.startPublish"));
@@ -456,6 +469,31 @@ export function EditorShell({
       setIsPublishing(false);
     }
   }, [invitationId, isGuest, locale, saveNow, t]);
+
+  const startCheckout = useCallback(async (purchaseType: "single_publish" | "lifetime") => {
+    setCheckoutType(purchaseType);
+    setError("");
+    try {
+      const response = await fetch("/api/payment/create-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ purchaseType, invitationId }),
+      });
+      const payload = (await response.json()) as {
+        data?: { checkoutUrl?: string };
+        error?: { code?: string; message?: string };
+      };
+      if (!response.ok || !payload.data?.checkoutUrl) {
+        throw new Error(payload.error?.code === "CHECKOUT_NOT_CONFIGURED"
+          ? t("errors.paymentIncomplete")
+          : t("errors.startCheckout"));
+      }
+      window.location.assign(payload.data.checkoutUrl);
+    } catch (checkoutError) {
+      setError(checkoutError instanceof Error ? checkoutError.message : t("errors.startCheckout"));
+      setCheckoutType(null);
+    }
+  }, [invitationId, t]);
 
   useEffect(() => {
     if (!hydrated || action !== "publish" || autoPublishRef.current) {
@@ -558,7 +596,51 @@ export function EditorShell({
         </aside>
       </div>
 
-      {error ? <div className="fixed bottom-4 left-1/2 z-30 flex w-[min(92vw,520px)] -translate-x-1/2 items-center justify-between gap-4 rounded-md border border-destructive/30 bg-background px-4 py-3 text-sm text-destructive shadow-lg" role="alert"><span>{error}</span><Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setError("")} aria-label={t("dismissError")} title={t("dismissError")}><span aria-hidden="true">×</span></Button></div> : null}
+      <Dialog open={showPaymentOptions} onClose={(open) => { if (!checkoutType) { setShowPaymentOptions(open); setError(""); } }}>
+        <DialogContent className="relative max-w-2xl rounded-lg">
+          <DialogHeader className="pr-10">
+            <DialogTitle>{t("payment.title")}</DialogTitle>
+            <DialogDescription>{t("payment.description")}</DialogDescription>
+          </DialogHeader>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute right-4 top-4"
+            onClick={() => { setShowPaymentOptions(false); setError(""); }}
+            disabled={Boolean(checkoutType)}
+            aria-label={t("payment.close")}
+            title={t("payment.close")}
+          >
+            <X className="h-4 w-4" aria-hidden="true" />
+          </Button>
+          {error ? <p className="mb-4 rounded-md border border-destructive/30 bg-background px-3 py-2 text-sm text-destructive" role="alert">{error}</p> : null}
+          <div className="grid gap-3 sm:grid-cols-2">
+            <section className="flex min-h-56 flex-col rounded-lg border border-border p-5">
+              <CreditCard className="h-5 w-5" aria-hidden="true" />
+              <h3 className="mt-4 text-base font-semibold">{t("payment.single.title")}</h3>
+              <p className="mt-1 text-2xl font-semibold">{t("payment.single.price")}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{t("payment.single.description")}</p>
+              <Button className="mt-auto w-full" onClick={() => void startCheckout("single_publish")} disabled={Boolean(checkoutType)}>
+                {checkoutType === "single_publish" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <CreditCard className="h-4 w-4" aria-hidden="true" />}
+                {checkoutType === "single_publish" ? t("payment.redirecting") : t("payment.single.action")}
+              </Button>
+            </section>
+            <section className="flex min-h-56 flex-col rounded-lg border border-foreground bg-secondary/50 p-5">
+              <InfinityIcon className="h-5 w-5" aria-hidden="true" />
+              <h3 className="mt-4 text-base font-semibold">{t("payment.lifetime.title")}</h3>
+              <p className="mt-1 text-2xl font-semibold">{t("payment.lifetime.price")}</p>
+              <p className="mt-2 text-sm text-muted-foreground">{t("payment.lifetime.description")}</p>
+              <Button className="mt-auto w-full" onClick={() => void startCheckout("lifetime")} disabled={Boolean(checkoutType)}>
+                {checkoutType === "lifetime" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <InfinityIcon className="h-4 w-4" aria-hidden="true" />}
+                {checkoutType === "lifetime" ? t("payment.redirecting") : t("payment.lifetime.action")}
+              </Button>
+            </section>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {error && !showPaymentOptions ? <div className="fixed bottom-4 left-1/2 z-30 flex w-[min(92vw,520px)] -translate-x-1/2 items-center justify-between gap-4 rounded-md border border-destructive/30 bg-background px-4 py-3 text-sm text-destructive shadow-lg" role="alert"><span>{error}</span><Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setError("")} aria-label={t("dismissError")} title={t("dismissError")}><span aria-hidden="true">×</span></Button></div> : null}
     </main>
   );
 }

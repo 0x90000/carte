@@ -103,7 +103,20 @@
     "greeting": "早上好，{name}。",
     "subtitle": "让下一场相聚从这里开始。",
     "createInvitation": "创建邀请函",
-    "paymentSuccess": "付款已收到，你的邀请函现已发布。",
+    "paymentSuccessSingle": "付款已收到，Stripe 确认后将发布你的邀请函。",
+    "paymentSuccessLifetime": "付款已收到，Stripe 确认后将激活终身权益。",
+    "paymentCancelled": "已取消结账，没有产生扣款。",
+    "billing": {
+      "title": "终身发布权益",
+      "description": "一次支付 299 美元，终身每天最多发布 10 份新邀请函。",
+      "activeTitle": "终身权益",
+      "activeBadge": "已激活",
+      "usage": "今天还可发布 {remaining}/{limit} 份（已使用 {used} 份）。",
+      "buy": "299 美元终身买断",
+      "redirecting": "正在打开结账页面",
+      "notConfigured": "终身买断结账尚未配置。",
+      "checkoutError": "无法打开结账页面，请重试。"
+    },
     "overviewLabel": "邀请函概览",
     "stats": {
       "totalInvitations": "邀请函总数",
@@ -144,11 +157,12 @@
     "payments": {
       "heading": "付款记录",
       "viewApiData": "查看 API 数据",
-      "invitation": "邀请函",
+      "product": "购买项目",
       "amount": "金额",
       "status": "状态",
       "date": "日期",
-      "defaultInvitation": "邀请函",
+      "singlePublish": "单份邀请函发布",
+      "lifetime": "终身权益",
       "statuses": {
         "pending": "处理中",
         "paid": "已付款",
@@ -218,6 +232,24 @@
     "preview": "预览",
     "preparing": "准备中",
     "publish": "发布",
+    "payment": {
+      "title": "选择发布方式",
+      "description": "你可以只为这份邀请函付费，也可以为账户开通终身发布权益。",
+      "close": "关闭付款选项",
+      "redirecting": "正在打开结账页面",
+      "single": {
+        "title": "按次发布",
+        "price": "9.90 美元",
+        "description": "发布当前邀请函，并永久保留它的公开访问链接。",
+        "action": "支付 9.90 美元并发布"
+      },
+      "lifetime": {
+        "title": "终身买断",
+        "price": "299 美元",
+        "description": "一次支付，终身每天最多发布 10 份新邀请函。",
+        "action": "终身买断并发布"
+      }
+    },
     "guestBanner": "尚未登录，草稿将保存 7 天。",
     "layers": "图层",
     "selectLayer": "选择 {name}",
@@ -252,6 +284,9 @@
       "generate": "无法生成文案。",
       "saveLatest": "请先保存最新修改再发布。",
       "startPublish": "无法开始发布。",
+      "publishIncomplete": "发布没有完成，请重试。",
+      "dailyLimit": "今天的 10 次终身发布额度已经用完，将在 UTC 00:00 重置。",
+      "startCheckout": "无法打开结账页面，请重试。",
       "paymentIncomplete": "支付设置尚未完成，请先配置 Stripe。"
     },
     "new": {
