@@ -1,57 +1,49 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { createCheckoutSession, getDefaultStripePriceId, isAllowedStripePriceId } from "@/lib/stripe";
-import { prisma } from "@/lib/prisma";
+import { invalidateInvitationCache } from "@/lib/public-invitation";
+import {
+  LIFETIME_DAILY_PUBLISH_LIMIT,
+  PublishInvitationError,
+  publishInvitationWithLifetimeAccess,
+} from "@/lib/publishing";
 
 type RouteContext = { params: Promise<{ id: string }> };
+
+function errorResponse(code: string, message: string, status: number, data?: Record<string, unknown>) {
+  return NextResponse.json({ success: false, error: { code, message }, ...(data ? { data } : {}) }, { status });
+}
 
 export async function POST(_request: Request, context: RouteContext) {
   const session = await auth();
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Please sign in before publishing." }, { status: 401 });
+    return errorResponse("UNAUTHORIZED", "Sign in before publishing.", 401);
   }
 
   const { id } = await context.params;
-  const invitation = await prisma.invitation.findFirst({
-    where: { id, userId: session.user.id },
-    select: { id: true, title: true, status: true },
-  });
-  if (!invitation) {
-    return NextResponse.json({ error: "Invitation not found." }, { status: 404 });
-  }
-  if (invitation.status === "published") {
-    return NextResponse.json({ error: "Invitation is already published." }, { status: 409 });
-  }
-
-  const priceId = getDefaultStripePriceId();
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "");
-  if (!priceId || !appUrl || !process.env.STRIPE_SECRET_KEY) {
-    return NextResponse.json(
-      { error: "Publishing payments are not configured. Set STRIPE_SECRET_KEY, STRIPE_PRICE_ID, and NEXT_PUBLIC_APP_URL." },
-      { status: 503 },
-    );
-  }
-  if (!isAllowedStripePriceId(priceId)) {
-    return NextResponse.json({ error: "That payment price is not available." }, { status: 400 });
-  }
-
   try {
-    const checkout = await createCheckoutSession({
-      userId: session.user.id,
-      invitationId: invitation.id,
-      priceId,
-      customerEmail: session.user.email,
-      successUrl: `${appUrl}/dashboard?payment=success&invitation=${encodeURIComponent(invitation.id)}`,
-      cancelUrl: `${appUrl}/editor/${encodeURIComponent(invitation.id)}?payment=cancelled`,
-    });
-
-    return NextResponse.json({
-      success: true,
-      checkoutUrl: checkout.url,
-      checkoutSessionId: checkout.id,
-    });
+    const published = await publishInvitationWithLifetimeAccess(session.user.id, id);
+    await invalidateInvitationCache(published.slug);
+    return NextResponse.json({ success: true, data: { published: true, ...published } });
   } catch (error) {
-    console.error("Failed to create publish checkout", error);
-    return NextResponse.json({ error: "We could not start payment. Please try again." }, { status: 502 });
+    if (error instanceof PublishInvitationError) {
+      switch (error.code) {
+        case "INVITATION_NOT_FOUND":
+          return errorResponse(error.code, "Invitation not found.", 404);
+        case "INVITATION_ALREADY_PUBLISHED":
+          return errorResponse(error.code, "Invitation is already published.", 409);
+        case "PAYMENT_REQUIRED":
+          return errorResponse(error.code, "Choose a payment option before publishing.", 402, {
+            purchaseOptions: ["single_publish", "lifetime"],
+          });
+        case "DAILY_LIMIT_REACHED":
+          return errorResponse(error.code, "Your daily lifetime publishing limit has been reached.", 429, {
+            dailyLimit: LIFETIME_DAILY_PUBLISH_LIMIT,
+            remainingToday: 0,
+          });
+      }
+    }
+
+    console.error("Failed to publish invitation", error);
+    return errorResponse("PUBLISH_FAILED", "We could not publish this invitation. Please try again.", 500);
   }
 }

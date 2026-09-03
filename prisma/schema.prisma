@@ -9,21 +9,23 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  name          String?
-  avatarUrl     String?        @map("avatar_url")
-  locale        String         @default("en")
-  emailVerified DateTime?      @map("email_verified")
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  invitations   Invitation[]
-  payments      Payment[]
-  emailSends    EmailSend[]
-  aiGenerations AIGeneration[]
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
+  id                 String              @id @default(uuid())
+  email              String              @unique
+  name               String?
+  avatarUrl          String?             @map("avatar_url")
+  locale             String              @default("en")
+  emailVerified      DateTime?           @map("email_verified")
+  image              String?
+  lifetimeAccessAt   DateTime?           @map("lifetime_access_at")
+  accounts           Account[]
+  sessions           Session[]
+  invitations        Invitation[]
+  payments           Payment[]
+  dailyPublishUsages DailyPublishUsage[]
+  emailSends         EmailSend[]
+  aiGenerations      AIGeneration[]
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -109,27 +111,27 @@ model GuestDraft {
 }
 
 model Invitation {
-  id            String    @id @default(uuid())
-  userId        String    @map("user_id")
-  slug          String    @unique
+  id            String      @id @default(uuid())
+  userId        String      @map("user_id")
+  slug          String      @unique
   scene         String
   title         String
-  locale        String    @default("en")
+  locale        String      @default("en")
   content       Json
-  templateId    String?   @map("template_id")
-  template      Template? @relation(fields: [templateId], references: [id], onDelete: SetNull)
-  eventDate     DateTime? @map("event_date")
-  eventLocation String?   @map("event_location")
-  settings      Json      @default("{}")
-  status        String    @default("draft")
-  publishedAt   DateTime? @map("published_at")
-  viewCount     Int       @default(0) @map("view_count")
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  templateId    String?     @map("template_id")
+  template      Template?   @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  eventDate     DateTime?   @map("event_date")
+  eventLocation String?     @map("event_location")
+  settings      Json        @default("{}")
+  status        String      @default("draft")
+  publishedAt   DateTime?   @map("published_at")
+  viewCount     Int         @default(0) @map("view_count")
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   rsvps         RSVP[]
   payments      Payment[]
   emailSends    EmailSend[]
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
 
   @@index([userId, status])
   @@index([slug])
@@ -154,23 +156,23 @@ model RSVP {
 }
 
 model EmailSend {
-  id             String      @id @default(uuid())
-  invitationId   String      @map("invitation_id")
-  userId         String      @map("user_id")
-  recipientEmail String      @map("recipient_email")
-  recipientName  String?     @map("recipient_name")
+  id             String     @id @default(uuid())
+  invitationId   String     @map("invitation_id")
+  userId         String     @map("user_id")
+  recipientEmail String     @map("recipient_email")
+  recipientName  String?    @map("recipient_name")
   subject        String
-  message        String?     @db.Text
-  status         String      @default("pending")
-  attemptCount   Int         @default(0) @map("attempt_count")
-  lastAttemptAt  DateTime?   @map("last_attempt_at")
-  sentAt         DateTime?   @map("sent_at")
-  openedAt       DateTime?   @map("opened_at")
-  clickedAt      DateTime?   @map("clicked_at")
-  errorMessage   String?     @map("error_message") @db.Text
-  invitation     Invitation  @relation(fields: [invitationId], references: [id], onDelete: Cascade)
-  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt      DateTime    @default(now()) @map("created_at")
+  message        String?    @db.Text
+  status         String     @default("pending")
+  attemptCount   Int        @default(0) @map("attempt_count")
+  lastAttemptAt  DateTime?  @map("last_attempt_at")
+  sentAt         DateTime?  @map("sent_at")
+  openedAt       DateTime?  @map("opened_at")
+  clickedAt      DateTime?  @map("clicked_at")
+  errorMessage   String?    @map("error_message") @db.Text
+  invitation     Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime   @default(now()) @map("created_at")
 
   @@index([invitationId])
   @@index([status])
@@ -185,6 +187,7 @@ model Payment {
   invitationId      String?     @map("invitation_id")
   amountCents       Int         @map("amount_cents")
   currency          String      @default("USD")
+  purchaseType      String      @map("purchase_type")
   paymentProvider   String      @map("payment_provider")
   providerPaymentId String?     @map("provider_payment_id")
   providerSessionId String?     @unique @map("provider_session_id")
@@ -196,6 +199,17 @@ model Payment {
   @@index([userId, status])
   @@index([providerPaymentId])
   @@map("payments")
+}
+
+model DailyPublishUsage {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  usageDate DateTime @map("usage_date") @db.Date
+  count     Int      @default(0)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, usageDate])
+  @@map("daily_publish_usages")
 }
 
 model AIGeneration {

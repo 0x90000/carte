@@ -1,6 +1,12 @@
+import { Prisma } from "@prisma/client";
 import type Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
 import { invalidateInvitationCache } from "@/lib/public-invitation";
+import {
+  PublishInvitationError,
+  publishInvitationWithLifetimeAccessInTransaction,
+} from "@/lib/publishing";
+import { isPaymentPurchaseType } from "@/lib/stripe";
 
 export class PaymentWebhookError extends Error {}
 
@@ -13,11 +19,15 @@ function paymentIntentId(value: string | Stripe.PaymentIntent | null) {
   return typeof value === "string" ? value : value?.id ?? null;
 }
 
-export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+async function processCheckoutCompleted(session: Stripe.Checkout.Session, now: Date) {
   const userId = metadataValue(session.metadata, "userId");
   const invitationId = metadataValue(session.metadata, "invitationId");
-  if (!userId || !invitationId) {
+  const purchaseTypeValue = metadataValue(session.metadata, "purchaseType");
+  if (!userId || !purchaseTypeValue || !isPaymentPurchaseType(purchaseTypeValue)) {
     throw new PaymentWebhookError("Checkout metadata is incomplete.");
+  }
+  if (purchaseTypeValue === "single_publish" && !invitationId) {
+    throw new PaymentWebhookError("Single-publish checkout requires an invitation.");
   }
 
   const providerPaymentId = paymentIntentId(session.payment_intent);
@@ -27,15 +37,7 @@ export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) 
     throw new PaymentWebhookError("Checkout payment details are incomplete.");
   }
 
-  const result = await prisma.$transaction(async (transaction) => {
-    const invitation = await transaction.invitation.findFirst({
-      where: { id: invitationId, userId },
-      select: { id: true, slug: true, status: true, publishedAt: true },
-    });
-    if (!invitation) {
-      throw new PaymentWebhookError("Invitation for checkout was not found.");
-    }
-
+  return prisma.$transaction(async (transaction) => {
     const existing = await transaction.payment.findFirst({
       where: {
         OR: [
@@ -43,54 +45,114 @@ export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) 
           ...(providerPaymentId ? [{ providerPaymentId }] : []),
         ],
       },
+      include: { invitation: { select: { slug: true } } },
     });
+    if (existing?.status === "succeeded") {
+      return { invitationSlug: existing.invitation?.slug ?? null, processed: false };
+    }
 
+    const user = await transaction.user.findUnique({
+      where: { id: userId },
+      select: { id: true },
+    });
+    if (!user) {
+      throw new PaymentWebhookError("User for checkout was not found.");
+    }
+
+    let invitation: { id: string; slug: string; status: string; publishedAt: Date | null } | null = null;
+    if (invitationId) {
+      invitation = await transaction.invitation.findFirst({
+        where: { id: invitationId, userId },
+        select: { id: true, slug: true, status: true, publishedAt: true },
+      });
+      if (!invitation) {
+        throw new PaymentWebhookError("Invitation for checkout was not found.");
+      }
+    }
+
+    const paymentData = {
+      userId,
+      invitationId,
+      purchaseType: purchaseTypeValue,
+      amountCents,
+      currency,
+      paymentProvider: "stripe",
+      providerPaymentId,
+      providerSessionId: session.id,
+      status: "succeeded",
+    };
     if (existing) {
       await transaction.payment.update({
         where: { id: existing.id },
-        data: {
-          userId,
-          invitationId,
-          amountCents,
-          currency,
-          paymentProvider: "stripe",
-          providerPaymentId: providerPaymentId ?? existing.providerPaymentId,
-          providerSessionId: session.id,
-          status: "succeeded",
-        },
+        data: { ...paymentData, providerPaymentId: providerPaymentId ?? existing.providerPaymentId },
       });
     } else {
-      await transaction.payment.create({
-        data: {
-          userId,
-          invitationId,
-          amountCents,
-          currency,
-          paymentProvider: "stripe",
-          providerPaymentId,
-          providerSessionId: session.id,
-          status: "succeeded",
-        },
-      });
+      await transaction.payment.create({ data: paymentData });
     }
 
-    if (invitation.status !== "published") {
-      await transaction.invitation.update({
-        where: { id: invitation.id },
-        data: { status: "published", publishedAt: invitation.publishedAt ?? new Date() },
-      });
+    if (purchaseTypeValue === "single_publish") {
+      if (invitation?.status !== "published") {
+        await transaction.invitation.update({
+          where: { id: invitation!.id },
+          data: { status: "published", publishedAt: invitation?.publishedAt ?? now },
+        });
+      }
+      return { invitationSlug: invitation!.slug, processed: true };
     }
-    return invitation;
-  });
 
-  await invalidateInvitationCache(result.slug);
+    await transaction.user.updateMany({
+      where: { id: userId, lifetimeAccessAt: null },
+      data: { lifetimeAccessAt: { set: now } },
+    });
+
+    if (!invitation || invitation.status === "published") {
+      return { invitationSlug: invitation?.slug ?? null, processed: true };
+    }
+
+    try {
+      const published = await publishInvitationWithLifetimeAccessInTransaction(transaction, {
+        userId,
+        invitationId: invitation.id,
+        now,
+      });
+      return { invitationSlug: published.slug, processed: true };
+    } catch (error) {
+      if (error instanceof PublishInvitationError && error.code === "DAILY_LIMIT_REACHED") {
+        return { invitationSlug: null, processed: true };
+      }
+      throw error;
+    }
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
+}
+
+export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
+  if (session.payment_status !== "paid") {
+    return { invitationSlug: null, processed: false };
+  }
+
+  const now = new Date();
+  let result: Awaited<ReturnType<typeof processCheckoutCompleted>> | null = null;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      result = await processCheckoutCompleted(session, now);
+      break;
+    } catch (error) {
+      const shouldRetry = error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2034";
+      if (!shouldRetry || attempt === 2) {
+        throw error;
+      }
+    }
+  }
+
+  if (result?.invitationSlug) {
+    await invalidateInvitationCache(result.invitationSlug);
+  }
   return result;
 }
 
 export async function handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
-  const providerPaymentId = paymentIntent.id;
   await prisma.payment.updateMany({
-    where: { providerPaymentId },
+    where: { providerPaymentId: paymentIntent.id },
     data: { status: "failed" },
   });
 }
