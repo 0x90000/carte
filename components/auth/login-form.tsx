@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { signIn } from "next-auth/react";
 import { ArrowRight, Check, Loader2, Mail, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { localePath } from "@/lib/i18n";
 
 type Step = "email" | "code";
 
@@ -16,11 +18,19 @@ type LoginFormProps = {
 };
 
 export function LoginForm({ continueUrl = "/dashboard", migrateAfterSignIn = false }: LoginFormProps) {
+  const locale = useLocale();
+  const t = useTranslations("login");
   const [step, setStep] = useState<Step>("email");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  function requestErrorMessage(errorCode?: string) {
+    if (errorCode === "invalidEmail") return t("errors.invalidEmail");
+    if (errorCode === "rateLimited") return t("errors.rateLimited");
+    return t("errors.requestFailed");
+  }
 
   useEffect(() => {
     if (!migrateAfterSignIn) {
@@ -55,14 +65,14 @@ export function LoginForm({ continueUrl = "/dashboard", migrateAfterSignIn = fal
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      const payload = (await response.json()) as { error?: string };
+      const payload = (await response.json()) as { errorCode?: string };
       if (!response.ok) {
-        setError(payload.error ?? "We could not send your code. Please try again.");
+        setError(requestErrorMessage(payload.errorCode));
         return;
       }
       setStep("code");
     } catch {
-      setError("We could not send your code. Please try again.");
+      setError(t("errors.requestFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +91,7 @@ export function LoginForm({ continueUrl = "/dashboard", migrateAfterSignIn = fal
     });
 
     if (result?.error) {
-      setError("That code is invalid or expired. Request a new one and try again.");
+      setError(t("errors.invalidCode"));
       setIsLoading(false);
       return;
     }
@@ -100,7 +110,7 @@ export function LoginForm({ continueUrl = "/dashboard", migrateAfterSignIn = fal
     setError("");
     setIsLoading(true);
     await signIn("google", {
-      callbackUrl: `/login?continue=${encodeURIComponent(continueUrl)}&migrate=1`,
+      callbackUrl: `${localePath(locale, "/login")}?continue=${encodeURIComponent(continueUrl)}&migrate=1`,
     });
   }
 
@@ -108,9 +118,9 @@ export function LoginForm({ continueUrl = "/dashboard", migrateAfterSignIn = fal
     <div className="space-y-6">
       <div className="flex items-center gap-3 text-sm text-muted-foreground">
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">1</span>
-        <span className={step === "code" ? "text-muted-foreground" : "font-medium text-foreground"}>Your email</span>
+        <span className={step === "code" ? "text-muted-foreground" : "font-medium text-foreground"}>{t("form.emailStep")}</span>
         <span className="h-px flex-1 bg-border" />
-        <span className={step === "code" ? "font-medium text-foreground" : ""}>Verification</span>
+        <span className={step === "code" ? "font-medium text-foreground" : ""}>{t("form.verificationStep")}</span>
         <span className={`flex h-8 w-8 items-center justify-center rounded-full ${step === "code" ? "bg-primary text-primary-foreground" : "border border-border text-muted-foreground"}`}>
           {step === "code" ? <Check className="h-4 w-4" aria-hidden="true" /> : "2"}
         </span>
@@ -119,46 +129,46 @@ export function LoginForm({ continueUrl = "/dashboard", migrateAfterSignIn = fal
       {step === "email" ? (
         <form className="space-y-5" onSubmit={requestCode}>
           <div className="space-y-2">
-            <Label htmlFor="email">Email address</Label>
+            <Label htmlFor="email">{t("form.emailLabel")}</Label>
             <div className="relative">
               <Mail className="pointer-events-none absolute left-3 top-3 h-5 w-5 text-muted-foreground" aria-hidden="true" />
               <Input id="email" name="email" type="email" autoComplete="email" placeholder="you@example.com" className="pl-11" value={email} onChange={(event) => setEmail(event.target.value)} required />
             </div>
-            <p className="text-sm text-muted-foreground">We&apos;ll send a six-digit code. No password to remember.</p>
+            <p className="text-sm text-muted-foreground">{t("form.emailHint")}</p>
           </div>
           {error ? <p className="text-sm text-destructive" role="alert">{error}</p> : null}
           <Button className="w-full" type="submit" disabled={isLoading}>
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <ArrowRight className="h-4 w-4" aria-hidden="true" />}
-            {isLoading ? "Sending code" : "Continue with email"}
+            {isLoading ? t("form.sendCode") : t("form.continueWithEmail")}
           </Button>
         </form>
       ) : (
         <form className="space-y-5" onSubmit={verifyCode}>
           <div className="space-y-2">
-            <Label htmlFor="code">Verification code</Label>
+            <Label htmlFor="code">{t("form.codeLabel")}</Label>
             <Input id="code" name="code" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} placeholder="000000" className="text-center text-xl tracking-[0.3em]" value={code} onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))} required />
-            <p className="text-sm text-muted-foreground">Check {email} for your code. It expires in 10 minutes.</p>
+            <p className="text-sm text-muted-foreground">{t("form.codeHint", { email })}</p>
           </div>
           {error ? <p className="text-sm text-destructive" role="alert">{error}</p> : null}
           <Button className="w-full" type="submit" disabled={isLoading || code.length !== 6}>
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <ShieldCheck className="h-4 w-4" aria-hidden="true" />}
-            {isLoading ? "Checking code" : "Sign in"}
+            {isLoading ? t("form.checkingCode") : t("form.signIn")}
           </Button>
           <Button variant="ghost" className="w-full" type="button" onClick={() => { setStep("email"); setCode(""); setError(""); }}>
-            Use a different email
+            {t("form.differentEmail")}
           </Button>
         </form>
       )}
 
       <div className="relative flex items-center gap-3 py-1">
         <span className="h-px flex-1 bg-border" />
-        <span className="text-xs uppercase tracking-[0.12em] text-muted-foreground">or</span>
+        <span className="text-xs uppercase tracking-[0.12em] text-muted-foreground">{t("form.or")}</span>
         <span className="h-px flex-1 bg-border" />
       </div>
 
       <Button variant="outline" className="w-full" type="button" onClick={continueWithGoogle} disabled={isLoading}>
         <span aria-hidden="true" className="flex h-5 w-5 items-center justify-center text-sm font-semibold">G</span>
-        Continue with Google
+        {t("form.continueWithGoogle")}
       </Button>
     </div>
   );

@@ -67,7 +67,34 @@
     }
   },
   "login": {
-    "eyebrow": "Welcome back", "title": "Sign in to your studio", "description": "Your invitations, drafts, and guest lists in one place.", "back": "Back to Carte", "terms": "By continuing, you agree to Carte's terms and privacy policy."
+    "metadataTitle": "Sign in | Carte",
+    "metadataDescription": "Sign in to create and manage your invitations.",
+    "eyebrow": "Welcome back", "title": "Sign in to your studio", "description": "Your invitations, drafts, and guest lists in one place.", "back": "Back to Carte", "terms": "By continuing, you agree to Carte's terms and privacy policy.",
+    "brandEyebrow": "Thoughtful invitations",
+    "brandTitle": "Give every gathering a beautiful beginning.",
+    "brandDescription": "Create, refine, and share an invitation that feels like your event before the first guest arrives.",
+    "brandTagline": "Invitations with intention",
+    "form": {
+      "emailStep": "Your email",
+      "verificationStep": "Verification",
+      "emailLabel": "Email address",
+      "emailHint": "We'll send a six-digit code. No password to remember.",
+      "codeLabel": "Verification code",
+      "codeHint": "Check {email} for your code. It expires in 10 minutes.",
+      "sendCode": "Sending code",
+      "continueWithEmail": "Continue with email",
+      "checkingCode": "Checking code",
+      "signIn": "Sign in",
+      "differentEmail": "Use a different email",
+      "or": "or",
+      "continueWithGoogle": "Continue with Google"
+    },
+    "errors": {
+      "invalidEmail": "Enter a valid email address.",
+      "rateLimited": "Please wait a minute before requesting another code.",
+      "requestFailed": "We could not send your code. Please try again.",
+      "invalidCode": "That code is invalid or expired. Request a new one and try again."
+    }
   },
   "dashboard": {
     "metadataTitle": "Dashboard | Carte",

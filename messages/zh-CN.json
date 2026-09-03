@@ -64,7 +64,34 @@
     }
   },
   "login": {
-    "eyebrow": "欢迎回来", "title": "登录你的工作室", "description": "你的邀请函、草稿和宾客名单都在这里。", "back": "返回 Carte", "terms": "继续即表示你同意 Carte 的服务条款和隐私政策。"
+    "metadataTitle": "登录 | Carte",
+    "metadataDescription": "登录以创建和管理你的邀请函。",
+    "eyebrow": "欢迎回来", "title": "登录你的工作室", "description": "你的邀请函、草稿和宾客名单都在这里。", "back": "返回 Carte", "terms": "继续即表示你同意 Carte 的服务条款和隐私政策。",
+    "brandEyebrow": "用心设计的邀请函",
+    "brandTitle": "为每场相聚开启一个美好的开始。",
+    "brandDescription": "创建、完善并分享一份像你的活动一样真切的邀请函，让宾客在抵达前就感受到它的氛围。",
+    "brandTagline": "用心设计每一份邀请",
+    "form": {
+      "emailStep": "你的邮箱",
+      "verificationStep": "验证",
+      "emailLabel": "邮箱地址",
+      "emailHint": "我们会发送六位验证码，无需记忆密码。",
+      "codeLabel": "验证码",
+      "codeHint": "请查看 {email} 的验证码，有效期为 10 分钟。",
+      "sendCode": "发送验证码中",
+      "continueWithEmail": "使用邮箱继续",
+      "checkingCode": "验证中",
+      "signIn": "登录",
+      "differentEmail": "使用其他邮箱",
+      "or": "或",
+      "continueWithGoogle": "使用 Google 继续"
+    },
+    "errors": {
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "rateLimited": "请等待一分钟后再请求新的验证码。",
+      "requestFailed": "无法发送验证码，请稍后重试。",
+      "invalidCode": "验证码无效或已过期，请重新请求。"
+    }
   },
   "dashboard": {
     "metadataTitle": "控制台 | Carte",

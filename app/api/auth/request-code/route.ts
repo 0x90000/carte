@@ -13,17 +13,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
+      return NextResponse.json({ errorCode: "invalidEmail" }, { status: 400 });
     }
     if (error instanceof Error && error.message === "RATE_LIMIT") {
       return NextResponse.json(
-        { error: "Please wait a minute before requesting another code." },
+        { errorCode: "rateLimited" },
         { status: 429 },
       );
     }
     console.error("Failed to issue sign-in code", error);
     return NextResponse.json(
-      { error: "We could not send your code. Please try again." },
+      { errorCode: "requestFailed" },
       { status: 503 },
     );
   }
