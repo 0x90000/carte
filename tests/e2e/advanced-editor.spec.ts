@@ -1,11 +1,21 @@
 import { expect, test } from "@playwright/test";
-import { createGuestDraft } from "./helpers";
 
 test.describe("advanced editor text controls", () => {
   test("changes a text layer font, size, and color", async ({ page }) => {
     test.skip(process.env.ADVANCED_EDITOR_TEST_MODE !== "1", "Set ADVANCED_EDITOR_TEST_MODE=1 to run the advanced editor flow.");
 
-    const invitationId = await createGuestDraft(page);
+    await page.goto("/en/create");
+    await page.getByRole("link", { name: "Wedding" }).click();
+    await page.waitForURL(/\/en\/templates\?scene=wedding$/);
+    await page.locator('a[href^="/en/templates/"]').first().click();
+    await page.getByRole("link", { name: /Use this template/ }).click();
+    await page.waitForURL(/\/en\/editor\/[^/?]+$/);
+    await page.getByText("Not logged in. Your draft will be saved for 7 days.").waitFor();
+
+    const invitationId = new URL(page.url()).pathname.split("/").pop();
+    if (!invitationId) {
+      throw new Error(`Could not determine invitation id from ${page.url()}`);
+    }
     await page.getByRole("button", { name: "Select Couple names" }).click();
 
     await page.getByLabel("Font family").selectOption("Georgia");
