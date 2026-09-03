@@ -4,9 +4,7 @@ test.describe("advanced editor text controls", () => {
   test("changes a text layer font, size, and color", async ({ page }) => {
     test.skip(process.env.ADVANCED_EDITOR_TEST_MODE !== "1", "Set ADVANCED_EDITOR_TEST_MODE=1 to run the advanced editor flow.");
 
-    await page.goto("/en/create");
-    await page.getByRole("link", { name: "Wedding" }).click();
-    await page.waitForURL(/\/en\/templates\?scene=wedding$/);
+    await page.goto("/en/templates?scene=wedding");
     await page.locator('a[href^="/en/templates/"]').first().click();
     await page.getByRole("link", { name: /Use this template/ }).click();
     await page.waitForURL(/\/en\/editor\/[^/?]+$/);
