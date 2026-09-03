@@ -29,5 +29,11 @@ test.describe("advanced editor text controls", () => {
     expect(titleLayer?.content?.font?.family).toBe("Georgia");
     expect(titleLayer?.content?.font?.size).toBe(42);
     expect(titleLayer?.content?.color).toBe("#ff0000");
+
+    await page.goto(`/zh-CN/editor/${invitationId}`);
+    await page.getByRole("button", { name: "选择 Couple names" }).click();
+    await expect(page.getByLabel("字体")).toBeVisible();
+    await expect(page.getByLabel("字号")).toBeVisible();
+    await expect(page.getByLabel("文字颜色")).toBeVisible();
   });
 });
