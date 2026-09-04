@@ -44,6 +44,9 @@ test.describe("photo gallery", () => {
 
     await page.goto(`/en/i/${encodeURIComponent(slug as string)}`);
     await expect(page.getByRole("heading", { name: "Photo gallery", exact: true })).toBeVisible();
-    await expect(page.getByRole("img", { name: /Gallery photo/ }).first()).toBeVisible();
+    const galleryPhotos = page.getByRole("img", { name: /test photo/ });
+    await expect(galleryPhotos).toHaveCount(2);
+    await expect(page.getByRole("img", { name: "First test photo", exact: true })).toBeVisible();
+    await expect(page.getByRole("img", { name: "Second test photo", exact: true })).toBeVisible();
   });
 });
