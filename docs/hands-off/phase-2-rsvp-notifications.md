@@ -66,3 +66,4 @@ git diff --check                     PASS
 - `c3e0c59 fix: retry redis connections after startup timeout`
 - `65d903d fix: destroy failed redis sockets before retry`
 - `b618ade test: clean up digest fixtures on assertion failure`
+- `833b689 docs: document rsvp notification settings`
