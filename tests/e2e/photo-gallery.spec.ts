@@ -24,7 +24,7 @@ test.describe("photo gallery", () => {
       { name: "first.png", mimeType: "image/png", buffer: onePixelPng },
       { name: "second.png", mimeType: "image/png", buffer: onePixelPng },
     ]);
-    await expect(page.getByLabel("Selected gallery photos")).toBeVisible();
+    await expect(page.getByRole("region", { name: "Photo gallery" }).getByLabel("Selected gallery photos")).toBeVisible();
     await expect(page.getByRole("button", { name: "Remove gallery photo 1" })).toBeVisible();
     await page.getByRole("button", { name: "Remove gallery photo 1" }).click();
     await page.getByRole("button", { name: /^Save$/ }).click();
