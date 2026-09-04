@@ -12,6 +12,16 @@ const partySize = partySizeValue.default(1);
 const dietaryPreferences = z.string().trim().max(1000).optional();
 const message = z.string().trim().max(500, "Messages must be 500 characters or fewer.").optional();
 
+export function normalizeRsvpEmail(value: string | null | undefined) {
+  const normalized = value?.trim().toLowerCase() ?? "";
+  return normalized || null;
+}
+
+export function normalizeRsvpPhone(value: string | null | undefined) {
+  const normalized = value?.replace(/\D/g, "") ?? "";
+  return normalized || null;
+}
+
 export const rsvpSchema = z
   .object({
     invitationSlug: invitationIdentifier,

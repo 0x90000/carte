@@ -347,6 +347,8 @@
       "nameRequired": "Name is required.",
       "emailInvalid": "Enter a valid email address.",
       "contactRequired": "Enter an email or phone number.",
+      "duplicate": "An RSVP has already been submitted for this contact.",
+      "rateLimited": "Too many attempts. Please wait a minute and try again.",
       "partySize": "Party size must be between 1 and 20.",
       "messageLength": "Message must be 500 characters or fewer.",
       "submit": "We could not submit your RSVP."

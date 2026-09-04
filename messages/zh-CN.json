@@ -344,6 +344,8 @@
       "nameRequired": "请填写姓名。",
       "emailInvalid": "请输入有效的邮箱地址。",
       "contactRequired": "请填写邮箱或电话。",
+      "duplicate": "该联系方式已经提交过 RSVP。",
+      "rateLimited": "操作过于频繁，请等待一分钟后重试。",
       "partySize": "同行人数需为 1 至 20 人。",
       "messageLength": "留言不能超过 500 个字符。",
       "submit": "无法提交 RSVP，请稍后重试。"

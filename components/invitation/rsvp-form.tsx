@@ -96,7 +96,13 @@ export function RSVPForm({ invitationSlug }: RSVPFormProps) {
         body: JSON.stringify({ ...values, invitationSlug, partySize: Number(values.partySize) }),
       });
       if (!response.ok) {
-        throw new Error(t("errors.submit"));
+        const payload = await response.json().catch(() => null) as { error?: { code?: string } } | null;
+        const messageKey = payload?.error?.code === "DUPLICATE_RSVP"
+          ? "errors.duplicate"
+          : payload?.error?.code === "RATE_LIMITED"
+            ? "errors.rateLimited"
+            : "errors.submit";
+        throw new Error(t(messageKey));
       }
       setSubmitted(true);
     } catch (error) {
