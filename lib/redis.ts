@@ -4,7 +4,7 @@ type CarteRedis = RedisClientType;
 
 const globalForRedis = globalThis as unknown as {
   redis?: CarteRedis;
-  redisConnection?: Promise<CarteRedis>;
+  redisConnection?: Promise<CarteRedis | null>;
 };
 
 export async function getRedis() {
@@ -25,15 +25,36 @@ export async function getRedis() {
     });
   }
 
-  if (!globalForRedis.redis.isOpen) {
-    try {
-      globalForRedis.redisConnection ??= globalForRedis.redis.connect().then(() => globalForRedis.redis!);
-      await globalForRedis.redisConnection;
-    } catch (error) {
-      globalForRedis.redisConnection = undefined;
-      console.warn("Could not connect to Redis", error);
-      return null;
-    }
+  if (!globalForRedis.redis.isReady) {
+    globalForRedis.redisConnection ??= (async () => {
+      const redis = globalForRedis.redis!;
+      if (redis.isOpen) {
+        try {
+          await redis.disconnect();
+        } catch {
+          // A timed-out connection may already be closed by the client.
+        }
+      }
+      await redis.connect();
+      return redis;
+    })()
+      .catch((error) => {
+        console.warn("Could not connect to Redis", error);
+        try {
+          if (globalForRedis.redis?.isOpen) {
+            void globalForRedis.redis.disconnect();
+          }
+        } catch {
+          // Ignore cleanup errors; the next call will create a fresh attempt.
+        }
+        return null;
+      })
+      .finally(() => {
+        if (!globalForRedis.redis?.isReady) {
+          globalForRedis.redisConnection = undefined;
+        }
+      });
+    await globalForRedis.redisConnection;
   }
 
   return globalForRedis.redis.isReady ? globalForRedis.redis : null;
