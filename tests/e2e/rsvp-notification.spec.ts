@@ -48,11 +48,11 @@ test.describe.serial("hourly RSVP digest notifications", () => {
         include: { emailSend: true },
         orderBy: { createdAt: "desc" },
       });
+      if (digest?.id) createdNotificationIds.push(digest.id);
       expect(digest).toBeTruthy();
       expect(digest?.rsvpCount).toBe(2);
       expect(digest?.rsvpIds.sort()).toEqual(createdRsvpIds.sort());
       expect(digest?.emailSend?.rsvpNotificationId).toBe(digest?.id);
-      if (digest?.id) createdNotificationIds.push(digest.id);
 
       await new Promise((resolve) => setTimeout(resolve, 2_500));
       await expect(prisma.rSVPNotification.count({ where: { invitationId: invitationId! } })).resolves.toBe(notificationCountBefore + 1);
@@ -79,8 +79,8 @@ test.describe.serial("hourly RSVP digest notifications", () => {
         where: { invitationId: invitationId!, createdAt: { gte: startedAt }, id: { notIn: createdNotificationIds } },
         orderBy: { createdAt: "desc" },
       });
-      expect(secondDigest?.rsvpCount).toBe(1);
       if (secondDigest?.id) createdNotificationIds.push(secondDigest.id);
+      expect(secondDigest?.rsvpCount).toBe(1);
     } finally {
       await prisma.emailSend.deleteMany({ where: { rsvpNotificationId: { in: createdNotificationIds } } });
       await prisma.rSVPNotification.deleteMany({ where: { id: { in: createdNotificationIds } } });
