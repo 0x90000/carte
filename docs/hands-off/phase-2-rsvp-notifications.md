@@ -70,4 +70,4 @@ git diff --check                     PASS
 - `b618ade test: clean up digest fixtures on assertion failure`
 - `833b689 docs: document rsvp notification settings`
 - `a2522c3 fix: allow redis reconnect after disconnect`
-- `（待提交） fix: remove Google Fonts build-time dependency for offline standalone builds`
+- `6a1ece9 fix: remove google fonts build dependency`
