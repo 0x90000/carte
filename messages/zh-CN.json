@@ -317,6 +317,8 @@
     "videoBackground": "邀请函视频背景",
     "youAreInvited": "诚邀您的到来",
     "invitationBy": "邀请函由 Carte 制作",
+    "galleryTitle": "照片画廊",
+    "galleryPhotoAlt": "画廊照片 {index}",
     "notFoundTitle": "找不到邀请函 | Carte",
     "invitedDescription": "诚邀你参加 {title}"
   },

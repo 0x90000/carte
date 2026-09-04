@@ -320,6 +320,8 @@
     "videoBackground": "Invitation video background",
     "youAreInvited": "You are invited",
     "invitationBy": "Invitation by Carte",
+    "galleryTitle": "Photo gallery",
+    "galleryPhotoAlt": "Gallery photo {index}",
     "notFoundTitle": "Invitation not found | Carte",
     "invitedDescription": "You're invited to {title}"
   },
