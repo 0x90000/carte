@@ -1,7 +1,7 @@
 # Carte Hands-off: RSVP 每小时汇总通知
 
 **状态**: 已完成代码实现、服务器候选验收和正式部署
-**日期**: 2026-09-04
+**日期**: 2026-09-05
 **依据**: `docs/tech-spec-detailed.md`、`docs/feature-supplement.md` 及产品确认的 RSVP 可靠性规则
 
 ## 产品规则
@@ -37,7 +37,7 @@
 npm run lint                         PASS
 npx tsc --noEmit --incremental false PASS
 npx prisma validate                  PASS（临时 DATABASE_URL）
-npm run build                        PASS
+npm run build                        PASS（移除 next/font/google 构建期外网依赖后）
 npx playwright test --list           PASS（21 个测试）
 git diff --check                     PASS
 ```
@@ -51,7 +51,9 @@ git diff --check                     PASS
 - 候选验证了两条 RSVP 生成单条 `rsvp_notifications`（`rsvp_count=2`），无新增周期不生成第二条；加入第三条后第二条摘要只包含该新增 RSVP。
 - 开启邮件 worker 后，摘要关联 `EmailSend` 在无有效 Resend key 的服务器上完成 3 次重试，最终 `EmailSend.status=failed`、`attempt_count=3`、`error_message=EMAIL_NOT_CONFIGURED`；`RSVPNotification` 同步为 `failed`。
 - 验收中服务器曾因磁盘满触发 PostgreSQL 自动恢复；已删除本阶段归档、staging、候选容器和隔离 fixture，PostgreSQL/Redis 恢复为 healthy，fixture 用户、邀请函、RSVP 和摘要均为 0 残留。
-- 正式 `carte-app-1` 已切换至 `carte-app:rsvp-notification-redis-retry-final-20260904`；英文/中文首页均 HTTP 200，`POST /api/rsvp` 对不存在邀请函返回 404，确认 Redis 恢复后的限流链路正常。
+- 因构建服务器无法稳定访问 Google Fonts，`app/layout.tsx` 改用 CSS 系统字体栈（Inter 优先），不再产生构建期外网依赖；本机 Node 24 standalone 构建成功。
+- 正式 `carte-app-1` 已切换至 `carte-app:rsvp-notification-fontfix-20260905`；英文/中文首页均 HTTP 200，Node.js `v24.20.0`，PostgreSQL/Redis healthy。
+- 部署后已删除候选容器、旧正式容器/镜像、上传归档和 staging；服务器根分区约 90% 使用率，数据卷未删除。
 
 ## 当前边界
 
@@ -67,3 +69,5 @@ git diff --check                     PASS
 - `65d903d fix: destroy failed redis sockets before retry`
 - `b618ade test: clean up digest fixtures on assertion failure`
 - `833b689 docs: document rsvp notification settings`
+- `a2522c3 fix: allow redis reconnect after disconnect`
+- `（待提交） fix: remove Google Fonts build-time dependency for offline standalone builds`
