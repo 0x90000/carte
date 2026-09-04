@@ -23,6 +23,7 @@ model User {
   payments           Payment[]
   dailyPublishUsages DailyPublishUsage[]
   emailSends         EmailSend[]
+  rsvpNotifications  RSVPNotification[]
   aiGenerations      AIGeneration[]
   createdAt          DateTime            @default(now()) @map("created_at")
   updatedAt          DateTime            @updatedAt @map("updated_at")
@@ -128,6 +129,7 @@ model Invitation {
   viewCount     Int         @default(0) @map("view_count")
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   rsvps         RSVP[]
+  rsvpNotifications RSVPNotification[]
   payments      Payment[]
   emailSends    EmailSend[]
   createdAt     DateTime    @default(now()) @map("created_at")
@@ -148,11 +150,38 @@ model RSVP {
   partySize          Int        @default(1) @map("party_size")
   dietaryPreferences String?    @map("dietary_preferences") @db.Text
   message            String?    @db.Text
+  notificationSentAt DateTime?  @map("notification_sent_at")
   invitation         Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
   createdAt          DateTime   @default(now()) @map("created_at")
 
   @@index([invitationId])
+  @@index([invitationId, notificationSentAt])
   @@map("rsvps")
+}
+
+model RSVPNotification {
+  id             String     @id @default(uuid())
+  invitationId   String     @map("invitation_id")
+  userId         String     @map("user_id")
+  recipientEmail String     @map("recipient_email")
+  recipientName  String?    @map("recipient_name")
+  rsvpIds        String[]   @map("rsvp_ids")
+  rsvpCount      Int        @map("rsvp_count")
+  subject        String
+  message        String     @db.Text
+  status         String     @default("pending")
+  attemptCount   Int        @default(0) @map("attempt_count")
+  lastAttemptAt  DateTime?  @map("last_attempt_at")
+  sentAt         DateTime?  @map("sent_at")
+  errorMessage   String?    @map("error_message") @db.Text
+  invitation     Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  emailSend      EmailSend?
+  createdAt      DateTime   @default(now()) @map("created_at")
+
+  @@index([status, createdAt])
+  @@index([invitationId, createdAt])
+  @@map("rsvp_notifications")
 }
 
 model EmailSend {
@@ -170,8 +199,10 @@ model EmailSend {
   openedAt       DateTime?  @map("opened_at")
   clickedAt      DateTime?  @map("clicked_at")
   errorMessage   String?    @map("error_message") @db.Text
+  rsvpNotificationId String? @unique @map("rsvp_notification_id")
   invitation     Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
   user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rsvpNotification RSVPNotification? @relation(fields: [rsvpNotificationId], references: [id], onDelete: SetNull)
   createdAt      DateTime   @default(now()) @map("created_at")
 
   @@index([invitationId])

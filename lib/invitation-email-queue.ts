@@ -24,14 +24,26 @@ export async function enqueueInvitationEmails(sendIds: string[]) {
 }
 
 async function processEmailSend(sendId: string) {
-  const send = await prisma.emailSend.findUnique({ where: { id: sendId } });
+  const send = await prisma.emailSend.findUnique({
+    where: { id: sendId },
+    include: { rsvpNotification: true },
+  });
   if (!send || send.status === "sent") return;
 
   const attemptCount = send.attemptCount + 1;
-  await prisma.emailSend.update({
-    where: { id: send.id },
-    data: { status: "sending", attemptCount, lastAttemptAt: new Date() },
-  });
+  const attemptAt = new Date();
+  await prisma.$transaction([
+    prisma.emailSend.update({
+      where: { id: send.id },
+      data: { status: "sending", attemptCount, lastAttemptAt: attemptAt },
+    }),
+    ...(send.rsvpNotification
+      ? [prisma.rSVPNotification.update({
+          where: { id: send.rsvpNotification.id },
+          data: { status: "sending", attemptCount, lastAttemptAt: attemptAt, errorMessage: null },
+        })]
+      : []),
+  ]);
 
   try {
     const resend = getResendClient();
@@ -47,28 +59,61 @@ async function processEmailSend(sendId: string) {
     if (result.error) {
       throw new Error(result.error.message);
     }
-    await prisma.emailSend.update({
-      where: { id: send.id },
-      data: { status: "sent", sentAt: new Date(), errorMessage: null },
-    });
+    const sentAt = new Date();
+    await prisma.$transaction([
+      prisma.emailSend.update({
+        where: { id: send.id },
+        data: { status: "sent", sentAt, errorMessage: null },
+      }),
+      ...(send.rsvpNotification
+        ? [prisma.rSVPNotification.update({
+            where: { id: send.rsvpNotification.id },
+            data: { status: "sent", sentAt, errorMessage: null },
+          })]
+        : []),
+    ]);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Email delivery failed.";
     if (attemptCount >= MAX_ATTEMPTS) {
-      await prisma.emailSend.update({
-        where: { id: send.id },
-        data: { status: "failed", errorMessage: message },
-      });
+      await prisma.$transaction([
+        prisma.emailSend.update({
+          where: { id: send.id },
+          data: { status: "failed", errorMessage: message },
+        }),
+        ...(send.rsvpNotification
+          ? [prisma.rSVPNotification.update({
+              where: { id: send.rsvpNotification.id },
+              data: { status: "failed", errorMessage: message },
+            })]
+          : []),
+      ]);
       return;
     }
 
-    await prisma.emailSend.update({
-      where: { id: send.id },
-      data: { status: "pending", errorMessage: message },
-    });
+    await prisma.$transaction([
+      prisma.emailSend.update({
+        where: { id: send.id },
+        data: { status: "pending", errorMessage: message },
+      }),
+      ...(send.rsvpNotification
+        ? [prisma.rSVPNotification.update({
+            where: { id: send.rsvpNotification.id },
+            data: { status: "queued", errorMessage: message },
+          })]
+        : []),
+    ]);
     await delay(RETRY_DELAY_MS * attemptCount);
     try {
       await enqueueInvitationEmails([send.id]);
     } catch (enqueueError) {
+      if (send.rsvpNotification) {
+        await prisma.rSVPNotification.update({
+          where: { id: send.rsvpNotification.id },
+          data: { status: "pending", errorMessage: "Email queue is unavailable." },
+        }).catch((updateError) => {
+          console.error(`[InvitationEmailQueue] RSVP notification state update failed for ${send.id}`, updateError);
+        });
+      }
       console.error(`[InvitationEmailQueue] retry enqueue failed for ${send.id}`, enqueueError);
     }
   }

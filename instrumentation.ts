@@ -14,4 +14,11 @@ export async function register() {
     const { startInvitationEmailWorker } = await import("./lib/invitation-email-queue");
     void startInvitationEmailWorker();
   }
+
+  const rsvpNotificationEnabled = process.env.RSVP_NOTIFICATION_ENABLED !== "false" &&
+    (process.env.NODE_ENV === "production" || process.env.RSVP_NOTIFICATION_ENABLED === "true");
+  if (rsvpNotificationEnabled) {
+    const { startRsvpNotificationScheduler } = await import("./lib/rsvp-notification");
+    startRsvpNotificationScheduler();
+  }
 }
