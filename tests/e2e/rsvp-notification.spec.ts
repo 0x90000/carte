@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
-import { prisma } from "@/lib/prisma";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 const enabled = process.env.RSVP_NOTIFICATION_TEST_MODE === "1";
 const invitationId = process.env.RSVP_NOTIFICATION_INVITATION_ID?.trim();
