@@ -11,6 +11,7 @@ import {
   EyeOff,
   FileImage,
   Infinity as InfinityIcon,
+  Images,
   Layers3,
   Loader2,
   Lock,
@@ -19,6 +20,7 @@ import {
   Save,
   Send,
   Sparkles,
+  Trash2,
   Undo2,
   Upload,
   X,
@@ -36,6 +38,7 @@ import {
   normalizeEditorContent,
   type EditorColorScheme,
   type EditorContent,
+  type EditorGalleryItem,
   type EditorLayer,
 } from "@/components/editor/types";
 import { localePath } from "@/lib/i18n";
@@ -57,6 +60,8 @@ type EditorShellProps = {
 
 const LOCAL_STORAGE_PREFIX = "carte:editor:";
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_GALLERY_PHOTOS = 9;
+const MAX_GALLERY_IMAGE_BYTES = 1 * 1024 * 1024;
 const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 160;
 const FONT_FAMILY_OPTIONS = ["Inter", "Arial", "Georgia", "Times New Roman", "Trebuchet MS", "Courier New"];
@@ -227,6 +232,7 @@ export function EditorShell({
   const saveTimerRef = useRef<number | null>(null);
   const saveInFlightRef = useRef<Promise<boolean> | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
   const autoPublishRef = useRef(false);
   const storageKey = `${LOCAL_STORAGE_PREFIX}${invitationId}`;
 
@@ -446,6 +452,62 @@ export function EditorShell({
     reader.readAsDataURL(file);
   }
 
+  function readFileAsDataUrl(file: File) {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => typeof reader.result === "string" ? resolve(reader.result) : reject(new Error("read_image"));
+      reader.onerror = () => reject(new Error("read_image"));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function onGallerySelected(event: ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (files.length === 0) {
+      return;
+    }
+    const currentGallery = contentRef.current.gallery ?? [];
+    if (currentGallery.length + files.length > MAX_GALLERY_PHOTOS) {
+      setError(t("errors.galleryLimit", { count: MAX_GALLERY_PHOTOS }));
+      return;
+    }
+    const invalidType = files.find((file) => file.type !== "image/jpeg" && file.type !== "image/png");
+    if (invalidType) {
+      setError(t("errors.galleryInvalidImage"));
+      return;
+    }
+    const oversized = files.find((file) => file.size > MAX_GALLERY_IMAGE_BYTES);
+    if (oversized) {
+      setError(t("errors.galleryImageTooLarge"));
+      return;
+    }
+
+    try {
+      const items: EditorGalleryItem[] = [];
+      for (const file of files) {
+        items.push({
+          id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+          url: await readFileAsDataUrl(file),
+          alt: file.name.replace(/\.[^.]+$/, "").slice(0, 120),
+        });
+      }
+      const next = cloneEditorContent(contentRef.current);
+      next.gallery = [...currentGallery, ...items];
+      setError("");
+      commitContent(next);
+    } catch (galleryError) {
+      console.error("Failed to read gallery images", galleryError);
+      setError(t("errors.readImage"));
+    }
+  }
+
+  function removeGalleryPhoto(photoId: string) {
+    const next = cloneEditorContent(contentRef.current);
+    next.gallery = (next.gallery ?? []).filter((photo) => photo.id !== photoId);
+    commitContent(next);
+  }
+
   const publishInvitation = useCallback(async () => {
     if (isGuest) {
       window.location.assign(`${localePath(locale, "/login")}?continue=${encodeURIComponent(localePath(locale, `/editor/${invitationId}?action=publish`))}`);
@@ -637,6 +699,31 @@ export function EditorShell({
             {selectedLayer && selectedLayer.type !== "text" && selectedLayer.type !== "image" ? <p className="text-sm leading-6 text-muted-foreground">{t("movableLayerPrompt")}</p> : null}
           </section>
 
+          <section className="rounded-lg border border-border bg-card p-4 shadow-sm" aria-labelledby="gallery-title">
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2"><Images className="h-4 w-4" aria-hidden="true" /><h2 id="gallery-title" className="text-sm font-semibold">{t("galleryTitle")}</h2></div>
+              <span className="text-xs text-muted-foreground">{(content.gallery ?? []).length}/{MAX_GALLERY_PHOTOS}</span>
+            </div>
+            <p className="text-sm leading-6 text-muted-foreground">{t("galleryDescription")}</p>
+            <input ref={galleryInputRef} id="gallery-upload" aria-label={t("galleryUploadInputLabel")} type="file" accept="image/jpeg,image/png" multiple className="hidden" onChange={(event) => void onGallerySelected(event)} />
+            <Button variant="outline" className="mt-3 w-full" onClick={() => galleryInputRef.current?.click()} disabled={(content.gallery ?? []).length >= MAX_GALLERY_PHOTOS}>
+              <Upload className="h-4 w-4" aria-hidden="true" /> {t("addGalleryPhotos")}
+            </Button>
+            {(content.gallery ?? []).length > 0 ? (
+              <div className="mt-4 grid grid-cols-3 gap-2" aria-label={t("galleryListLabel")}>
+                {(content.gallery ?? []).map((photo, index) => (
+                  <div key={photo.id} className="group relative aspect-square overflow-hidden rounded-md border border-border bg-secondary">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo.url} alt={photo.alt || t("galleryPhotoAlt", { index: index + 1 })} className="h-full w-full object-cover" />
+                    <Button variant="destructive" size="icon" className="absolute right-1 top-1 h-8 w-8 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100" onClick={() => removeGalleryPhoto(photo.id)} aria-label={t("removeGalleryPhoto", { index: index + 1 })} title={t("removeGalleryPhoto", { index: index + 1 })}>
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
+          </section>
+
           <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
             <Label htmlFor="color-scheme">{t("colorScheme")}</Label>
             <Select id="color-scheme" className="mt-2" value={activeScheme?.id ?? ""} onChange={(event) => applyScheme(event.target.value)} disabled={!content.colorSchemes?.length}>
@@ -657,7 +744,25 @@ export function EditorShell({
             {aiVariations.length > 0 ? <div className="mt-3 space-y-2">{aiVariations.map((variation, index) => <div key={`${variation}-${index}`} className="rounded-md border border-border p-2.5"><p className="text-sm leading-5">{variation}</p><Button variant="ghost" size="sm" className="mt-2 h-8 px-2" onClick={() => { if (selectedLayer?.type === "text") updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: variation } })); }}>{t("useOption")}</Button></div>)}</div> : null}
           </section>
 
-          {showPreview ? <section className="space-y-3"><div className="flex items-center gap-2"><Eye className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("livePreview")}</h2></div><PreviewCanvas content={content} videoLabel={t("videoPreview")} /></section> : null}
+          {showPreview ? (
+            <section className="space-y-3">
+              <div className="flex items-center gap-2"><Eye className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("livePreview")}</h2></div>
+              <PreviewCanvas content={content} videoLabel={t("videoPreview")} />
+              {(content.gallery ?? []).length > 0 ? (
+                <div className="w-full max-w-[300px] space-y-2">
+                  <h3 className="text-sm font-semibold">{t("galleryTitle")}</h3>
+                  <div className="grid grid-cols-3 gap-1.5" aria-label={t("galleryListLabel")}>
+                    {(content.gallery ?? []).map((photo, index) => (
+                      <div key={photo.id} className="aspect-square overflow-hidden rounded-md border border-border bg-secondary">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={photo.url} alt={photo.alt || t("galleryPhotoAlt", { index: index + 1 })} className="h-full w-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+            </section>
+          ) : null}
         </aside>
       </div>
 

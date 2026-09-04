@@ -95,7 +95,7 @@ function InvitationLayer({ layer, canvas }: { layer: EditorLayer; canvas: Editor
 export async function InvitationRenderer({ invitation }: { invitation: PublicInvitationData }) {
   const [locale, t] = await Promise.all([getLocale(), getTranslations("invitation")]);
   const content = normalizeEditorContent(invitation.content) as EditorContent;
-  const { canvas, layers } = content;
+  const { canvas, layers, gallery } = content;
   const background = canvas.background;
   const eventDate = invitation.eventDate ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(invitation.eventDate) : undefined;
   const invitationSettings = invitation.settings && typeof invitation.settings === "object" ? invitation.settings as Record<string, unknown> : {};
@@ -122,6 +122,19 @@ export async function InvitationRenderer({ invitation }: { invitation: PublicInv
         {eventDate || invitation.eventLocation ? <p className="text-sm text-white/70">{[eventDate, invitation.eventLocation].filter(Boolean).join(" · ")}</p> : null}
         <p className="pt-3 text-xs text-white/40">{t("invitationBy")}</p>
       </section>
+      {gallery && gallery.length > 0 ? (
+        <section className="mx-auto max-w-[750px] px-2 pb-8" aria-labelledby="invitation-gallery-title">
+          <h2 id="invitation-gallery-title" className="mb-4 text-center text-lg font-semibold text-white">{t("galleryTitle")}</h2>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
+            {gallery.map((photo, index) => (
+              <figure key={photo.id} className="aspect-square overflow-hidden rounded-md bg-white/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={photo.url} alt={photo.alt || t("galleryPhotoAlt", { index: index + 1 })} className="h-full w-full object-cover" loading={index < 3 ? "eager" : "lazy"} />
+              </figure>
+            ))}
+          </div>
+        </section>
+      ) : null}
       {rsvpEnabled ? <RSVPSection invitationSlug={invitation.slug} /> : null}
     </main>
   );

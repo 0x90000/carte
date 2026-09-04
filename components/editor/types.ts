@@ -31,6 +31,12 @@ export type EditorColorScheme = {
   colors: Record<string, string>;
 };
 
+export type EditorGalleryItem = {
+  id: string;
+  url: string;
+  alt?: string;
+};
+
 export type EditorContent = {
   canvas: {
     width: number;
@@ -38,6 +44,7 @@ export type EditorContent = {
     background: EditorBackground;
   };
   layers: EditorLayer[];
+  gallery?: EditorGalleryItem[];
   variables?: Array<Record<string, unknown>>;
   colorSchemes?: EditorColorScheme[];
   settings?: Record<string, unknown>;
@@ -54,6 +61,21 @@ export function normalizeEditorContent(value: unknown): EditorContent {
     ? content.canvas as Partial<EditorContent["canvas"]>
     : {};
   const layers = Array.isArray(content.layers) ? content.layers : [];
+  const gallery = Array.isArray(content.gallery)
+    ? content.gallery.filter((item): item is EditorGalleryItem => Boolean(
+      item
+      && typeof item === "object"
+      && "id" in item
+      && "url" in item
+      && typeof item.id !== "object"
+      && typeof item.url === "string"
+      && item.url.length > 0,
+    )).slice(0, 9).map((item) => ({
+      id: String(item.id),
+      url: item.url,
+      ...(typeof item.alt === "string" && item.alt.trim() ? { alt: item.alt.trim().slice(0, 120) } : {}),
+    }))
+    : [];
 
   return {
     ...content,
@@ -62,6 +84,7 @@ export function normalizeEditorContent(value: unknown): EditorContent {
       height: typeof canvas.height === "number" ? canvas.height : 1334,
       background: canvas.background && typeof canvas.background === "object" ? canvas.background : { type: "color", value: "#ffffff" },
     },
+    gallery,
     layers: layers.filter((layer): layer is EditorLayer => Boolean(layer && typeof layer === "object" && "id" in layer)).map((layer) => ({
       ...layer,
       id: String(layer.id),
