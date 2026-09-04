@@ -50,9 +50,8 @@ export async function getRedis() {
         return null;
       })
       .finally(() => {
-        if (!globalForRedis.redis?.isReady) {
-          globalForRedis.redisConnection = undefined;
-        }
+        // Keep this promise only while a connection attempt is in flight.
+        globalForRedis.redisConnection = undefined;
       });
     await globalForRedis.redisConnection;
   }
