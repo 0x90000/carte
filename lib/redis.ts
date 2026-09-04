@@ -30,7 +30,7 @@ export async function getRedis() {
       const redis = globalForRedis.redis!;
       if (redis.isOpen) {
         try {
-          await redis.disconnect();
+          redis.destroy();
         } catch {
           // A timed-out connection may already be closed by the client.
         }
@@ -42,7 +42,7 @@ export async function getRedis() {
         console.warn("Could not connect to Redis", error);
         try {
           if (globalForRedis.redis?.isOpen) {
-            void globalForRedis.redis.disconnect();
+            globalForRedis.redis.destroy();
           }
         } catch {
           // Ignore cleanup errors; the next call will create a fresh attempt.
