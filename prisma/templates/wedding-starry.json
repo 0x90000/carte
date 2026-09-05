@@ -5,8 +5,8 @@
   "style": "romantic",
   "description": "Celestial night sky theme with twinkling stars, constellations, and cosmic romance",
   "tags": ["stars", "night", "celestial", "cosmic", "romantic"],
-  "thumbnailUrl": "/templates/wedding-starry/thumbnail.png",
-  "previewUrl": "/templates/wedding-starry/preview.png",
+  "thumbnailUrl": "/templates/wedding-starry/thumbnail.svg",
+  "previewUrl": "/templates/wedding-starry/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

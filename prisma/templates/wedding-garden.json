@@ -5,8 +5,8 @@
   "style": "natural",
   "description": "Lush botanical garden theme with watercolor leaves, vines, and natural green tones",
   "tags": ["garden", "botanical", "nature", "green", "organic"],
-  "thumbnailUrl": "/templates/wedding-garden/thumbnail.png",
-  "previewUrl": "/templates/wedding-garden/preview.png",
+  "thumbnailUrl": "/templates/wedding-garden/thumbnail.svg",
+  "previewUrl": "/templates/wedding-garden/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

@@ -112,6 +112,26 @@ async function addLayer(canvas: Canvas, layer: EditorLayer) {
         console.warn(`Could not load image layer ${layer.id}`, error);
       }
     }
+  } else if ((layer.type === "svg" || layer.type === "decoration") && typeof content.svg === "string" && content.svg.trim()) {
+    try {
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(content.svg)}`;
+      object = await FabricImage.fromURL(svgUrl);
+      const image = object as FabricImage;
+      const naturalWidth = image.width || layer.size.width;
+      const naturalHeight = image.height || layer.size.height;
+      image.set({
+        left: layer.position.x,
+        top: layer.position.y,
+        scaleX: layer.size.width / naturalWidth,
+        scaleY: layer.size.height / naturalHeight,
+        angle: layer.rotation ?? 0,
+        opacity: layer.opacity ?? 1,
+        selectable: layer.locked !== true,
+        evented: layer.locked !== true,
+      });
+    } catch (error) {
+      console.warn(`Could not load SVG layer ${layer.id}`, error);
+    }
   }
 
   if (object) {
@@ -173,7 +193,7 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
   const backgroundStyle = background.type === "image" && background.url
     ? { backgroundImage: `url(${background.url})`, backgroundSize: background.fit === "contain" ? "contain" : "cover", backgroundPosition: "center" }
     : background.type === "gradient" || background.type === "color"
-      ? { background: background.value ?? "#ffffff" }
+      ? { background: background.gradient ?? background.value ?? "#ffffff" }
       : { background: "#ffffff" };
 
   useEffect(() => {

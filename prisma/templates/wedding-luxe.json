@@ -5,8 +5,8 @@
   "style": "luxury",
   "description": "Sophisticated black and gold Art Deco design with geometric patterns and metallic accents",
   "tags": ["luxury", "gold", "black", "art-deco", "elegant"],
-  "thumbnailUrl": "/templates/wedding-luxe/thumbnail.png",
-  "previewUrl": "/templates/wedding-luxe/preview.png",
+  "thumbnailUrl": "/templates/wedding-luxe/thumbnail.svg",
+  "previewUrl": "/templates/wedding-luxe/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

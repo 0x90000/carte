@@ -5,8 +5,8 @@
   "style": "romantic",
   "description": "Soft pink watercolor with floating hearts and elegant script typography",
   "tags": ["romantic", "pink", "watercolor", "hearts", "elegant"],
-  "thumbnailUrl": "/templates/wedding-romantic/thumbnail.png",
-  "previewUrl": "/templates/wedding-romantic/preview.png",
+  "thumbnailUrl": "/templates/wedding-romantic/thumbnail.svg",
+  "previewUrl": "/templates/wedding-romantic/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

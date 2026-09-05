@@ -10,9 +10,10 @@ type UseTemplateButtonProps = {
   scene: string;
   label: string;
   locale: string;
+  structure: unknown;
 };
 
-export function UseTemplateButton({ templateId, scene, label, locale }: UseTemplateButtonProps) {
+export function UseTemplateButton({ templateId, scene, label, locale, structure }: UseTemplateButtonProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,6 +28,7 @@ export function UseTemplateButton({ templateId, scene, label, locale }: UseTempl
           scene,
           locale,
           title: "",
+          content: structure,
         }),
       });
 

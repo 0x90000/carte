@@ -5,8 +5,8 @@
   "style": "luxury",
   "description": "Opulent baroque design with ornate golden flourishes, rich textures, and regal ambiance",
   "tags": ["baroque", "gold", "luxury", "ornate", "regal"],
-  "thumbnailUrl": "/templates/wedding-golden/thumbnail.png",
-  "previewUrl": "/templates/wedding-golden/preview.png",
+  "thumbnailUrl": "/templates/wedding-golden/thumbnail.svg",
+  "previewUrl": "/templates/wedding-golden/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

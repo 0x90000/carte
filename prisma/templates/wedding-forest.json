@@ -5,8 +5,8 @@
   "style": "natural",
   "description": "Mystical woodland theme with deep greens, forest creatures, and magical atmosphere",
   "tags": ["forest", "woodland", "mystical", "nature", "green"],
-  "thumbnailUrl": "/templates/wedding-forest/thumbnail.png",
-  "previewUrl": "/templates/wedding-forest/preview.png",
+  "thumbnailUrl": "/templates/wedding-forest/thumbnail.svg",
+  "previewUrl": "/templates/wedding-forest/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

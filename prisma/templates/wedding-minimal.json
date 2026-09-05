@@ -5,8 +5,8 @@
   "style": "modern",
   "description": "Clean minimalist design with geometric shapes, monochrome palette, and contemporary typography",
   "tags": ["minimal", "modern", "clean", "geometric", "contemporary"],
-  "thumbnailUrl": "/templates/wedding-minimal/thumbnail.png",
-  "previewUrl": "/templates/wedding-minimal/preview.png",
+  "thumbnailUrl": "/templates/wedding-minimal/thumbnail.svg",
+  "previewUrl": "/templates/wedding-minimal/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

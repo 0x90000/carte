@@ -156,6 +156,7 @@ export default async function TemplateDetailPage({ params }: TemplateDetailProps
               scene={template.scene}
               label={t("detail.useTemplate")}
               locale={locale}
+              structure={structure}
             />
 
             {/* Additional Info */}

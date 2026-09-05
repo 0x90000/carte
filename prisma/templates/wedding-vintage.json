@@ -5,8 +5,8 @@
   "style": "vintage",
   "description": "Classic vintage aesthetic with sepia tones, ornate borders, and Victorian-inspired typography",
   "tags": ["vintage", "classic", "ornate", "retro", "elegant"],
-  "thumbnailUrl": "/templates/wedding-vintage/thumbnail.png",
-  "previewUrl": "/templates/wedding-vintage/preview.png",
+  "thumbnailUrl": "/templates/wedding-vintage/thumbnail.svg",
+  "previewUrl": "/templates/wedding-vintage/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

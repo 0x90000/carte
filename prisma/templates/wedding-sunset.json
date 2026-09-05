@@ -5,8 +5,8 @@
   "style": "romantic",
   "description": "Warm sunset colors with golden rays, horizon silhouettes, and romantic twilight ambiance",
   "tags": ["sunset", "golden", "warm", "romantic", "twilight"],
-  "thumbnailUrl": "/templates/wedding-sunset/thumbnail.png",
-  "previewUrl": "/templates/wedding-sunset/preview.png",
+  "thumbnailUrl": "/templates/wedding-sunset/thumbnail.svg",
+  "previewUrl": "/templates/wedding-sunset/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

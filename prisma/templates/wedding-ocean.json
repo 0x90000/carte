@@ -5,8 +5,8 @@
   "style": "beach",
   "description": "Serene ocean-inspired design with flowing waves, nautical elements, and coastal colors",
   "tags": ["ocean", "beach", "nautical", "coastal", "blue"],
-  "thumbnailUrl": "/templates/wedding-ocean/thumbnail.png",
-  "previewUrl": "/templates/wedding-ocean/preview.png",
+  "thumbnailUrl": "/templates/wedding-ocean/thumbnail.svg",
+  "previewUrl": "/templates/wedding-ocean/preview.svg",
   "canvas": {
     "width": 750,
     "height": 1334,

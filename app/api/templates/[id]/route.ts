@@ -6,7 +6,7 @@ type RouteContext = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, context: RouteContext) {
   const { id } = await context.params;
-  if (!z.string().uuid().safeParse(id).success) {
+  if (!z.string().trim().min(1).max(200).safeParse(id).success) {
     return NextResponse.json(
       { success: false, error: { code: "INVALID_TEMPLATE_ID", message: "Template id is invalid." } },
       { status: 400 },
