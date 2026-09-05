@@ -1,0 +1,179 @@
+{
+  "id": "wedding-golden-008",
+  "name": "Gilded Elegance",
+  "scene": "wedding",
+  "style": "luxury",
+  "description": "Opulent gold and ivory design with baroque patterns and luxurious metallic accents. Features sophisticated shimmer animations.",
+  "tags": ["gold", "luxury", "baroque", "elegant", "metallic", "animated"],
+  "thumbnailUrl": "/templates/wedding-golden/thumbnail.svg",
+  "previewUrl": "/templates/wedding-golden/preview.svg",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "gradient",
+      "gradient": "linear-gradient(180deg, #fffbeb 0%, #fef3c7 30%, #fde68a 70%, #fcd34d 100%)"
+    }
+  },
+  "layers": [
+    {
+      "id": "gold-radiance",
+      "type": "shape",
+      "name": "Golden radiance",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 750, "height": 1334 },
+      "content": {
+        "shape": "rectangle",
+        "fill": "radial-gradient(ellipse at 50% 40%, rgba(251,191,36,0.3) 0%, rgba(253,224,71,0.1) 50%, rgba(254,243,199,0) 100%)"
+      },
+      "locked": true,
+      "zIndex": 1,
+      "animation": {
+        "type": "pulse",
+        "duration": 6000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "baroque-top",
+      "type": "svg",
+      "name": "Baroque ornament top",
+      "position": { "x": 150, "y": 120 },
+      "size": { "width": 450, "height": 200 },
+      "content": {
+        "svg": "<svg viewBox='0 0 450 200'><defs><linearGradient id='goldGrad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:#fbbf24'/><stop offset='50%' style='stop-color:#fde047'/><stop offset='100%' style='stop-color:#fbbf24'/></linearGradient></defs><path d='M225 50 Q200 30 175 50 Q150 70 175 90 Q200 110 225 90 Q250 70 275 90 Q300 110 325 90 Q350 70 325 50 Q300 30 275 50 Q250 70 225 50' fill='none' stroke='url(#goldGrad)' stroke-width='3'/><circle cx='225' cy='70' r='35' fill='none' stroke='url(#goldGrad)' stroke-width='2'/><path d='M225 35 L225 25 M225 105 L225 115' stroke='#d97706' stroke-width='2'/><path d='M190 70 L180 70 M260 70 L270 70' stroke='#d97706' stroke-width='2'/><circle cx='225' cy='70' r='15' fill='#fbbf24' opacity='0.6'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 2000,
+        "delay": 500
+      }
+    },
+    {
+      "id": "monogram-circle",
+      "type": "shape",
+      "name": "Monogram circle",
+      "position": { "x": 300, "y": 370 },
+      "size": { "width": 150, "height": 150 },
+      "content": {
+        "shape": "circle",
+        "fill": "none",
+        "stroke": "#d97706",
+        "strokeWidth": 2
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "drawStroke",
+        "duration": 2000,
+        "delay": 1000
+      }
+    },
+    {
+      "id": "couple-names",
+      "type": "text",
+      "name": "Couple names",
+      "position": { "x": 75, "y": 550 },
+      "size": { "width": 600, "height": 140 },
+      "variable": "couple_names",
+      "content": {
+        "text": "Victoria & Alexander",
+        "font": { "family": "Cormorant Garamond", "size": 58, "weight": 600, "lineHeight": 1.2 },
+        "color": "#92400e",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1800,
+        "delay": 1500
+      }
+    },
+    {
+      "id": "gold-flourish",
+      "type": "svg",
+      "name": "Gold flourish",
+      "position": { "x": 200, "y": 720 },
+      "size": { "width": 350, "height": 100 },
+      "content": {
+        "svg": "<svg viewBox='0 0 350 100'><path d='M0 50 Q87.5 30 175 50 Q262.5 70 350 50' stroke='#fbbf24' stroke-width='2' fill='none'/><path d='M0 50 Q87.5 70 175 50 Q262.5 30 350 50' stroke='#fde047' stroke-width='1' fill='none' opacity='0.6'/><circle cx='87.5' cy='40' r='10' fill='#fbbf24'/><circle cx='175' cy='50' r='12' fill='#fde047'/><circle cx='262.5' cy='40' r='10' fill='#fbbf24'/></svg>"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "shimmer",
+        "duration": 3000,
+        "delay": 2000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "date-venue",
+      "type": "text",
+      "name": "Date and location",
+      "position": { "x": 100, "y": 860 },
+      "size": { "width": 550, "height": 120 },
+      "variable": "event_details",
+      "content": {
+        "text": "Saturday, the Twelfth of November\nTwo Thousand and Twenty-Six\nThe Grand Ballroom",
+        "font": { "family": "Cormorant Garamond", "size": 22, "weight": 500, "lineHeight": 1.8 },
+        "color": "#b45309",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 2500
+      }
+    },
+    {
+      "id": "invitation-text",
+      "type": "text",
+      "name": "Invitation message",
+      "position": { "x": 100, "y": 1050 },
+      "size": { "width": 550, "height": 110 },
+      "variable": "message",
+      "content": {
+        "text": "Cordially invite you to witness\nthe exchange of their vows\nand celebrate in grand style",
+        "font": { "family": "Cormorant Garamond", "size": 20, "weight": 400, "lineHeight": 1.8, "style": "italic" },
+        "color": "#92400e",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 3000
+      }
+    },
+    {
+      "id": "baroque-bottom",
+      "type": "svg",
+      "name": "Baroque ornament bottom",
+      "position": { "x": 150, "y": 1180 },
+      "size": { "width": 450, "height": 150 },
+      "content": {
+        "svg": "<svg viewBox='0 0 450 150'><path d='M50 75 Q112.5 55 175 75 Q237.5 95 300 75 Q362.5 55 400 75' stroke='#fbbf24' stroke-width='2.5' fill='none'/><circle cx='112.5' cy='65' r='18' fill='#fde68a' opacity='0.7'/><circle cx='225' cy='85' r='22' fill='#fde047' opacity='0.6'/><circle cx='337.5' cy='65' r='18' fill='#fde68a' opacity='0.7'/><rect x='215' y='65' width='20' height='20' fill='none' stroke='#d97706' stroke-width='1.5' transform='rotate(45 225 75)'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeInUp",
+        "duration": 1500,
+        "delay": 1800
+      }
+    }
+  ],
+  "variables": [
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Victoria & Alexander", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "Saturday, the Twelfth of November\nTwo Thousand and Twenty-Six\nThe Grand Ballroom", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+  ],
+  "colorSchemes": [
+    { "id": "golden", "name": "Pure Gold", "colors": { "primary": "#fbbf24", "secondary": "#92400e", "accent": "#fde047", "text": "#b45309", "background": "#fffbeb" } },
+    { "id": "champagne", "name": "Champagne Gold", "colors": { "primary": "#fde68a", "secondary": "#78350f", "accent": "#fef3c7", "text": "#92400e", "background": "#fffbf0" } },
+    { "id": "rose-gold", "name": "Rose Gold", "colors": { "primary": "#fca5a5", "secondary": "#881337", "accent": "#fecdd3", "text": "#9f1239", "background": "#fff1f2" } }
+  ],
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "luxury" }
+}

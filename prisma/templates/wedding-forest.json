@@ -1,0 +1,194 @@
+{
+  "id": "wedding-forest-009",
+  "name": "Enchanted Forest",
+  "scene": "wedding",
+  "style": "rustic",
+  "description": "Mystical forest theme with deep greens, earth tones, and woodland elements. Features organic growth animations and nature-inspired shapes.",
+  "tags": ["forest", "nature", "rustic", "woodland", "earthy", "animated"],
+  "thumbnailUrl": "/templates/wedding-forest/thumbnail.svg",
+  "previewUrl": "/templates/wedding-forest/preview.svg",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "gradient",
+      "gradient": "linear-gradient(180deg, #1e3a2f 0%, #2d5447 25%, #3a6f5f 50%, #4a7c6b 75%, #5a8a78 100%)"
+    }
+  },
+  "layers": [
+    {
+      "id": "forest-mist",
+      "type": "shape",
+      "name": "Forest mist overlay",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 750, "height": 1334 },
+      "content": {
+        "shape": "rectangle",
+        "fill": "radial-gradient(ellipse at 50% 70%, rgba(209,250,229,0.15) 0%, rgba(167,243,208,0.08) 50%, rgba(110,231,183,0) 100%)"
+      },
+      "locked": true,
+      "zIndex": 1,
+      "animation": {
+        "type": "float",
+        "duration": 8000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "branch-top-left",
+      "type": "svg",
+      "name": "Branch left",
+      "position": { "x": -80, "y": 50 },
+      "size": { "width": 400, "height": 300 },
+      "content": {
+        "svg": "<svg viewBox='0 0 400 300'><path d='M350 50 Q300 100 250 150 Q200 200 150 250' stroke='#4a5d4e' stroke-width='8' fill='none'/><path d='M300 100 Q280 120 260 140' stroke='#4a5d4e' stroke-width='5' fill='none'/><path d='M250 150 Q230 170 210 190' stroke='#4a5d4e' stroke-width='5' fill='none'/><ellipse cx='260' cy='140' rx='30' ry='40' fill='#6ee7b7' opacity='0.4' transform='rotate(-30 260 140)'/><ellipse cx='210' cy='190' rx='35' ry='45' fill='#34d399' opacity='0.5' transform='rotate(-40 210 190)'/><ellipse cx='290' cy='110' rx='25' ry='35' fill='#10b981' opacity='0.45' transform='rotate(-20 290 110)'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "sway",
+        "duration": 5000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "branch-top-right",
+      "type": "svg",
+      "name": "Branch right",
+      "position": { "x": 430, "y": 80 },
+      "size": { "width": 400, "height": 300 },
+      "content": {
+        "svg": "<svg viewBox='0 0 400 300'><path d='M50 50 Q100 100 150 150 Q200 200 250 250' stroke='#4a5d4e' stroke-width='8' fill='none'/><path d='M100 100 Q120 120 140 140' stroke='#4a5d4e' stroke-width='5' fill='none'/><path d='M150 150 Q170 170 190 190' stroke='#4a5d4e' stroke-width='5' fill='none'/><ellipse cx='140' cy='140' rx='30' ry='40' fill='#6ee7b7' opacity='0.4' transform='rotate(30 140 140)'/><ellipse cx='190' cy='190' rx='35' ry='45' fill='#34d399' opacity='0.5' transform='rotate(40 190 190)'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "sway",
+        "duration": 6000,
+        "delay": 1000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "wreath-circle",
+      "type": "svg",
+      "name": "Leaf wreath",
+      "position": { "x": 200, "y": 350 },
+      "size": { "width": 350, "height": 350 },
+      "content": {
+        "svg": "<svg viewBox='0 0 350 350'><circle cx='175' cy='175' r='120' fill='none' stroke='#6ee7b7' stroke-width='3' opacity='0.3'/><ellipse cx='175' cy='80' rx='20' ry='30' fill='#34d399' opacity='0.6'/><ellipse cx='270' cy='175' rx='20' ry='30' fill='#10b981' opacity='0.65' transform='rotate(90 270 175)'/><ellipse cx='175' cy='270' rx='20' ry='30' fill='#059669' opacity='0.7'/><ellipse cx='80' cy='175' rx='20' ry='30' fill='#047857' opacity='0.65' transform='rotate(90 80 175)'/><ellipse cx='235' cy='115' rx='18' ry='28' fill='#34d399' opacity='0.5' transform='rotate(45 235 115)'/><ellipse cx='235' cy='235' rx='18' ry='28' fill='#10b981' opacity='0.55' transform='rotate(135 235 235)'/><ellipse cx='115' cy='235' rx='18' ry='28' fill='#047857' opacity='0.6' transform='rotate(225 115 235)'/><ellipse cx='115' cy='115' rx='18' ry='28' fill='#059669' opacity='0.55' transform='rotate(315 115 115)'/></svg>"
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 2500,
+        "delay": 1000
+      }
+    },
+    {
+      "id": "couple-names",
+      "type": "text",
+      "name": "Couple names",
+      "position": { "x": 100, "y": 490 },
+      "size": { "width": 550, "height": 150 },
+      "variable": "couple_names",
+      "content": {
+        "text": "Willow & Forest",
+        "font": { "family": "Playfair Display", "size": 64, "weight": 600, "lineHeight": 1.2 },
+        "color": "#d1fae5",
+        "align": "center",
+        "shadow": "0 4px 12px rgba(16,185,129,0.3)"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1800,
+        "delay": 1800
+      }
+    },
+    {
+      "id": "fern-divider",
+      "type": "svg",
+      "name": "Fern divider",
+      "position": { "x": 225, "y": 680 },
+      "size": { "width": 300, "height": 80 },
+      "content": {
+        "svg": "<svg viewBox='0 0 300 80'><path d='M0 40 Q75 35 150 40 Q225 45 300 40' stroke='#6ee7b7' stroke-width='2' fill='none'/><path d='M50 40 L45 30 L50 35 L55 30' stroke='#34d399' stroke-width='1.5' fill='none'/><path d='M100 37 L95 27 L100 32 L105 27' stroke='#34d399' stroke-width='1.5' fill='none'/><path d='M150 40 L145 30 L150 35 L155 30' stroke='#10b981' stroke-width='1.5' fill='none'/><path d='M200 43 L195 33 L200 38 L205 33' stroke='#34d399' stroke-width='1.5' fill='none'/><path d='M250 40 L245 30 L250 35 L255 30' stroke='#34d399' stroke-width='1.5' fill='none'/></svg>"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "drawLine",
+        "duration": 2000,
+        "delay": 2500
+      }
+    },
+    {
+      "id": "date-venue",
+      "type": "text",
+      "name": "Date and location",
+      "position": { "x": 100, "y": 800 },
+      "size": { "width": 550, "height": 100 },
+      "variable": "event_details",
+      "content": {
+        "text": "May 3, 2026\nRedwood Grove, Big Sur",
+        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.6 },
+        "color": "#a7f3d0",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 3000
+      }
+    },
+    {
+      "id": "invitation-text",
+      "type": "text",
+      "name": "Invitation message",
+      "position": { "x": 90, "y": 980 },
+      "size": { "width": 570, "height": 130 },
+      "variable": "message",
+      "content": {
+        "text": "Join us in the heart of the woods\nwhere ancient trees bear witness\nto the beginning of our forever",
+        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.7 },
+        "color": "#d1fae5",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 3500
+      }
+    },
+    {
+      "id": "mushroom-accent",
+      "type": "svg",
+      "name": "Forest floor",
+      "position": { "x": 50, "y": 1180 },
+      "size": { "width": 650, "height": 150 },
+      "content": {
+        "svg": "<svg viewBox='0 0 650 150'><ellipse cx='150' cy='120' rx='80' ry='20' fill='#1e3a2f' opacity='0.3'/><path d='M150 80 Q130 70 120 90 L180 90 Q170 70 150 80' fill='#dc2626' opacity='0.7'/><rect x='145' y='90' width='10' height='30' fill='#fef3c7' opacity='0.8'/><ellipse cx='450' cy='130' rx='60' ry='15' fill='#1e3a2f' opacity='0.3'/><path d='M450 100 Q435 92 428 108 L472 108 Q465 92 450 100' fill='#ea580c' opacity='0.7'/><rect x='446' y='108' width='8' height='22' fill='#fef3c7' opacity='0.8'/><circle cx='300' cy='130' r='12' fill='#fde047' opacity='0.6'/><circle cx='350' cy='125' r='10' fill='#fbbf24' opacity='0.5'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeInUp",
+        "duration": 1500,
+        "delay": 2000
+      }
+    }
+  ],
+  "variables": [
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Willow & Forest", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "May 3, 2026\nRedwood Grove, Big Sur", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+  ],
+  "colorSchemes": [
+    { "id": "deep-forest", "name": "Deep Forest", "colors": { "primary": "#10b981", "secondary": "#1e3a2f", "accent": "#6ee7b7", "text": "#d1fae5", "background": "#1e3a2f" } },
+    { "id": "moss-stone", "name": "Moss & Stone", "colors": { "primary": "#84cc16", "secondary": "#365314", "accent": "#bef264", "text": "#ecfccb", "background": "#1a2e05" } },
+    { "id": "autumn-woods", "name": "Autumn Woods", "colors": { "primary": "#f59e0b", "secondary": "#422006", "accent": "#fde68a", "text": "#fef3c7", "background": "#27170a" } }
+  ],
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "organic" }
+}

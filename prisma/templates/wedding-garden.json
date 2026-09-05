@@ -1,0 +1,176 @@
+{
+  "id": "wedding-garden-003",
+  "name": "Secret Garden",
+  "scene": "wedding",
+  "style": "botanical",
+  "description": "Lush botanical garden theme with vibrant greens, wildflowers, and organic shapes. Features gentle sway animations and natural textures.",
+  "tags": ["botanical", "garden", "green", "nature", "organic", "animated"],
+  "thumbnailUrl": "/templates/wedding-garden/thumbnail.svg",
+  "previewUrl": "/templates/wedding-garden/preview.svg",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "gradient",
+      "gradient": "linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 30%, #d1fae5 70%, #a7f3d0 100%)"
+    }
+  },
+  "layers": [
+    {
+      "id": "foliage-bg",
+      "type": "shape",
+      "name": "Foliage background",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 750, "height": 1334 },
+      "content": {
+        "svg": "<svg viewBox='0 0 750 1334'><ellipse cx='100' cy='200' rx='180' ry='220' fill='#86efac' opacity='0.15'/><ellipse cx='650' cy='400' rx='200' ry='260' fill='#4ade80' opacity='0.12'/><ellipse cx='120' cy='900' rx='160' ry='200' fill='#22c55e' opacity='0.1'/><ellipse cx='600' cy='1100' rx='190' ry='240' fill='#86efac' opacity='0.13'/><circle cx='375' cy='650' r='280' fill='#d1fae5' opacity='0.2'/></svg>"
+      },
+      "locked": true,
+      "zIndex": 1,
+      "animation": {
+        "type": "float",
+        "duration": 6000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "leaf-top-left",
+      "type": "svg",
+      "name": "Leaf cluster top",
+      "position": { "x": -50, "y": 50 },
+      "size": { "width": 300, "height": 300 },
+      "content": {
+        "svg": "<svg viewBox='0 0 300 300'><path d='M150 150 Q100 80 80 50 Q60 30 50 50 Q40 70 80 100 Q120 130 150 150' fill='#059669' opacity='0.7'/><path d='M150 150 Q180 100 220 80 Q250 70 260 90 Q270 110 230 130 Q190 150 150 150' fill='#10b981' opacity='0.6'/><path d='M150 150 Q130 200 120 240 Q110 270 130 280 Q150 290 160 250 Q170 210 150 150' fill='#34d399' opacity='0.65'/><ellipse cx='80' cy='70' rx='25' ry='35' fill='#6ee7b7' opacity='0.5' transform='rotate(-30 80 70)'/><ellipse cx='220' cy='100' rx='30' ry='40' fill='#6ee7b7' opacity='0.5' transform='rotate(20 220 100)'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "sway",
+        "duration": 4000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "leaf-top-right",
+      "type": "svg",
+      "name": "Leaf cluster top right",
+      "position": { "x": 500, "y": 80 },
+      "size": { "width": 280, "height": 280 },
+      "content": {
+        "svg": "<svg viewBox='0 0 280 280'><path d='M140 140 Q180 80 210 60 Q240 45 250 65 Q260 85 220 110 Q180 135 140 140' fill='#047857' opacity='0.65'/><path d='M140 140 Q100 100 70 90 Q40 85 35 105 Q30 125 70 140 Q110 155 140 140' fill='#059669' opacity='0.7'/><circle cx='200' cy='80' r='20' fill='#fbbf24' opacity='0.8'/><circle cx='90' cy='110' r='18' fill='#fde047' opacity='0.75'/><circle cx='140' cy='70' r='15' fill='#fef08a' opacity='0.7'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "sway",
+        "duration": 5000,
+        "delay": 1000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "couple-names",
+      "type": "text",
+      "name": "Couple names",
+      "position": { "x": 80, "y": 520 },
+      "size": { "width": 590, "height": 150 },
+      "variable": "couple_names",
+      "content": {
+        "text": "Lily & Oliver",
+        "font": { "family": "Playfair Display", "size": 68, "weight": 600, "lineHeight": 1.2 },
+        "color": "#065f46",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1500,
+        "delay": 800
+      }
+    },
+    {
+      "id": "floral-divider",
+      "type": "svg",
+      "name": "Botanical divider",
+      "position": { "x": 225, "y": 700 },
+      "size": { "width": 300, "height": 60 },
+      "content": {
+        "svg": "<svg viewBox='0 0 300 60'><path d='M0 30 Q75 20 150 30 Q225 40 300 30' stroke='#10b981' stroke-width='2' fill='none'/><circle cx='50' cy='28' r='8' fill='#fbbf24'/><circle cx='150' cy='30' r='12' fill='#fde047'/><circle cx='250' cy='28' r='9' fill='#fef08a'/><circle cx='100' cy='25' r='6' fill='#fca5a5'/><circle cx='200' cy='32' r='7' fill='#f87171'/></svg>"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "drawLine",
+        "duration": 2000,
+        "delay": 1500
+      }
+    },
+    {
+      "id": "date-venue",
+      "type": "text",
+      "name": "Date and location",
+      "position": { "x": 100, "y": 800 },
+      "size": { "width": 550, "height": 100 },
+      "variable": "event_details",
+      "content": {
+        "text": "August 12, 2026\nBotanical Gardens Pavilion",
+        "font": { "family": "Lora", "size": 24, "weight": 400, "lineHeight": 1.6 },
+        "color": "#047857",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 2000
+      }
+    },
+    {
+      "id": "invitation-text",
+      "type": "text",
+      "name": "Invitation message",
+      "position": { "x": 90, "y": 1000 },
+      "size": { "width": 570, "height": 120 },
+      "variable": "message",
+      "content": {
+        "text": "Join us in the garden\nas we begin our journey together\nsurrounded by love and nature's beauty",
+        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.7 },
+        "color": "#065f46",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 2500
+      }
+    },
+    {
+      "id": "leaf-bottom",
+      "type": "svg",
+      "name": "Bottom foliage",
+      "position": { "x": 50, "y": 1180 },
+      "size": { "width": 650, "height": 150 },
+      "content": {
+        "svg": "<svg viewBox='0 0 650 150'><path d='M50 100 Q150 70 250 100 Q350 130 450 100 Q550 70 650 100' stroke='#10b981' stroke-width='3' fill='none' opacity='0.4'/><ellipse cx='150' cy='90' rx='40' ry='50' fill='#34d399' opacity='0.5' transform='rotate(-20 150 90)'/><ellipse cx='450' cy='90' rx='45' ry='55' fill='#34d399' opacity='0.5' transform='rotate(25 450 90)'/><circle cx='250' cy='100' r='15' fill='#fbbf24' opacity='0.7'/><circle cx='350' cy='110' r='12' fill='#fde047' opacity='0.7'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeInUp",
+        "duration": 1500,
+        "delay": 1000
+      }
+    }
+  ],
+  "variables": [
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Lily & Oliver", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "August 12, 2026\nBotanical Gardens Pavilion", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+  ],
+  "colorSchemes": [
+    { "id": "garden-green", "name": "Garden Green", "colors": { "primary": "#10b981", "secondary": "#065f46", "accent": "#6ee7b7", "text": "#047857", "background": "#f0fdf4" } },
+    { "id": "sage-cream", "name": "Sage & Cream", "colors": { "primary": "#84a98c", "secondary": "#52796f", "accent": "#cad2c5", "text": "#354f52", "background": "#f8f9fa" } },
+    { "id": "wildflower", "name": "Wildflower Meadow", "colors": { "primary": "#fbbf24", "secondary": "#059669", "accent": "#fde047", "text": "#065f46", "background": "#fffbeb" } }
+  ],
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "organic" }
+}

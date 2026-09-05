@@ -1,0 +1,160 @@
+{
+  "id": "wedding-sunset-004",
+  "name": "Golden Hour",
+  "scene": "wedding",
+  "style": "romantic",
+  "description": "Warm sunset palette with orange, coral, and gold tones. Features glowing light rays and dreamy fade animations.",
+  "tags": ["sunset", "warm", "golden", "romantic", "dreamy", "animated"],
+  "thumbnailUrl": "/templates/wedding-sunset/thumbnail.svg",
+  "previewUrl": "/templates/wedding-sunset/preview.svg",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "gradient",
+      "gradient": "linear-gradient(180deg, #fff7ed 0%, #fed7aa 20%, #fdba74 40%, #fb923c 60%, #f97316 80%, #ea580c 100%)"
+    }
+  },
+  "layers": [
+    {
+      "id": "sun-glow",
+      "type": "shape",
+      "name": "Sun glow effect",
+      "position": { "x": 175, "y": 150 },
+      "size": { "width": 400, "height": 400 },
+      "content": {
+        "shape": "circle",
+        "fill": "radial-gradient(circle, rgba(254,243,199,0.6) 0%, rgba(253,186,116,0.3) 40%, rgba(251,146,60,0) 70%)"
+      },
+      "locked": true,
+      "zIndex": 1,
+      "animation": {
+        "type": "pulse",
+        "duration": 5000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "light-rays",
+      "type": "svg",
+      "name": "Light rays",
+      "position": { "x": 0, "y": 100 },
+      "size": { "width": 750, "height": 500 },
+      "content": {
+        "svg": "<svg viewBox='0 0 750 500'><defs><linearGradient id='ray1' x1='0%' y1='0%' x2='0%' y2='100%'><stop offset='0%' style='stop-color:#fef3c7;stop-opacity:0.4'/><stop offset='100%' style='stop-color:#fef3c7;stop-opacity:0'/></linearGradient></defs><polygon points='375,150 340,500 410,500' fill='url(#ray1)'/><polygon points='375,150 280,500 340,500' fill='url(#ray1)' opacity='0.6'/><polygon points='375,150 410,500 470,500' fill='url(#ray1)' opacity='0.6'/><polygon points='375,150 220,500 280,500' fill='url(#ray1)' opacity='0.3'/><polygon points='375,150 470,500 530,500' fill='url(#ray1)' opacity='0.3'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 1,
+      "animation": {
+        "type": "fadeInRotate",
+        "duration": 2000,
+        "delay": 500
+      }
+    },
+    {
+      "id": "couple-names",
+      "type": "text",
+      "name": "Couple names",
+      "position": { "x": 75, "y": 600 },
+      "size": { "width": 600, "height": 140 },
+      "variable": "couple_names",
+      "content": {
+        "text": "Sofia & Marcus",
+        "font": { "family": "Playfair Display", "size": 64, "weight": 700, "lineHeight": 1.2 },
+        "color": "#7c2d12",
+        "align": "center",
+        "shadow": "0 4px 12px rgba(124,45,18,0.2)"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1800,
+        "delay": 1200
+      }
+    },
+    {
+      "id": "sunburst-divider",
+      "type": "svg",
+      "name": "Sunburst divider",
+      "position": { "x": 300, "y": 770 },
+      "size": { "width": 150, "height": 80 },
+      "content": {
+        "svg": "<svg viewBox='0 0 150 80'><circle cx='75' cy='40' r='20' fill='#fbbf24'/><path d='M75 20 L75 5' stroke='#f59e0b' stroke-width='2'/><path d='M75 60 L75 75' stroke='#f59e0b' stroke-width='2'/><path d='M55 40 L40 40' stroke='#f59e0b' stroke-width='2'/><path d='M95 40 L110 40' stroke='#f59e0b' stroke-width='2'/><path d='M61 26 L51 16' stroke='#f59e0b' stroke-width='2'/><path d='M89 54 L99 64' stroke='#f59e0b' stroke-width='2'/><path d='M89 26 L99 16' stroke='#f59e0b' stroke-width='2'/><path d='M61 54 L51 64' stroke='#f59e0b' stroke-width='2'/></svg>"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "rotate",
+        "duration": 20000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "date-venue",
+      "type": "text",
+      "name": "Date and location",
+      "position": { "x": 100, "y": 880 },
+      "size": { "width": 550, "height": 100 },
+      "variable": "event_details",
+      "content": {
+        "text": "July 7, 2026 at 6:00 PM\nSeaside Terrace, Malibu",
+        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.6 },
+        "color": "#9a3412",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 2000
+      }
+    },
+    {
+      "id": "invitation-text",
+      "type": "text",
+      "name": "Invitation message",
+      "position": { "x": 90, "y": 1050 },
+      "size": { "width": 570, "height": 140 },
+      "variable": "message",
+      "content": {
+        "text": "As the sun sets on one chapter,\na new one begins.\nJoin us to celebrate love, laughter,\nand a lifetime of golden moments.",
+        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.7 },
+        "color": "#7c2d12",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 2500
+      }
+    },
+    {
+      "id": "silhouette-accent",
+      "type": "svg",
+      "name": "Sunset silhouette",
+      "position": { "x": 0, "y": 1220 },
+      "size": { "width": 750, "height": 114 },
+      "content": {
+        "svg": "<svg viewBox='0 0 750 114'><path d='M0 80 Q100 60 200 70 Q300 80 375 65 Q450 50 550 70 Q650 90 750 80 L750 114 L0 114 Z' fill='#7c2d12' opacity='0.3'/><path d='M0 95 Q150 85 300 90 Q450 95 600 85 Q675 80 750 90 L750 114 L0 114 Z' fill='#7c2d12' opacity='0.2'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeInUp",
+        "duration": 1500,
+        "delay": 1500
+      }
+    }
+  ],
+  "variables": [
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Sofia & Marcus", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "July 7, 2026 at 6:00 PM\nSeaside Terrace, Malibu", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+  ],
+  "colorSchemes": [
+    { "id": "golden-sunset", "name": "Golden Sunset", "colors": { "primary": "#fbbf24", "secondary": "#7c2d12", "accent": "#fed7aa", "text": "#9a3412", "background": "#fff7ed" } },
+    { "id": "coral-dream", "name": "Coral Dream", "colors": { "primary": "#fb7185", "secondary": "#881337", "accent": "#fda4af", "text": "#9f1239", "background": "#fff1f2" } },
+    { "id": "terracotta", "name": "Terracotta Glow", "colors": { "primary": "#f97316", "secondary": "#7c2d12", "accent": "#ffedd5", "text": "#9a3412", "background": "#fffaf0" } }
+  ],
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "dreamy" }
+}

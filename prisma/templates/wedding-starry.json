@@ -1,0 +1,211 @@
+{
+  "id": "wedding-starry-010",
+  "name": "Starry Night",
+  "scene": "wedding",
+  "style": "romantic",
+  "description": "Magical night sky theme with deep indigo, twinkling stars, and celestial elements. Features sparkling and constellation animations.",
+  "tags": ["stars", "night", "celestial", "magical", "romantic", "animated"],
+  "thumbnailUrl": "/templates/wedding-starry/thumbnail.svg",
+  "previewUrl": "/templates/wedding-starry/preview.svg",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "gradient",
+      "gradient": "linear-gradient(180deg, #0f172a 0%, #1e1b4b 25%, #312e81 50%, #3730a3 75%, #4338ca 100%)"
+    }
+  },
+  "layers": [
+    {
+      "id": "galaxy-overlay",
+      "type": "shape",
+      "name": "Galaxy mist",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 750, "height": 1334 },
+      "content": {
+        "shape": "rectangle",
+        "fill": "radial-gradient(ellipse at 30% 40%, rgba(139,92,246,0.2) 0%, rgba(124,58,237,0.1) 40%, rgba(109,40,217,0) 70%)"
+      },
+      "locked": true,
+      "zIndex": 1,
+      "animation": {
+        "type": "float",
+        "duration": 10000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "stars-large",
+      "type": "svg",
+      "name": "Large stars",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 750, "height": 1334 },
+      "content": {
+        "svg": "<svg viewBox='0 0 750 1334'><circle cx='120' cy='180' r='3' fill='#fef3c7' opacity='0.9'/><circle cx='580' cy='240' r='4' fill='#fde68a' opacity='0.95'/><circle cx='200' cy='420' r='2.5' fill='#fbbf24'/><circle cx='650' cy='520' r='3.5' fill='#fef3c7' opacity='0.9'/><circle cx='150' cy='680' r='3' fill='#fde68a' opacity='0.85'/><circle cx='550' cy='780' r='4' fill='#fbbf24' opacity='0.9'/><circle cx='300' cy='920' r='2.5' fill='#fef3c7'/><circle cx='100' cy='1050' r='3.5' fill='#fde68a' opacity='0.95'/><circle cx='600' cy='1150' r='3' fill='#fbbf24' opacity='0.9'/><path d='M400 200 L402 210 L412 210 L404 216 L407 226 L400 220 L393 226 L396 216 L388 210 L398 210 Z' fill='#fbbf24'/><path d='M500 600 L502 608 L510 608 L504 613 L506 621 L500 616 L494 621 L496 613 L490 608 L498 608 Z' fill='#fde68a'/><path d='M250 1100 L252 1108 L260 1108 L254 1113 L256 1121 L250 1116 L244 1121 L246 1113 L240 1108 L248 1108 Z' fill='#fef3c7'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "twinkle",
+        "duration": 3000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "stars-small",
+      "type": "svg",
+      "name": "Small stars",
+      "position": { "x": 0, "y": 0 },
+      "size": { "width": 750, "height": 1334 },
+      "content": {
+        "svg": "<svg viewBox='0 0 750 1334'><circle cx='80' cy='120' r='1.5' fill='#e0e7ff' opacity='0.7'/><circle cx='220' cy='160' r='1' fill='#ddd6fe' opacity='0.6'/><circle cx='340' cy='220' r='1.5' fill='#e0e7ff' opacity='0.65'/><circle cx='470' cy='180' r='1' fill='#ddd6fe' opacity='0.7'/><circle cx='620' cy='340' r='1.5' fill='#e0e7ff' opacity='0.6'/><circle cx='180' cy='560' r='1' fill='#ddd6fe' opacity='0.65'/><circle cx='420' cy='640' r='1.5' fill='#e0e7ff' opacity='0.7'/><circle cx='680' cy='880' r='1' fill='#ddd6fe' opacity='0.6'/><circle cx='260' cy='980' r='1.5' fill='#e0e7ff' opacity='0.65'/><circle cx='140' cy='1200' r='1' fill='#ddd6fe' opacity='0.7'/><circle cx='520' cy='1260' r='1.5' fill='#e0e7ff' opacity='0.6'/></svg>"
+      },
+      "locked": false,
+      "zIndex": 2,
+      "animation": {
+        "type": "twinkle",
+        "duration": 4000,
+        "delay": 1000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "moon-crescent",
+      "type": "svg",
+      "name": "Crescent moon",
+      "position": { "x": 550, "y": 150 },
+      "size": { "width": 120, "height": 120 },
+      "content": {
+        "svg": "<svg viewBox='0 0 120 120'><circle cx='60' cy='60' r='50' fill='#fef3c7' opacity='0.9'/><circle cx='75' cy='55' r='45' fill='#1e1b4b'/></svg>"
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "glow",
+        "duration": 5000,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "constellation",
+      "type": "svg",
+      "name": "Love constellation",
+      "position": { "x": 150, "y": 320 },
+      "size": { "width": 450, "height": 280 },
+      "content": {
+        "svg": "<svg viewBox='0 0 450 280'><line x1='100' y1='80' x2='200' y2='100' stroke='#c7d2fe' stroke-width='1' opacity='0.5'/><line x1='200' y1='100' x2='250' y2='140' stroke='#c7d2fe' stroke-width='1' opacity='0.5'/><line x1='250' y1='140' x2='200' y2='180' stroke='#c7d2fe' stroke-width='1' opacity='0.5'/><line x1='200' y1='180' x2='100' y2='160' stroke='#c7d2fe' stroke-width='1' opacity='0.5'/><line x1='100' y1='160' x2='100' y2='80' stroke='#c7d2fe' stroke-width='1' opacity='0.5'/><circle cx='100' cy='80' r='5' fill='#fbbf24'/><circle cx='200' cy='100' r='5' fill='#fde68a'/><circle cx='250' cy='140' r='6' fill='#fef3c7'/><circle cx='200' cy='180' r='5' fill='#fde68a'/><circle cx='100' cy='160' r='5' fill='#fbbf24'/></svg>"
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "drawConstellation",
+        "duration": 3000,
+        "delay": 1500
+      }
+    },
+    {
+      "id": "couple-names",
+      "type": "text",
+      "name": "Couple names",
+      "position": { "x": 75, "y": 650 },
+      "size": { "width": 600, "height": 140 },
+      "variable": "couple_names",
+      "content": {
+        "text": "Luna & Orion",
+        "font": { "family": "Playfair Display", "size": 68, "weight": 600, "lineHeight": 1.2 },
+        "color": "#fef3c7",
+        "align": "center",
+        "shadow": "0 0 20px rgba(251,191,36,0.5)"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 2000,
+        "delay": 2000
+      }
+    },
+    {
+      "id": "star-divider",
+      "type": "svg",
+      "name": "Star divider",
+      "position": { "x": 275, "y": 820 },
+      "size": { "width": 200, "height": 60 },
+      "content": {
+        "svg": "<svg viewBox='0 0 200 60'><line x1='0' y1='30' x2='80' y2='30' stroke='#c7d2fe' stroke-width='1' opacity='0.6'/><line x1='120' y1='30' x2='200' y2='30' stroke='#c7d2fe' stroke-width='1' opacity='0.6'/><path d='M100 10 L102 20 L112 20 L104 26 L107 36 L100 30 L93 36 L96 26 L88 20 L98 20 Z' fill='#fbbf24'/></svg>"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "shimmer",
+        "duration": 2500,
+        "delay": 2500,
+        "iterationCount": "infinite"
+      }
+    },
+    {
+      "id": "date-venue",
+      "type": "text",
+      "name": "Date and location",
+      "position": { "x": 100, "y": 920 },
+      "size": { "width": 550, "height": 100 },
+      "variable": "event_details",
+      "content": {
+        "text": "December 21, 2026 at 8:00 PM\nObservatory Terrace",
+        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.6 },
+        "color": "#e0e7ff",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 3000
+      }
+    },
+    {
+      "id": "invitation-text",
+      "type": "text",
+      "name": "Invitation message",
+      "position": { "x": 90, "y": 1070 },
+      "size": { "width": 570, "height": 130 },
+      "variable": "message",
+      "content": {
+        "text": "Under the stars that guided us together,\nwe invite you to witness our vows\nand celebrate a love written in the cosmos",
+        "font": { "family": "Lora", "size": 19, "weight": 400, "lineHeight": 1.7 },
+        "color": "#ddd6fe",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 3500
+      }
+    },
+    {
+      "id": "shooting-star",
+      "type": "svg",
+      "name": "Shooting star",
+      "position": { "x": 450, "y": 1200 },
+      "size": { "width": 250, "height": 100 },
+      "content": {
+        "svg": "<svg viewBox='0 0 250 100'><line x1='0' y1='20' x2='200' y2='80' stroke='#fbbf24' stroke-width='2' opacity='0.6'/><circle cx='200' cy='80' r='5' fill='#fef3c7'/></svg>"
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "shootingStar",
+        "duration": 2000,
+        "delay": 4000,
+        "iterationCount": "infinite"
+      }
+    }
+  ],
+  "variables": [
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Luna & Orion", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "December 21, 2026 at 8:00 PM\nObservatory Terrace", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+  ],
+  "colorSchemes": [
+    { "id": "midnight", "name": "Midnight Sky", "colors": { "primary": "#fbbf24", "secondary": "#0f172a", "accent": "#fef3c7", "text": "#e0e7ff", "background": "#0f172a" } },
+    { "id": "twilight", "name": "Twilight Hour", "colors": { "primary": "#c084fc", "secondary": "#1e1b4b", "accent": "#e9d5ff", "text": "#f3e8ff", "background": "#1e1b4b" } },
+    { "id": "aurora", "name": "Aurora Borealis", "colors": { "primary": "#34d399", "secondary": "#1e293b", "accent": "#6ee7b7", "text": "#d1fae5", "background": "#0f172a" } }
+  ],
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "celestial" }
+}

@@ -1,0 +1,164 @@
+{
+  "id": "wedding-minimal-005",
+  "name": "Pure Minimalist",
+  "scene": "wedding",
+  "style": "minimal",
+  "description": "Ultra-clean minimalist design with bold typography and subtle geometric shapes. Features smooth fade and slide animations.",
+  "tags": ["minimal", "modern", "clean", "typography", "simple", "animated"],
+  "thumbnailUrl": "/templates/wedding-minimal/thumbnail.svg",
+  "previewUrl": "/templates/wedding-minimal/preview.svg",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "color",
+      "color": "#fafaf9"
+    }
+  },
+  "layers": [
+    {
+      "id": "geometric-accent",
+      "type": "shape",
+      "name": "Geometric frame",
+      "position": { "x": 100, "y": 200 },
+      "size": { "width": 550, "height": 934 },
+      "content": {
+        "shape": "rectangle",
+        "fill": "none",
+        "stroke": "#171717",
+        "strokeWidth": 1
+      },
+      "locked": false,
+      "zIndex": 1,
+      "animation": {
+        "type": "drawStroke",
+        "duration": 2500,
+        "delay": 500
+      }
+    },
+    {
+      "id": "thin-line-top",
+      "type": "shape",
+      "name": "Top accent line",
+      "position": { "x": 150, "y": 380 },
+      "size": { "width": 450, "height": 1 },
+      "content": {
+        "shape": "rectangle",
+        "fill": "#171717"
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "expandWidth",
+        "duration": 1500,
+        "delay": 1000
+      }
+    },
+    {
+      "id": "couple-names",
+      "type": "text",
+      "name": "Couple names",
+      "position": { "x": 120, "y": 500 },
+      "size": { "width": 510, "height": 200 },
+      "variable": "couple_names",
+      "content": {
+        "text": "ANNA\n&\nDAVID",
+        "font": { "family": "Inter", "size": 72, "weight": 200, "lineHeight": 1.1, "letterSpacing": 12 },
+        "color": "#171717",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 2000,
+        "delay": 1500
+      }
+    },
+    {
+      "id": "thin-line-bottom",
+      "type": "shape",
+      "name": "Bottom accent line",
+      "position": { "x": 150, "y": 740 },
+      "size": { "width": 450, "height": 1 },
+      "content": {
+        "shape": "rectangle",
+        "fill": "#171717"
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "expandWidth",
+        "duration": 1500,
+        "delay": 2000
+      }
+    },
+    {
+      "id": "date-venue",
+      "type": "text",
+      "name": "Date and location",
+      "position": { "x": 150, "y": 820 },
+      "size": { "width": 450, "height": 80 },
+      "variable": "event_details",
+      "content": {
+        "text": "10.15.2026\nSTUDIO GALLERY, NYC",
+        "font": { "family": "Inter", "size": 18, "weight": 400, "lineHeight": 1.8, "letterSpacing": 4 },
+        "color": "#525252",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 2500
+      }
+    },
+    {
+      "id": "invitation-text",
+      "type": "text",
+      "name": "Invitation message",
+      "position": { "x": 150, "y": 970 },
+      "size": { "width": 450, "height": 100 },
+      "variable": "message",
+      "content": {
+        "text": "Request the pleasure of your company",
+        "font": { "family": "Inter", "size": 16, "weight": 300, "lineHeight": 1.7, "letterSpacing": 1 },
+        "color": "#737373",
+        "align": "center"
+      },
+      "zIndex": 3,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1200,
+        "delay": 3000
+      }
+    },
+    {
+      "id": "square-accent",
+      "type": "shape",
+      "name": "Minimal square",
+      "position": { "x": 350, "y": 1080 },
+      "size": { "width": 50, "height": 50 },
+      "content": {
+        "shape": "rectangle",
+        "fill": "none",
+        "stroke": "#171717",
+        "strokeWidth": 1
+      },
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1000,
+        "delay": 3500
+      }
+    }
+  ],
+  "variables": [
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "ANNA\n&\nDAVID", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "10.15.2026\nSTUDIO GALLERY, NYC", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Request the pleasure of your company", "aiGenerable": true }
+  ],
+  "colorSchemes": [
+    { "id": "monochrome", "name": "Monochrome", "colors": { "primary": "#171717", "secondary": "#525252", "accent": "#a3a3a3", "text": "#171717", "background": "#fafaf9" } },
+    { "id": "warm-minimal", "name": "Warm Minimal", "colors": { "primary": "#57534e", "secondary": "#292524", "accent": "#a8a29e", "text": "#1c1917", "background": "#fafaf9" } },
+    { "id": "cool-minimal", "name": "Cool Minimal", "colors": { "primary": "#334155", "secondary": "#0f172a", "accent": "#94a3b8", "text": "#1e293b", "background": "#f8fafc" } }
+  ],
+  "settings": { "allowMusic": false, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "minimal" }
+}

@@ -1,11 +1,13 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { PrismaClient } from "@prisma/client";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const templatesDirectory = join(root, "..", "prisma", "templates");
-const templateFiles = ["wedding-modern.json", "birthday-playful.json", "business-tech.json"];
+const templateFiles = (await readdir(templatesDirectory))
+  .filter((file) => file.endsWith(".json") && file !== "template.schema.json")
+  .sort();
 const prisma = new PrismaClient();
 
 function assertTemplate(template) {
