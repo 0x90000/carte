@@ -1,4 +1,5 @@
 import { randomInt } from "node:crypto";
+import nodemailer from "nodemailer";
 import { Resend } from "resend";
 import { getRedis } from "@/lib/redis";
 
@@ -78,6 +79,28 @@ export async function verifyEmailCode(rawEmail: string, code: string) {
 
 async function sendEmailCode(email: string, code: string) {
   if (getConfiguredTestCode()) {
+    return;
+  }
+
+  const smtpHost = process.env.SMTP_HOST?.trim();
+  const smtpUser = process.env.SMTP_USER?.trim();
+  const smtpPassword = process.env.SMTP_PASSWORD?.trim();
+  if (smtpHost && smtpUser && smtpPassword) {
+    const smtpPort = Number(process.env.SMTP_PORT ?? "465");
+    const secure = process.env.SMTP_SECURE !== "false";
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: Number.isFinite(smtpPort) ? smtpPort : 465,
+      secure,
+      auth: { user: smtpUser, pass: smtpPassword },
+    });
+    const from = process.env.EMAIL_FROM?.trim() || smtpUser;
+    await transporter.sendMail({
+      from,
+      to: email,
+      subject: "Your Carte sign-in code",
+      html: `<p>Your Carte verification code is <strong>${code}</strong>.</p><p>This code expires in 10 minutes.</p>`,
+    });
     return;
   }
 
