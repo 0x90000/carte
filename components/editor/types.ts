@@ -1,6 +1,7 @@
 export type EditorBackground = {
   type?: string;
   value?: string;
+  gradient?: string;
   url?: string;
   poster?: string;
   fit?: string;
@@ -12,7 +13,7 @@ export type EditorBackground = {
 
 export type EditorLayer = {
   id: string;
-  type: "text" | "image" | "shape" | "decoration" | string;
+  type: "text" | "image" | "shape" | "svg" | "decoration" | string;
   name: string;
   position: { x: number; y: number };
   size: { width: number; height: number };
@@ -22,6 +23,12 @@ export type EditorLayer = {
   locked?: boolean;
   visible?: boolean;
   variable?: string;
+  animation?: {
+    type: string;
+    duration: number;
+    delay?: number;
+    iterationCount?: string | number;
+  };
   content: Record<string, unknown>;
 };
 

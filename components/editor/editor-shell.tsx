@@ -94,6 +94,8 @@ function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoL
           backgroundPosition: "center",
           backgroundSize: background.fit === "contain" ? "contain" : "cover",
         }
+      : background.gradient
+      ? { background: background.gradient }
       : { background: background.value ?? "#ffffff" };
 
   return (
@@ -120,6 +122,12 @@ function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoL
             if (layer.visible === false) {
               return null;
             }
+            const animationStyle: CSSProperties = layer.animation ? {
+              animation: `${layer.animation.type} ${layer.animation.duration}ms ease-in-out`,
+              animationDelay: `${layer.animation.delay || 0}ms`,
+              animationIterationCount: layer.animation.iterationCount || 1,
+            } : {};
+
             const style: CSSProperties = {
               position: "absolute",
               left: `${(layer.position.x / canvas.width) * 100}%`,
@@ -130,6 +138,7 @@ function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoL
               transformOrigin: "center",
               opacity: layer.opacity ?? 1,
               zIndex: layer.zIndex ?? 0,
+              ...animationStyle,
             };
             if (layer.type === "text") {
               const font = layer.content.font && typeof layer.content.font === "object" ? (layer.content.font as Record<string, unknown>) : {};
@@ -168,6 +177,24 @@ function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoL
                       ? `${Number((layer.content.stroke as Record<string, unknown>).width ?? 0)}px solid ${String((layer.content.stroke as Record<string, unknown>).color ?? "transparent")}`
                       : undefined,
                   }}
+                />
+              );
+            }
+            if (layer.type === "svg" && layer.content.svg) {
+              return (
+                <div
+                  key={layer.id}
+                  style={style}
+                  dangerouslySetInnerHTML={{ __html: String(layer.content.svg) }}
+                />
+              );
+            }
+            if (layer.type === "decoration" && layer.content.svg) {
+              return (
+                <div
+                  key={layer.id}
+                  style={style}
+                  dangerouslySetInnerHTML={{ __html: String(layer.content.svg) }}
                 />
               );
             }
