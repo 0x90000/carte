@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, Heart, Palette, Sparkles, Star } from "lucide-react";
+import { ArrowLeft, Check, Heart, Palette, Sparkles, Star } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { TemplatePreview } from "@/components/templates/template-preview";
 import { getTemplateStructure, templateBackgroundType } from "@/lib/templates";
 import { localePath } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 import { absoluteSiteUrl } from "@/lib/site-url";
+import { UseTemplateButton } from "./use-template-button";
 
 export const dynamic = "force-dynamic";
 
@@ -150,12 +151,12 @@ export default async function TemplateDetailPage({ params }: TemplateDetailProps
             </div>
 
             {/* CTA Button */}
-            <form method="post" action={`/api/invitations/from-template/${encodeURIComponent(template.id)}`}>
-              <Button type="submit" size="lg" className="w-full rounded-full text-base h-14 shadow-xl shadow-primary/30 group">
-                {t("detail.useTemplate")}
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </form>
+            <UseTemplateButton
+              templateId={template.id}
+              scene={template.scene}
+              label={t("detail.useTemplate")}
+              locale={locale}
+            />
 
             {/* Additional Info */}
             <div className="rounded-2xl border border-dashed border-border/60 bg-secondary/30 p-6 text-center">
