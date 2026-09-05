@@ -40,6 +40,7 @@ const occasions = [
 export default async function Home() {
   const session = await auth();
   const t = await getTranslations("home");
+  const createT = await getTranslations("create");
   const common = await getTranslations("common");
 
   return (
@@ -107,7 +108,7 @@ export default async function Home() {
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border hover:border-primary/40 hover:shadow-md transition-all text-sm font-medium"
                 >
                   <span className="text-lg">{emoji}</span>
-                  <span>{t(`create.scenes.${key}.name`)}</span>
+                  <span>{createT(`scenes.${key}.name`)}</span>
                 </Link>
               ))}
             </div>
