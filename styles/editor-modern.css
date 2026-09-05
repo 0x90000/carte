@@ -1,0 +1,357 @@
+/* 编辑器现代化样式 - 只修改外观，不改变功能 */
+
+/* 导入到 globals.css */
+
+/* 1. 编辑器容器 - 渐变背景 */
+.editor-container {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  min-height: 100vh;
+}
+
+/* 2. 编辑器 Header - 玻璃态效果 */
+.editor-header {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 3. 侧边栏 - 现代卡片设计 */
+.editor-sidebar {
+  background: white;
+  border-right: 1px solid rgba(226, 232, 240, 0.6);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.03);
+}
+
+/* 4. 工具栏按钮 - 悬停动画 */
+.editor-toolbar-button {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 0.75rem;
+}
+
+.editor-toolbar-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.editor-toolbar-button:active {
+  transform: translateY(0);
+}
+
+/* 5. 图层列表 - 卡片式设计 */
+.editor-layer-item {
+  border-radius: 0.75rem;
+  border: 1.5px solid #e2e8f0;
+  padding: 0.875rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.editor-layer-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transform: translateX(2px);
+}
+
+.editor-layer-item.selected {
+  border-color: #3b82f6;
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 6. 输入框 - 现代化 */
+.editor-input {
+  border-radius: 0.75rem;
+  border: 1.5px solid #e2e8f0;
+  padding: 0.625rem 0.875rem;
+  transition: all 0.2s;
+  background: white;
+}
+
+.editor-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+/* 7. 画布区域 - 浮动效果 */
+.editor-canvas-container {
+  padding: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.editor-canvas-wrapper {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.08),
+    0 10px 20px rgba(0, 0, 0, 0.04),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.editor-canvas-wrapper:hover {
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.12),
+    0 15px 30px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+/* 8. 颜色选择器 - 网格布局 */
+.editor-color-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+}
+
+.editor-color-swatch {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.editor-color-swatch:hover {
+  transform: scale(1.1);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.editor-color-swatch.selected {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.editor-color-swatch.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 9. 标签页 - 现代设计 */
+.editor-tabs {
+  display: flex;
+  border-bottom: 2px solid #e2e8f0;
+  background: white;
+  padding: 0 1rem;
+}
+
+.editor-tab {
+  padding: 0.875rem 1.5rem;
+  border-bottom: 3px solid transparent;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editor-tab:hover {
+  color: #334155;
+  background: #f8fafc;
+}
+
+.editor-tab.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  background: linear-gradient(to bottom, rgba(59, 130, 246, 0.03), transparent);
+}
+
+/* 10. 属性面板 - 分组卡片 */
+.editor-property-group {
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s;
+}
+
+.editor-property-group:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.editor-property-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+
+/* 11. 滑块 - 现代化 */
+.editor-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #e2e8f0;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.editor-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.editor-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.editor-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+/* 12. 加载动画 */
+@keyframes editor-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.editor-loading {
+  animation: editor-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 13. 过渡动画 */
+.editor-fade-in {
+  animation: editor-fade-in 0.3s ease-out;
+}
+
+@keyframes editor-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 14. 工具提示 */
+.editor-tooltip {
+  position: absolute;
+  background: rgba(15, 23, 42, 0.95);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 15. AI 助手面板 - 特殊设计 */
+.editor-ai-panel {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #bfdbfe 100%);
+  border: 2px solid #93c5fd;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.editor-ai-panel::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+  animation: editor-ai-glow 3s ease-in-out infinite;
+}
+
+@keyframes editor-ai-glow {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(10px, 10px);
+  }
+}
+
+/* 16. 响应式优化 */
+@media (max-width: 1024px) {
+  .editor-sidebar {
+    position: fixed;
+    left: -100%;
+    transition: left 0.3s ease;
+    z-index: 40;
+  }
+
+  .editor-sidebar.open {
+    left: 0;
+  }
+}
+
+/* 17. 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .editor-container {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  }
+
+  .editor-header {
+    background: rgba(15, 23, 42, 0.8);
+    border-bottom-color: rgba(71, 85, 105, 0.6);
+  }
+
+  .editor-sidebar {
+    background: #1e293b;
+    border-right-color: rgba(71, 85, 105, 0.6);
+  }
+
+  .editor-layer-item {
+    background: #334155;
+    border-color: #475569;
+  }
+
+  .editor-layer-item:hover {
+    border-color: #64748b;
+  }
+
+  .editor-layer-item.selected {
+    border-color: #60a5fa;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  }
+}
