@@ -3,158 +3,118 @@
   "name": "Romantic Blush",
   "scene": "wedding",
   "style": "romantic",
-  "description": "Soft blush pink with watercolor florals and elegant script typography. Features floating petal animations.",
-  "tags": ["romantic", "pink", "floral", "elegant", "animated"],
-  "thumbnailUrl": "/templates/wedding-romantic/thumbnail.svg",
-  "previewUrl": "/templates/wedding-romantic/preview.svg",
+  "description": "Soft pink watercolor with floating hearts and elegant script typography",
+  "tags": ["romantic", "pink", "watercolor", "hearts", "elegant"],
+  "thumbnailUrl": "/templates/wedding-romantic/thumbnail.png",
+  "previewUrl": "/templates/wedding-romantic/preview.png",
   "canvas": {
     "width": 750,
     "height": 1334,
     "background": {
-      "type": "gradient",
-      "gradient": "linear-gradient(135deg, #ffeef8 0%, #ffe4f1 50%, #ffd4e8 100%)"
+      "type": "color",
+      "gradient": "linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)"
     }
   },
   "layers": [
     {
-      "id": "bg-overlay",
-      "type": "shape",
-      "name": "Soft overlay",
-      "position": { "x": 0, "y": 0 },
-      "size": { "width": 750, "height": 1334 },
-      "content": {
-        "shape": "rectangle",
-        "fill": "radial-gradient(circle at 50% 30%, rgba(255,182,193,0.3) 0%, rgba(255,228,241,0.1) 70%)"
-      },
-      "locked": true,
+      "id": "hearts-decoration",
+      "type": "svg",
+      "name": "Floating Hearts",
+      "position": { "x": 50, "y": 200 },
+      "size": { "width": 650, "height": 400 },
+      "opacity": 0.3,
       "zIndex": 1,
       "animation": {
-        "type": "pulse",
-        "duration": 4000,
+        "type": "float",
+        "duration": 3000,
         "iterationCount": "infinite"
-      }
-    },
-    {
-      "id": "floral-top",
-      "type": "svg",
-      "name": "Top floral",
-      "position": { "x": 50, "y": 80 },
-      "size": { "width": 650, "height": 200 },
-      "content": {
-        "svg": "<svg viewBox='0 0 650 200'><path d='M100 100 Q200 50 325 100 T550 100' stroke='#ffb6c1' stroke-width='2' fill='none' opacity='0.6'/><circle cx='100' cy='100' r='40' fill='#ffe4e1' opacity='0.7'/><circle cx='325' cy='100' r='50' fill='#ffb6c1' opacity='0.6'/><circle cx='550' cy='100' r='45' fill='#ffc0cb' opacity='0.65'/></svg>"
       },
-      "locked": false,
-      "zIndex": 2,
-      "animation": {
-        "type": "fadeInDown",
-        "duration": 1200,
-        "delay": 300
+      "content": {
+        "svg": "<svg viewBox='0 0 650 400' xmlns='http://www.w3.org/2000/svg'><path d='M325 100 Q300 60, 260 60 Q220 60, 220 100 Q220 140, 325 200 Q430 140, 430 100 Q430 60, 390 60 Q350 60, 325 100 Z' fill='#ec4899' opacity='0.4'/><path d='M150 250 Q135 225, 110 225 Q85 225, 85 250 Q85 275, 150 315 Q215 275, 215 250 Q215 225, 190 225 Q165 225, 150 250 Z' fill='#f472b6' opacity='0.5'/><path d='M500 280 Q485 255, 460 255 Q435 255, 435 280 Q435 305, 500 345 Q565 305, 565 280 Q565 255, 540 255 Q515 255, 500 280 Z' fill='#f9a8d4' opacity='0.6'/></svg>"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
-      "name": "Couple names",
-      "position": { "x": 75, "y": 450 },
-      "size": { "width": 600, "height": 180 },
+      "name": "Couple Names",
+      "position": { "x": 75, "y": 550 },
+      "size": { "width": 600, "height": 120 },
       "variable": "couple_names",
-      "content": {
-        "text": "Emma & James",
-        "font": { "family": "Playfair Display", "size": 64, "weight": 700, "lineHeight": 1.2, "style": "italic" },
-        "color": "#8b4367",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
         "duration": 1500,
-        "delay": 800
-      }
-    },
-    {
-      "id": "divider",
-      "type": "shape",
-      "name": "Heart divider",
-      "position": { "x": 325, "y": 660 },
-      "size": { "width": 100, "height": 50 },
-      "content": {
-        "svg": "<svg viewBox='0 0 100 50'><path d='M50 45 L35 30 Q30 25 30 20 Q30 10 40 10 Q45 10 50 15 Q55 10 60 10 Q70 10 70 20 Q70 25 65 30 Z' fill='#d4a5a5'/></svg>"
+        "delay": 300
       },
-      "zIndex": 3,
-      "animation": {
-        "type": "heartbeat",
-        "duration": 1500,
-        "delay": 1500,
-        "iterationCount": "infinite"
+      "content": {
+        "text": "Sarah & Michael",
+        "font": { "family": "Great Vibes", "size": 72, "weight": 400, "lineHeight": 1.2 },
+        "color": "#be185d",
+        "align": "center"
       }
     },
     {
-      "id": "date-place",
+      "id": "date-venue",
       "type": "text",
-      "name": "Date and venue",
-      "position": { "x": 100, "y": 740 },
+      "name": "Date and Location",
+      "position": { "x": 100, "y": 750 },
       "size": { "width": 550, "height": 100 },
       "variable": "event_details",
-      "content": {
-        "text": "June 20, 2026\nRose Garden Estate",
-        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.6 },
-        "color": "#6b4d57",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
-        "type": "fadeIn",
+        "type": "slideUp",
         "duration": 1200,
-        "delay": 1800
+        "delay": 600
+      },
+      "content": {
+        "text": "June 15, 2026\nRose Garden Estate",
+        "font": { "family": "Cormorant", "size": 28, "weight": 400, "lineHeight": 1.6 },
+        "color": "#9f1239",
+        "align": "center"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
-      "name": "Invitation message",
-      "position": { "x": 80, "y": 980 },
-      "size": { "width": 590, "height": 150 },
+      "name": "Invitation Message",
+      "position": { "x": 90, "y": 950 },
+      "size": { "width": 570, "height": 150 },
       "variable": "message",
-      "content": {
-        "text": "Together with their families,\ninvite you to celebrate their love\nand begin a new chapter together.",
-        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.7 },
-        "color": "#7a5d6f",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 1200,
-        "delay": 2100
+        "duration": 1500,
+        "delay": 900
+      },
+      "content": {
+        "text": "Together with their families,\ninvite you to celebrate their wedding\nand the beginning of their new journey together",
+        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.8 },
+        "color": "#831843",
+        "align": "center"
       }
     },
     {
-      "id": "floral-bottom",
+      "id": "bottom-flowers",
       "type": "svg",
-      "name": "Bottom floral",
-      "position": { "x": 50, "y": 1150 },
-      "size": { "width": 650, "height": 150 },
-      "content": {
-        "svg": "<svg viewBox='0 0 650 150'><path d='M50 75 Q175 50 325 75 T600 75' stroke='#ffb6c1' stroke-width='2' fill='none' opacity='0.5'/><circle cx='150' cy='60' r='30' fill='#ffe4e1' opacity='0.6'/><circle cx='500' cy='65' r='35' fill='#ffc0cb' opacity='0.65'/></svg>"
-      },
-      "locked": false,
+      "name": "Bottom Floral",
+      "position": { "x": 0, "y": 1150 },
+      "size": { "width": 750, "height": 184 },
+      "opacity": 0.4,
       "zIndex": 2,
-      "animation": {
-        "type": "fadeInUp",
-        "duration": 1200,
-        "delay": 600
+      "content": {
+        "svg": "<svg viewBox='0 0 750 184' xmlns='http://www.w3.org/2000/svg'><ellipse cx='150' cy='140' rx='60' ry='40' fill='#fda4af'/><ellipse cx='220' cy='150' rx='50' ry='35' fill='#fb7185'/><ellipse cx='280' cy='145' rx='55' ry='38' fill='#fda4af'/><ellipse cx='375' cy='155' rx='70' ry='45' fill='#fb7185'/><ellipse cx='470' cy='145' rx='55' ry='38' fill='#fda4af'/><ellipse cx='530' cy='150' rx='50' ry='35' fill='#fb7185'/><ellipse cx='600' cy='140' rx='60' ry='40' fill='#fda4af'/></svg>"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Emma & James", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "June 20, 2026\nRose Garden Estate", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Sarah & Michael", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "June 15, 2026\nRose Garden Estate", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Together with their families,\ninvite you to celebrate their wedding\nand the beginning of their new journey together", "aiGenerable": true }
   ],
   "colorSchemes": [
-    { "id": "blush", "name": "Blush Pink", "colors": { "primary": "#ffb6c1", "secondary": "#8b4367", "accent": "#ffc0cb", "text": "#6b4d57", "background": "#ffeef8" } },
-    { "id": "rose-gold", "name": "Rose Gold", "colors": { "primary": "#e4a8a3", "secondary": "#8c5555", "accent": "#f7dcd9", "text": "#5a4047", "background": "#fff5f3" } },
-    { "id": "lavender", "name": "Lavender Dream", "colors": { "primary": "#e6c9ff", "secondary": "#7d5ba6", "accent": "#f3e5ff", "text": "#5a4570", "background": "#faf5ff" } }
+    { "id": "blush", "name": "Romantic Blush", "colors": { "primary": "#ec4899", "secondary": "#be185d", "accent": "#fda4af", "text": "#831843", "background": "#fce7f3" } },
+    { "id": "rose", "name": "Deep Rose", "colors": { "primary": "#f43f5e", "secondary": "#be123c", "accent": "#fecdd3", "text": "#881337", "background": "#fff1f2" } },
+    { "id": "lavender", "name": "Soft Lavender", "colors": { "primary": "#c084fc", "secondary": "#7e22ce", "accent": "#e9d5ff", "text": "#581c87", "background": "#faf5ff" } }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "romantic" }
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
 }

@@ -3,152 +3,147 @@
   "name": "Vintage Romance",
   "scene": "wedding",
   "style": "vintage",
-  "description": "Classic vintage aesthetic with sepia tones, ornate borders, and Victorian-inspired typography. Features elegant fade animations.",
-  "tags": ["vintage", "classic", "ornate", "retro", "elegant", "animated"],
-  "thumbnailUrl": "/templates/wedding-vintage/thumbnail.svg",
-  "previewUrl": "/templates/wedding-vintage/preview.svg",
+  "description": "Classic vintage aesthetic with sepia tones, ornate borders, and Victorian-inspired typography",
+  "tags": ["vintage", "classic", "ornate", "retro", "elegant"],
+  "thumbnailUrl": "/templates/wedding-vintage/thumbnail.png",
+  "previewUrl": "/templates/wedding-vintage/preview.png",
   "canvas": {
     "width": 750,
     "height": 1334,
     "background": {
-      "type": "gradient",
-      "gradient": "linear-gradient(180deg, #fef3e2 0%, #f9e4c8 50%, #edd5b3 100%)"
+      "type": "color",
+      "gradient": "linear-gradient(135deg, #fef3e2 0%, #f5e6d3 50%, #e8d5c4 100%)"
     }
   },
   "layers": [
     {
-      "id": "vintage-texture",
-      "type": "shape",
-      "name": "Paper texture overlay",
-      "position": { "x": 0, "y": 0 },
-      "size": { "width": 750, "height": 1334 },
-      "content": {
-        "shape": "rectangle",
-        "fill": "radial-gradient(circle at 30% 40%, rgba(139,101,70,0.03) 0%, rgba(139,101,70,0.08) 100%)"
-      },
-      "locked": true,
-      "zIndex": 1
-    },
-    {
-      "id": "ornate-frame-top",
+      "id": "vintage-frame",
       "type": "svg",
-      "name": "Ornate top border",
-      "position": { "x": 75, "y": 150 },
-      "size": { "width": 600, "height": 150 },
-      "content": {
-        "svg": "<svg viewBox='0 0 600 150'><path d='M50 75 Q150 50 300 75 Q450 100 550 75' stroke='#8b6546' stroke-width='2' fill='none'/><path d='M100 75 Q150 65 200 75 Q250 85 300 75 Q350 65 400 75 Q450 85 500 75' stroke='#a0826d' stroke-width='1' fill='none' opacity='0.6'/><circle cx='300' cy='75' r='25' fill='none' stroke='#8b6546' stroke-width='2'/><circle cx='300' cy='75' r='18' fill='none' stroke='#a0826d' stroke-width='1'/><path d='M285 75 L315 75 M300 60 L300 90' stroke='#8b6546' stroke-width='1.5'/><rect x='80' y='65' width='20' height='20' fill='none' stroke='#8b6546' stroke-width='1.5' transform='rotate(45 90 75)'/><rect x='500' y='65' width='20' height='20' fill='none' stroke='#8b6546' stroke-width='1.5' transform='rotate(45 510 75)'/></svg>"
-      },
-      "locked": false,
-      "zIndex": 2,
+      "name": "Vintage Frame",
+      "position": { "x": 60, "y": 100 },
+      "size": { "width": 630, "height": 1134 },
+      "opacity": 0.6,
+      "zIndex": 1,
       "animation": {
         "type": "fadeIn",
         "duration": 2000,
+        "delay": 200
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 630 1134' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='610' height='1114' fill='none' stroke='#6b4423' stroke-width='3' rx='8'/><rect x='25' y='25' width='580' height='1084' fill='none' stroke='#8b6546' stroke-width='1'/><path d='M315 40 Q325 30, 335 40 Q325 50, 315 40' fill='#6b4423'/><path d='M315 1094 Q325 1084, 335 1094 Q325 1104, 315 1094' fill='#6b4423'/><rect x='280' y='50' width='70' height='4' fill='#8b6546' rx='2'/><rect x='280' y='1080' width='70' height='4' fill='#8b6546' rx='2'/></svg>"
+      }
+    },
+    {
+      "id": "vintage-ornament",
+      "type": "svg",
+      "name": "Ornament",
+      "position": { "x": 275, "y": 380 },
+      "size": { "width": 200, "height": 140 },
+      "opacity": 0.7,
+      "zIndex": 2,
+      "animation": {
+        "type": "fadeIn",
+        "duration": 1500,
         "delay": 500
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 200 140' xmlns='http://www.w3.org/2000/svg'><path d='M100 20 Q110 40, 100 60 Q90 40, 100 20' fill='#8b6546'/><path d='M100 60 Q120 70, 140 60 Q120 80, 100 90 Q80 80, 60 60 Q80 70, 100 60' fill='#a0826d'/><ellipse cx='100' cy='70' rx='35' ry='25' fill='none' stroke='#6b4423' stroke-width='2'/><path d='M100 90 Q90 110, 100 130 Q110 110, 100 90' fill='#8b6546'/><circle cx='100' cy='70' r='8' fill='#6b4423'/></svg>"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
-      "name": "Couple names",
-      "position": { "x": 80, "y": 450 },
-      "size": { "width": 590, "height": 180 },
+      "name": "Couple Names",
+      "position": { "x": 80, "y": 550 },
+      "size": { "width": 590, "height": 140 },
       "variable": "couple_names",
-      "content": {
-        "text": "Elizabeth & Thomas",
-        "font": { "family": "Playfair Display", "size": 56, "weight": 600, "lineHeight": 1.3, "style": "italic" },
-        "color": "#6b4423",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
         "duration": 1800,
-        "delay": 1200
-      }
-    },
-    {
-      "id": "vintage-flourish",
-      "type": "svg",
-      "name": "Vintage flourish",
-      "position": { "x": 250, "y": 660 },
-      "size": { "width": 250, "height": 80 },
-      "content": {
-        "svg": "<svg viewBox='0 0 250 80'><path d='M125 40 Q100 20 75 30 Q50 40 60 55 Q70 70 90 60 Q110 50 125 40' stroke='#8b6546' stroke-width='1.5' fill='none'/><path d='M125 40 Q150 20 175 30 Q200 40 190 55 Q180 70 160 60 Q140 50 125 40' stroke='#8b6546' stroke-width='1.5' fill='none'/><circle cx='125' cy='40' r='8' fill='#a0826d'/><path d='M60 55 Q50 60 45 70' stroke='#8b6546' stroke-width='1' fill='none'/><path d='M190 55 Q200 60 205 70' stroke='#8b6546' stroke-width='1' fill='none'/></svg>"
+        "delay": 700
       },
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 1800
+      "content": {
+        "text": "Elizabeth & Thomas",
+        "font": { "family": "Playfair Display", "size": 56, "weight": 600, "lineHeight": 1.3 },
+        "color": "#6b4423",
+        "align": "center"
       }
     },
     {
       "id": "date-venue",
       "type": "text",
-      "name": "Date and location",
-      "position": { "x": 100, "y": 780 },
-      "size": { "width": 550, "height": 100 },
+      "name": "Date and Location",
+      "position": { "x": 100, "y": 800 },
+      "size": { "width": 550, "height": 120 },
       "variable": "event_details",
+      "zIndex": 3,
+      "animation": {
+        "type": "slideUp",
+        "duration": 1500,
+        "delay": 1000
+      },
       "content": {
         "text": "The Twenty-Fifth of May\nTwo Thousand Twenty-Six\nVintage Estate Manor",
         "font": { "family": "Cormorant Garamond", "size": 22, "weight": 500, "lineHeight": 1.7 },
         "color": "#8b6546",
         "align": "center"
-      },
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1200,
-        "delay": 2200
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
-      "name": "Invitation message",
-      "position": { "x": 100, "y": 990 },
+      "name": "Invitation Message",
+      "position": { "x": 100, "y": 1000 },
       "size": { "width": 550, "height": 120 },
       "variable": "message",
-      "content": {
-        "text": "Request the honour of your presence\nat the celebration of their marriage",
-        "font": { "family": "Cormorant Garamond", "size": 20, "weight": 400, "lineHeight": 1.8, "style": "italic" },
-        "color": "#8b6546",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 1200,
-        "delay": 2700
+        "duration": 1800,
+        "delay": 1300
+      },
+      "content": {
+        "text": "Request the honour of your presence\nat the celebration of their marriage",
+        "font": { "family": "Cormorant Garamond", "size": 20, "weight": 400, "lineHeight": 1.8 },
+        "color": "#8b6546",
+        "align": "center"
       }
     },
     {
-      "id": "ornate-frame-bottom",
+      "id": "corner-flourish-1",
       "type": "svg",
-      "name": "Ornate bottom border",
-      "position": { "x": 75, "y": 1150 },
-      "size": { "width": 600, "height": 150 },
-      "content": {
-        "svg": "<svg viewBox='0 0 600 150'><path d='M50 75 Q150 100 300 75 Q450 50 550 75' stroke='#8b6546' stroke-width='2' fill='none'/><path d='M100 75 Q150 85 200 75 Q250 65 300 75 Q350 85 400 75 Q450 65 500 75' stroke='#a0826d' stroke-width='1' fill='none' opacity='0.6'/><circle cx='150' cy='85' r='12' fill='#c9a882' opacity='0.6'/><circle cx='300' cy='75' r='15' fill='#c9a882' opacity='0.7'/><circle cx='450' cy='65' r='12' fill='#c9a882' opacity='0.6'/></svg>"
-      },
-      "locked": false,
+      "name": "Corner Flourish Top",
+      "position": { "x": 80, "y": 720 },
+      "size": { "width": 150, "height": 60 },
+      "opacity": 0.5,
       "zIndex": 2,
-      "animation": {
-        "type": "fadeInUp",
-        "duration": 1500,
-        "delay": 1500
+      "content": {
+        "svg": "<svg viewBox='0 0 150 60' xmlns='http://www.w3.org/2000/svg'><path d='M0 30 Q30 20, 60 30 Q90 40, 120 30 Q135 25, 150 30' stroke='#8b6546' stroke-width='2' fill='none'/><circle cx='60' cy='30' r='4' fill='#a0826d'/><circle cx='30' cy='25' r='2' fill='#8b6546'/><circle cx='90' cy='35' r='2' fill='#8b6546'/></svg>"
+      }
+    },
+    {
+      "id": "corner-flourish-2",
+      "type": "svg",
+      "name": "Corner Flourish Bottom",
+      "position": { "x": 520, "y": 720 },
+      "size": { "width": 150, "height": 60 },
+      "opacity": 0.5,
+      "zIndex": 2,
+      "content": {
+        "svg": "<svg viewBox='0 0 150 60' xmlns='http://www.w3.org/2000/svg'><path d='M150 30 Q120 20, 90 30 Q60 40, 30 30 Q15 25, 0 30' stroke='#8b6546' stroke-width='2' fill='none'/><circle cx='90' cy='30' r='4' fill='#a0826d'/><circle cx='120' cy='25' r='2' fill='#8b6546'/><circle cx='60' cy='35' r='2' fill='#8b6546'/></svg>"
       }
     }
   ],
   "variables": [
     { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Elizabeth & Thomas", "validation": { "required": true, "maxLength": 50 } },
     { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "The Twenty-Fifth of May\nTwo Thousand Twenty-Six\nVintage Estate Manor", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Request the honour of your presence\nat the celebration of their marriage", "aiGenerable": true }
   ],
   "colorSchemes": [
     { "id": "sepia", "name": "Sepia Vintage", "colors": { "primary": "#8b6546", "secondary": "#6b4423", "accent": "#c9a882", "text": "#6b4423", "background": "#fef3e2" } },
     { "id": "cream-brown", "name": "Cream & Brown", "colors": { "primary": "#a0826d", "secondary": "#5d4e37", "accent": "#d4c5b0", "text": "#5d4e37", "background": "#faf6ef" } },
     { "id": "sage-vintage", "name": "Vintage Sage", "colors": { "primary": "#8a9b68", "secondary": "#5a6650", "accent": "#c8d5bb", "text": "#4a5542", "background": "#f5f7f1" } }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "vintage" }
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
 }

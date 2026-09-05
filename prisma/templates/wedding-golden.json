@@ -3,177 +3,135 @@
   "name": "Gilded Elegance",
   "scene": "wedding",
   "style": "luxury",
-  "description": "Opulent gold and ivory design with baroque patterns and luxurious metallic accents. Features sophisticated shimmer animations.",
-  "tags": ["gold", "luxury", "baroque", "elegant", "metallic", "animated"],
-  "thumbnailUrl": "/templates/wedding-golden/thumbnail.svg",
-  "previewUrl": "/templates/wedding-golden/preview.svg",
+  "description": "Opulent baroque design with ornate golden flourishes, rich textures, and regal ambiance",
+  "tags": ["baroque", "gold", "luxury", "ornate", "regal"],
+  "thumbnailUrl": "/templates/wedding-golden/thumbnail.png",
+  "previewUrl": "/templates/wedding-golden/preview.png",
   "canvas": {
     "width": 750,
     "height": 1334,
     "background": {
-      "type": "gradient",
-      "gradient": "linear-gradient(180deg, #fffbeb 0%, #fef3c7 30%, #fde68a 70%, #fcd34d 100%)"
+      "type": "color",
+      "gradient": "linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%)"
     }
   },
   "layers": [
     {
-      "id": "gold-radiance",
-      "type": "shape",
-      "name": "Golden radiance",
-      "position": { "x": 0, "y": 0 },
-      "size": { "width": 750, "height": 1334 },
-      "content": {
-        "shape": "rectangle",
-        "fill": "radial-gradient(ellipse at 50% 40%, rgba(251,191,36,0.3) 0%, rgba(253,224,71,0.1) 50%, rgba(254,243,199,0) 100%)"
-      },
-      "locked": true,
+      "id": "baroque-frame",
+      "type": "svg",
+      "name": "Baroque Frame",
+      "position": { "x": 40, "y": 80 },
+      "size": { "width": 670, "height": 1174 },
+      "opacity": 0.7,
       "zIndex": 1,
       "animation": {
-        "type": "pulse",
-        "duration": 6000,
+        "type": "shimmer",
+        "duration": 5000,
         "iterationCount": "infinite"
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 670 1174' xmlns='http://www.w3.org/2000/svg'><path d='M50 50 Q50 30, 70 30 L600 30 Q620 30, 620 50 L620 1124 Q620 1144, 600 1144 L70 1144 Q50 1144, 50 1124 Z' fill='none' stroke='#d97706' stroke-width='3'/><path d='M335 50 Q345 35, 355 50' fill='#d97706'/><path d='M335 1124 Q345 1139, 355 1124' fill='#d97706'/><ellipse cx='335' cy='80' rx='40' ry='30' fill='none' stroke='#d97706' stroke-width='2'/><ellipse cx='335' cy='1094' rx='40' ry='30' fill='none' stroke='#d97706' stroke-width='2'/><path d='M100 587 Q80 587, 80 607 Q80 627, 100 627' fill='none' stroke='#d97706' stroke-width='2'/><path d='M570 587 Q590 587, 590 607 Q590 627, 570 627' fill='none' stroke='#d97706' stroke-width='2'/></svg>"
       }
     },
     {
-      "id": "baroque-top",
+      "id": "crown-decoration",
       "type": "svg",
-      "name": "Baroque ornament top",
-      "position": { "x": 150, "y": 120 },
-      "size": { "width": 450, "height": 200 },
-      "content": {
-        "svg": "<svg viewBox='0 0 450 200'><defs><linearGradient id='goldGrad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:#fbbf24'/><stop offset='50%' style='stop-color:#fde047'/><stop offset='100%' style='stop-color:#fbbf24'/></linearGradient></defs><path d='M225 50 Q200 30 175 50 Q150 70 175 90 Q200 110 225 90 Q250 70 275 90 Q300 110 325 90 Q350 70 325 50 Q300 30 275 50 Q250 70 225 50' fill='none' stroke='url(#goldGrad)' stroke-width='3'/><circle cx='225' cy='70' r='35' fill='none' stroke='url(#goldGrad)' stroke-width='2'/><path d='M225 35 L225 25 M225 105 L225 115' stroke='#d97706' stroke-width='2'/><path d='M190 70 L180 70 M260 70 L270 70' stroke='#d97706' stroke-width='2'/><circle cx='225' cy='70' r='15' fill='#fbbf24' opacity='0.6'/></svg>"
-      },
-      "locked": false,
+      "name": "Crown",
+      "position": { "x": 300, "y": 350 },
+      "size": { "width": 150, "height": 100 },
+      "opacity": 0.8,
       "zIndex": 2,
       "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 500
-      }
-    },
-    {
-      "id": "monogram-circle",
-      "type": "shape",
-      "name": "Monogram circle",
-      "position": { "x": 300, "y": 370 },
-      "size": { "width": 150, "height": 150 },
-      "content": {
-        "shape": "circle",
-        "fill": "none",
-        "stroke": "#d97706",
-        "strokeWidth": 2
+        "type": "pulse",
+        "duration": 3000,
+        "iterationCount": "infinite"
       },
-      "zIndex": 2,
-      "animation": {
-        "type": "drawStroke",
-        "duration": 2000,
-        "delay": 1000
+      "content": {
+        "svg": "<svg viewBox='0 0 150 100' xmlns='http://www.w3.org/2000/svg'><path d='M20 70 L35 35 L50 60 L75 20 L100 60 L115 35 L130 70 Z' fill='#f59e0b' stroke='#d97706' stroke-width='2'/><rect x='15' y='70' width='120' height='15' fill='#d97706' stroke='#b45309' stroke-width='2'/><circle cx='35' cy='35' r='6' fill='#fbbf24'/><circle cx='75' cy='20' r='8' fill='#fbbf24'/><circle cx='115' cy='35' r='6' fill='#fbbf24'/></svg>"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
-      "name": "Couple names",
+      "name": "Couple Names",
       "position": { "x": 75, "y": 550 },
       "size": { "width": 600, "height": 140 },
       "variable": "couple_names",
-      "content": {
-        "text": "Victoria & Alexander",
-        "font": { "family": "Cormorant Garamond", "size": 58, "weight": 600, "lineHeight": 1.2 },
-        "color": "#92400e",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 1800,
-        "delay": 1500
-      }
-    },
-    {
-      "id": "gold-flourish",
-      "type": "svg",
-      "name": "Gold flourish",
-      "position": { "x": 200, "y": 720 },
-      "size": { "width": 350, "height": 100 },
-      "content": {
-        "svg": "<svg viewBox='0 0 350 100'><path d='M0 50 Q87.5 30 175 50 Q262.5 70 350 50' stroke='#fbbf24' stroke-width='2' fill='none'/><path d='M0 50 Q87.5 70 175 50 Q262.5 30 350 50' stroke='#fde047' stroke-width='1' fill='none' opacity='0.6'/><circle cx='87.5' cy='40' r='10' fill='#fbbf24'/><circle cx='175' cy='50' r='12' fill='#fde047'/><circle cx='262.5' cy='40' r='10' fill='#fbbf24'/></svg>"
+        "duration": 2000,
+        "delay": 600
       },
-      "zIndex": 3,
-      "animation": {
-        "type": "shimmer",
-        "duration": 3000,
-        "delay": 2000,
-        "iterationCount": "infinite"
+      "content": {
+        "text": "Isabella & Maximilian",
+        "font": { "family": "Playfair Display", "size": 58, "weight": 700, "lineHeight": 1.2 },
+        "color": "#92400e",
+        "align": "center"
       }
     },
     {
       "id": "date-venue",
       "type": "text",
-      "name": "Date and location",
-      "position": { "x": 100, "y": 860 },
-      "size": { "width": 550, "height": 120 },
+      "name": "Date and Location",
+      "position": { "x": 100, "y": 790 },
+      "size": { "width": 550, "height": 100 },
       "variable": "event_details",
-      "content": {
-        "text": "Saturday, the Twelfth of November\nTwo Thousand and Twenty-Six\nThe Grand Ballroom",
-        "font": { "family": "Cormorant Garamond", "size": 22, "weight": 500, "lineHeight": 1.8 },
-        "color": "#b45309",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
-        "type": "fadeIn",
-        "duration": 1200,
-        "delay": 2500
+        "type": "slideUp",
+        "duration": 1500,
+        "delay": 900
+      },
+      "content": {
+        "text": "September 15, 2026\nPalace Grand Hall",
+        "font": { "family": "Cormorant Garamond", "size": 26, "weight": 500, "lineHeight": 1.7 },
+        "color": "#b45309",
+        "align": "center"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
-      "name": "Invitation message",
-      "position": { "x": 100, "y": 1050 },
-      "size": { "width": 550, "height": 110 },
+      "name": "Invitation Message",
+      "position": { "x": 100, "y": 980 },
+      "size": { "width": 550, "height": 120 },
       "variable": "message",
-      "content": {
-        "text": "Cordially invite you to witness\nthe exchange of their vows\nand celebrate in grand style",
-        "font": { "family": "Cormorant Garamond", "size": 20, "weight": 400, "lineHeight": 1.8, "style": "italic" },
-        "color": "#92400e",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 1200,
-        "delay": 3000
+        "duration": 2000,
+        "delay": 1200
+      },
+      "content": {
+        "text": "In the grandeur of elegance,\nwe unite our hearts.\nHonor us with your royal presence.",
+        "font": { "family": "Cormorant Garamond", "size": 21, "weight": 400, "lineHeight": 1.7 },
+        "color": "#92400e",
+        "align": "center"
       }
     },
     {
-      "id": "baroque-bottom",
+      "id": "ornate-flourish",
       "type": "svg",
-      "name": "Baroque ornament bottom",
-      "position": { "x": 150, "y": 1180 },
-      "size": { "width": 450, "height": 150 },
-      "content": {
-        "svg": "<svg viewBox='0 0 450 150'><path d='M50 75 Q112.5 55 175 75 Q237.5 95 300 75 Q362.5 55 400 75' stroke='#fbbf24' stroke-width='2.5' fill='none'/><circle cx='112.5' cy='65' r='18' fill='#fde68a' opacity='0.7'/><circle cx='225' cy='85' r='22' fill='#fde047' opacity='0.6'/><circle cx='337.5' cy='65' r='18' fill='#fde68a' opacity='0.7'/><rect x='215' y='65' width='20' height='20' fill='none' stroke='#d97706' stroke-width='1.5' transform='rotate(45 225 75)'/></svg>"
-      },
-      "locked": false,
+      "name": "Golden Flourish",
+      "position": { "x": 150, "y": 700 },
+      "size": { "width": 450, "height": 60 },
+      "opacity": 0.6,
       "zIndex": 2,
-      "animation": {
-        "type": "fadeInUp",
-        "duration": 1500,
-        "delay": 1800
+      "content": {
+        "svg": "<svg viewBox='0 0 450 60' xmlns='http://www.w3.org/2000/svg'><path d='M0 30 Q50 10, 100 30 Q150 50, 225 30 Q300 10, 350 30 Q400 50, 450 30' stroke='#d97706' stroke-width='2' fill='none'/><circle cx='225' cy='30' r='8' fill='#f59e0b'/><circle cx='100' cy='30' r='5' fill='#fbbf24'/><circle cx='350' cy='30' r='5' fill='#fbbf24'/></svg>"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Victoria & Alexander", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "Saturday, the Twelfth of November\nTwo Thousand and Twenty-Six\nThe Grand Ballroom", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Isabella & Maximilian", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "September 15, 2026\nPalace Grand Hall", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "In the grandeur of elegance,\nwe unite our hearts.\nHonor us with your royal presence.", "aiGenerable": true }
   ],
   "colorSchemes": [
-    { "id": "golden", "name": "Pure Gold", "colors": { "primary": "#fbbf24", "secondary": "#92400e", "accent": "#fde047", "text": "#b45309", "background": "#fffbeb" } },
-    { "id": "champagne", "name": "Champagne Gold", "colors": { "primary": "#fde68a", "secondary": "#78350f", "accent": "#fef3c7", "text": "#92400e", "background": "#fffbf0" } },
-    { "id": "rose-gold", "name": "Rose Gold", "colors": { "primary": "#fca5a5", "secondary": "#881337", "accent": "#fecdd3", "text": "#9f1239", "background": "#fff1f2" } }
+    { "id": "golden", "name": "Royal Gold", "colors": { "primary": "#f59e0b", "secondary": "#92400e", "accent": "#fbbf24", "text": "#92400e", "background": "#fffbeb" } },
+    { "id": "amber", "name": "Amber Luxury", "colors": { "primary": "#f97316", "secondary": "#7c2d12", "accent": "#fdba74", "text": "#7c2d12", "background": "#fff7ed" } },
+    { "id": "bronze", "name": "Antique Bronze", "colors": { "primary": "#a16207", "secondary": "#78350f", "accent": "#fde047", "text": "#713f12", "background": "#fefce8" } }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "luxury" }
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
 }

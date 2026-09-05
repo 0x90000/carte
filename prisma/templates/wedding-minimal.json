@@ -2,163 +2,165 @@
   "id": "wedding-minimal-005",
   "name": "Pure Minimalist",
   "scene": "wedding",
-  "style": "minimal",
-  "description": "Ultra-clean minimalist design with bold typography and subtle geometric shapes. Features smooth fade and slide animations.",
-  "tags": ["minimal", "modern", "clean", "typography", "simple", "animated"],
-  "thumbnailUrl": "/templates/wedding-minimal/thumbnail.svg",
-  "previewUrl": "/templates/wedding-minimal/preview.svg",
+  "style": "modern",
+  "description": "Clean minimalist design with geometric shapes, monochrome palette, and contemporary typography",
+  "tags": ["minimal", "modern", "clean", "geometric", "contemporary"],
+  "thumbnailUrl": "/templates/wedding-minimal/thumbnail.png",
+  "previewUrl": "/templates/wedding-minimal/preview.png",
   "canvas": {
     "width": 750,
     "height": 1334,
     "background": {
       "type": "color",
-      "color": "#fafaf9"
+      "gradient": "linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%)"
     }
   },
   "layers": [
     {
-      "id": "geometric-accent",
-      "type": "shape",
-      "name": "Geometric frame",
-      "position": { "x": 100, "y": 200 },
-      "size": { "width": 550, "height": 934 },
-      "content": {
-        "shape": "rectangle",
-        "fill": "none",
-        "stroke": "#171717",
-        "strokeWidth": 1
-      },
-      "locked": false,
+      "id": "geometric-circle",
+      "type": "svg",
+      "name": "Circle",
+      "position": { "x": 250, "y": 200 },
+      "size": { "width": 250, "height": 250 },
+      "opacity": 0.15,
       "zIndex": 1,
       "animation": {
-        "type": "drawStroke",
-        "duration": 2500,
-        "delay": 500
+        "type": "pulse",
+        "duration": 4000,
+        "iterationCount": "infinite"
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'><circle cx='125' cy='125' r='120' fill='none' stroke='#000000' stroke-width='2'/><circle cx='125' cy='125' r='90' fill='none' stroke='#000000' stroke-width='1' opacity='0.5'/></svg>"
       }
     },
     {
-      "id": "thin-line-top",
-      "type": "shape",
-      "name": "Top accent line",
-      "position": { "x": 150, "y": 380 },
-      "size": { "width": 450, "height": 1 },
-      "content": {
-        "shape": "rectangle",
-        "fill": "#171717"
-      },
+      "id": "line-top",
+      "type": "svg",
+      "name": "Top Line",
+      "position": { "x": 200, "y": 480 },
+      "size": { "width": 350, "height": 4 },
+      "opacity": 0.8,
       "zIndex": 2,
       "animation": {
-        "type": "expandWidth",
+        "type": "slideUp",
         "duration": 1500,
-        "delay": 1000
+        "delay": 300
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 350 4' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='350' height='2' fill='#000000'/></svg>"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
-      "name": "Couple names",
-      "position": { "x": 120, "y": 500 },
-      "size": { "width": 510, "height": 200 },
+      "name": "Couple Names",
+      "position": { "x": 75, "y": 550 },
+      "size": { "width": 600, "height": 120 },
       "variable": "couple_names",
-      "content": {
-        "text": "ANNA\n&\nDAVID",
-        "font": { "family": "Inter", "size": 72, "weight": 200, "lineHeight": 1.1, "letterSpacing": 12 },
-        "color": "#171717",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 2000,
-        "delay": 1500
+        "duration": 1500,
+        "delay": 600
+      },
+      "content": {
+        "text": "Alex & Jordan",
+        "font": { "family": "Inter", "size": 64, "weight": 300, "lineHeight": 1.2 },
+        "color": "#000000",
+        "align": "center"
       }
     },
     {
-      "id": "thin-line-bottom",
-      "type": "shape",
-      "name": "Bottom accent line",
-      "position": { "x": 150, "y": 740 },
-      "size": { "width": 450, "height": 1 },
-      "content": {
-        "shape": "rectangle",
-        "fill": "#171717"
-      },
+      "id": "line-bottom",
+      "type": "svg",
+      "name": "Bottom Line",
+      "position": { "x": 200, "y": 696 },
+      "size": { "width": 350, "height": 4 },
+      "opacity": 0.8,
       "zIndex": 2,
       "animation": {
-        "type": "expandWidth",
+        "type": "slideUp",
         "duration": 1500,
-        "delay": 2000
+        "delay": 900
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 350 4' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='350' height='2' fill='#000000'/></svg>"
       }
     },
     {
       "id": "date-venue",
       "type": "text",
-      "name": "Date and location",
-      "position": { "x": 150, "y": 820 },
-      "size": { "width": 450, "height": 80 },
+      "name": "Date and Location",
+      "position": { "x": 100, "y": 800 },
+      "size": { "width": 550, "height": 80 },
       "variable": "event_details",
-      "content": {
-        "text": "10.15.2026\nSTUDIO GALLERY, NYC",
-        "font": { "family": "Inter", "size": 18, "weight": 400, "lineHeight": 1.8, "letterSpacing": 4 },
-        "color": "#525252",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 1200,
-        "delay": 2500
+        "duration": 1500,
+        "delay": 1200
+      },
+      "content": {
+        "text": "04.15.2026\nMODERN ART GALLERY",
+        "font": { "family": "Inter", "size": 18, "weight": 400, "lineHeight": 2.2 },
+        "color": "#333333",
+        "align": "center"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
-      "name": "Invitation message",
-      "position": { "x": 150, "y": 970 },
-      "size": { "width": 450, "height": 100 },
+      "name": "Invitation Message",
+      "position": { "x": 100, "y": 1000 },
+      "size": { "width": 550, "height": 100 },
       "variable": "message",
-      "content": {
-        "text": "Request the pleasure of your company",
-        "font": { "family": "Inter", "size": 16, "weight": 300, "lineHeight": 1.7, "letterSpacing": 1 },
-        "color": "#737373",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 1200,
-        "delay": 3000
+        "duration": 1500,
+        "delay": 1500
+      },
+      "content": {
+        "text": "Join us in celebrating\nthe beginning of our journey",
+        "font": { "family": "Inter", "size": 17, "weight": 300, "lineHeight": 2 },
+        "color": "#666666",
+        "align": "center"
       }
     },
     {
-      "id": "square-accent",
-      "type": "shape",
-      "name": "Minimal square",
-      "position": { "x": 350, "y": 1080 },
-      "size": { "width": 50, "height": 50 },
+      "id": "geometric-squares",
+      "type": "svg",
+      "name": "Squares",
+      "position": { "x": 100, "y": 950 },
+      "size": { "width": 550, "height": 30 },
+      "opacity": 0.4,
+      "zIndex": 1,
       "content": {
-        "shape": "rectangle",
-        "fill": "none",
-        "stroke": "#171717",
-        "strokeWidth": 1
-      },
-      "zIndex": 2,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1000,
-        "delay": 3500
+        "svg": "<svg viewBox='0 0 550 30' xmlns='http://www.w3.org/2000/svg'><rect x='250' y='10' width='10' height='10' fill='#000000'/><rect x='270' y='10' width='10' height='10' fill='#000000' opacity='0.6'/><rect x='290' y='10' width='10' height='10' fill='#000000' opacity='0.3'/></svg>"
+      }
+    },
+    {
+      "id": "bottom-geometric",
+      "type": "svg",
+      "name": "Bottom Geometry",
+      "position": { "x": 600, "y": 1100 },
+      "size": { "width": 150, "height": 150 },
+      "opacity": 0.1,
+      "zIndex": 1,
+      "content": {
+        "svg": "<svg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='150' height='150' fill='none' stroke='#000000' stroke-width='2'/><line x1='0' y1='0' x2='150' y2='150' stroke='#000000' stroke-width='1'/></svg>"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "ANNA\n&\nDAVID", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "10.15.2026\nSTUDIO GALLERY, NYC", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Request the pleasure of your company", "aiGenerable": true }
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Alex & Jordan", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "04.15.2026\nMODERN ART GALLERY", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Join us in celebrating\nthe beginning of our journey", "aiGenerable": true }
   ],
   "colorSchemes": [
-    { "id": "monochrome", "name": "Monochrome", "colors": { "primary": "#171717", "secondary": "#525252", "accent": "#a3a3a3", "text": "#171717", "background": "#fafaf9" } },
-    { "id": "warm-minimal", "name": "Warm Minimal", "colors": { "primary": "#57534e", "secondary": "#292524", "accent": "#a8a29e", "text": "#1c1917", "background": "#fafaf9" } },
-    { "id": "cool-minimal", "name": "Cool Minimal", "colors": { "primary": "#334155", "secondary": "#0f172a", "accent": "#94a3b8", "text": "#1e293b", "background": "#f8fafc" } }
+    { "id": "monochrome", "name": "Pure Monochrome", "colors": { "primary": "#000000", "secondary": "#333333", "accent": "#666666", "text": "#000000", "background": "#ffffff" } },
+    { "id": "charcoal", "name": "Charcoal Gray", "colors": { "primary": "#2d3748", "secondary": "#1a202c", "accent": "#718096", "text": "#2d3748", "background": "#f7fafc" } },
+    { "id": "navy", "name": "Navy Minimal", "colors": { "primary": "#1e3a8a", "secondary": "#1e40af", "accent": "#60a5fa", "text": "#1e3a8a", "background": "#eff6ff" } }
   ],
-  "settings": { "allowMusic": false, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "minimal" }
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
 }

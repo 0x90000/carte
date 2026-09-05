@@ -2,177 +2,136 @@
   "id": "wedding-ocean-007",
   "name": "Ocean Waves",
   "scene": "wedding",
-  "style": "coastal",
-  "description": "Serene ocean-inspired design with aqua, navy, and sandy beige. Features wave animations and coastal elements.",
-  "tags": ["ocean", "coastal", "blue", "beach", "waves", "animated"],
-  "thumbnailUrl": "/templates/wedding-ocean/thumbnail.svg",
-  "previewUrl": "/templates/wedding-ocean/preview.svg",
+  "style": "beach",
+  "description": "Serene ocean-inspired design with flowing waves, nautical elements, and coastal colors",
+  "tags": ["ocean", "beach", "nautical", "coastal", "blue"],
+  "thumbnailUrl": "/templates/wedding-ocean/thumbnail.png",
+  "previewUrl": "/templates/wedding-ocean/preview.png",
   "canvas": {
     "width": 750,
     "height": 1334,
     "background": {
-      "type": "gradient",
-      "gradient": "linear-gradient(180deg, #e0f2fe 0%, #bae6fd 25%, #7dd3fc 50%, #38bdf8 75%, #0ea5e9 100%)"
+      "type": "color",
+      "gradient": "linear-gradient(180deg, #bfdbfe 0%, #dbeafe 30%, #e0f2fe 60%, #f0f9ff 100%)"
     }
   },
   "layers": [
     {
-      "id": "wave-layer-1",
+      "id": "wave-top",
       "type": "svg",
-      "name": "Wave background 1",
-      "position": { "x": 0, "y": 900 },
-      "size": { "width": 750, "height": 434 },
-      "content": {
-        "svg": "<svg viewBox='0 0 750 434' preserveAspectRatio='none'><path d='M0 100 Q187.5 50 375 100 T750 100 L750 434 L0 434 Z' fill='#0284c7' opacity='0.3'/></svg>"
-      },
-      "locked": true,
+      "name": "Top Wave",
+      "position": { "x": 0, "y": 150 },
+      "size": { "width": 750, "height": 200 },
+      "opacity": 0.4,
       "zIndex": 1,
       "animation": {
-        "type": "wave",
-        "duration": 8000,
+        "type": "float",
+        "duration": 4000,
         "iterationCount": "infinite"
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 750 200' xmlns='http://www.w3.org/2000/svg'><path d='M0 100 Q187.5 50, 375 100 T750 100 L750 200 L0 200 Z' fill='#3b82f6' opacity='0.3'/><path d='M0 130 Q187.5 80, 375 130 T750 130 L750 200 L0 200 Z' fill='#60a5fa' opacity='0.4'/></svg>"
       }
     },
     {
-      "id": "wave-layer-2",
+      "id": "anchor-decoration",
       "type": "svg",
-      "name": "Wave background 2",
-      "position": { "x": 0, "y": 1000 },
-      "size": { "width": 750, "height": 334 },
-      "content": {
-        "svg": "<svg viewBox='0 0 750 334' preserveAspectRatio='none'><path d='M0 80 Q187.5 30 375 80 T750 80 L750 334 L0 334 Z' fill='#0369a1' opacity='0.4'/></svg>"
-      },
-      "locked": true,
-      "zIndex": 1,
-      "animation": {
-        "type": "wave",
-        "duration": 10000,
-        "delay": 1000,
-        "iterationCount": "infinite"
-      }
-    },
-    {
-      "id": "wave-layer-3",
-      "type": "svg",
-      "name": "Wave background 3",
-      "position": { "x": 0, "y": 1100 },
-      "size": { "width": 750, "height": 234 },
-      "content": {
-        "svg": "<svg viewBox='0 0 750 234' preserveAspectRatio='none'><path d='M0 60 Q187.5 20 375 60 T750 60 L750 234 L0 234 Z' fill='#075985' opacity='0.5'/></svg>"
-      },
-      "locked": true,
-      "zIndex": 1,
-      "animation": {
-        "type": "wave",
-        "duration": 12000,
-        "delay": 2000,
-        "iterationCount": "infinite"
-      }
-    },
-    {
-      "id": "seashell-accent",
-      "type": "svg",
-      "name": "Seashell decorations",
-      "position": { "x": 50, "y": 200 },
-      "size": { "width": 650, "height": 120 },
-      "content": {
-        "svg": "<svg viewBox='0 0 650 120'><path d='M100 60 Q90 40 100 20 Q110 40 100 60 M100 60 Q120 50 130 60 Q120 70 100 60 M100 60 Q90 70 80 60 Q90 50 100 60' fill='#f1f5f9' opacity='0.8'/><ellipse cx='550' cy='60' rx='30' ry='40' fill='#fef3c7' opacity='0.7' transform='rotate(20 550 60)'/><circle cx='300' cy='60' r='20' fill='#fde68a' opacity='0.6'/><path d='M300 40 Q290 50 300 60 Q310 50 300 40' fill='#fbbf24' opacity='0.5'/></svg>"
-      },
-      "locked": false,
+      "name": "Anchor",
+      "position": { "x": 325, "y": 380 },
+      "size": { "width": 100, "height": 120 },
+      "opacity": 0.6,
       "zIndex": 2,
       "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 800
+        "type": "swing",
+        "duration": 3000,
+        "iterationCount": "infinite"
+      },
+      "content": {
+        "svg": "<svg viewBox='0 0 100 120' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='20' r='12' fill='none' stroke='#1e40af' stroke-width='3'/><line x1='50' y1='32' x2='50' y2='100' stroke='#1e40af' stroke-width='4'/><path d='M30 90 Q30 105, 50 100 Q70 105, 70 90' fill='none' stroke='#1e40af' stroke-width='4'/><line x1='30' y1='90' x2='20' y2='75' stroke='#1e40af' stroke-width='4'/><line x1='70' y1='90' x2='80' y2='75' stroke='#1e40af' stroke-width='4'/><line x1='30' y1='50' x2='70' y2='50' stroke='#1e40af' stroke-width='3'/></svg>"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
-      "name": "Couple names",
-      "position": { "x": 75, "y": 450 },
-      "size": { "width": 600, "height": 160 },
+      "name": "Couple Names",
+      "position": { "x": 75, "y": 550 },
+      "size": { "width": 600, "height": 120 },
       "variable": "couple_names",
-      "content": {
-        "text": "Marina & Kai",
-        "font": { "family": "Playfair Display", "size": 68, "weight": 600, "lineHeight": 1.2 },
-        "color": "#0c4a6e",
-        "align": "center",
-        "shadow": "0 2px 8px rgba(12,74,110,0.15)"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
         "duration": 1800,
-        "delay": 1200
-      }
-    },
-    {
-      "id": "anchor-divider",
-      "type": "svg",
-      "name": "Anchor symbol",
-      "position": { "x": 335, "y": 640 },
-      "size": { "width": 80, "height": 100 },
-      "content": {
-        "svg": "<svg viewBox='0 0 80 100'><circle cx='40' cy='20' r='12' fill='none' stroke='#0369a1' stroke-width='2'/><line x1='40' y1='32' x2='40' y2='80' stroke='#0369a1' stroke-width='3'/><path d='M20 70 Q20 85 40 80 Q60 85 60 70' stroke='#0369a1' stroke-width='3' fill='none'/><line x1='20' y1='70' x2='25' y2='60' stroke='#0369a1' stroke-width='2'/><line x1='60' y1='70' x2='55' y2='60' stroke='#0369a1' stroke-width='2'/></svg>"
+        "delay": 500
       },
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 1800
+      "content": {
+        "text": "Marina & Sebastian",
+        "font": { "family": "Playfair Display", "size": 62, "weight": 600, "lineHeight": 1.2 },
+        "color": "#1e40af",
+        "align": "center"
       }
     },
     {
       "id": "date-venue",
       "type": "text",
-      "name": "Date and location",
-      "position": { "x": 100, "y": 770 },
+      "name": "Date and Location",
+      "position": { "x": 100, "y": 760 },
       "size": { "width": 550, "height": 100 },
       "variable": "event_details",
-      "content": {
-        "text": "September 20, 2026\nBeachside Resort, Monterey",
-        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.6 },
-        "color": "#075985",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
-        "type": "fadeIn",
-        "duration": 1200,
-        "delay": 2200
+        "type": "slideUp",
+        "duration": 1500,
+        "delay": 800
+      },
+      "content": {
+        "text": "July 10, 2026\nSeaside Resort & Marina",
+        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.7 },
+        "color": "#1e3a8a",
+        "align": "center"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
-      "name": "Invitation message",
-      "position": { "x": 90, "y": 980 },
-      "size": { "width": 570, "height": 120 },
+      "name": "Invitation Message",
+      "position": { "x": 90, "y": 950 },
+      "size": { "width": 570, "height": 130 },
       "variable": "message",
-      "content": {
-        "text": "Like the endless ocean,\nour love knows no bounds.\nJoin us as we say 'I do'\nby the sea.",
-        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.7 },
-        "color": "#0c4a6e",
-        "align": "center"
-      },
       "zIndex": 3,
       "animation": {
         "type": "fadeIn",
-        "duration": 1200,
-        "delay": 2700
+        "duration": 1800,
+        "delay": 1100
+      },
+      "content": {
+        "text": "Like the eternal ocean tides,\nour love flows endlessly.\nCelebrate with us by the sea.",
+        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.8 },
+        "color": "#1e40af",
+        "align": "center"
+      }
+    },
+    {
+      "id": "wave-bottom",
+      "type": "svg",
+      "name": "Bottom Wave",
+      "position": { "x": 0, "y": 1134 },
+      "size": { "width": 750, "height": 200 },
+      "opacity": 0.5,
+      "zIndex": 2,
+      "content": {
+        "svg": "<svg viewBox='0 0 750 200' xmlns='http://www.w3.org/2000/svg'><path d='M0 0 L0 50 Q187.5 100, 375 50 T750 50 L750 0 Z' fill='#60a5fa' opacity='0.4'/><path d='M0 0 L0 80 Q187.5 130, 375 80 T750 80 L750 0 Z' fill='#3b82f6' opacity='0.3'/><circle cx='100' cy='100' r='15' fill='#dbeafe' opacity='0.6'/><circle cx='250' cy='120' r='12' fill='#dbeafe' opacity='0.5'/><circle cx='400' cy='110' r='14' fill='#dbeafe' opacity='0.6'/><circle cx='550' cy='125' r='11' fill='#dbeafe' opacity='0.5'/><circle cx='680' cy='105' r='13' fill='#dbeafe' opacity='0.6'/></svg>"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Marina & Kai", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "September 20, 2026\nBeachside Resort, Monterey", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "", "aiGenerable": true }
+    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Marina & Sebastian", "validation": { "required": true, "maxLength": 50 } },
+    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "July 10, 2026\nSeaside Resort & Marina", "validation": { "required": true } },
+    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Like the eternal ocean tides,\nour love flows endlessly.\nCelebrate with us by the sea.", "aiGenerable": true }
   ],
   "colorSchemes": [
-    { "id": "ocean-blue", "name": "Ocean Blue", "colors": { "primary": "#0ea5e9", "secondary": "#0c4a6e", "accent": "#bae6fd", "text": "#075985", "background": "#e0f2fe" } },
-    { "id": "coral-reef", "name": "Coral Reef", "colors": { "primary": "#06b6d4", "secondary": "#0e7490", "accent": "#fecaca", "text": "#164e63", "background": "#cffafe" } },
-    { "id": "sandy-shore", "name": "Sandy Shore", "colors": { "primary": "#0891b2", "secondary": "#155e75", "accent": "#fef3c7", "text": "#164e63", "background": "#f0f9ff" } }
+    { "id": "ocean-blue", "name": "Ocean Blue", "colors": { "primary": "#3b82f6", "secondary": "#1e40af", "accent": "#93c5fd", "text": "#1e3a8a", "background": "#dbeafe" } },
+    { "id": "aqua", "name": "Tropical Aqua", "colors": { "primary": "#06b6d4", "secondary": "#0e7490", "accent": "#67e8f9", "text": "#155e75", "background": "#cffafe" } },
+    { "id": "navy-gold", "name": "Navy & Gold", "colors": { "primary": "#1e3a8a", "secondary": "#1e40af", "accent": "#fbbf24", "text": "#1e293b", "background": "#e0e7ff" } }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true, "animationPreset": "ocean" }
+  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
 }
