@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { readdir, readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,6 +24,7 @@ async function importTemplates() {
   for (const [sortOrder, file] of files.entries()) {
     const template = JSON.parse(await readFile(join(templatesDirectory, file), "utf8")) as Record<string, unknown>;
     assertTemplate(template);
+    const structure = template as unknown as Prisma.InputJsonValue;
     await prisma.template.upsert({
       where: { id: String(template.id) },
       update: {
@@ -31,14 +32,14 @@ async function importTemplates() {
         description: typeof template.description === "string" ? template.description : null,
         tags: template.tags as string[], thumbnailUrl: String(template.thumbnailUrl),
         previewUrl: typeof template.previewUrl === "string" ? template.previewUrl : null,
-        structure: template, isPremium: false, sortOrder, isActive: true,
+        structure, isPremium: false, sortOrder, isActive: true,
       },
       create: {
         id: String(template.id), name: String(template.name), scene: String(template.scene), style: String(template.style),
         description: typeof template.description === "string" ? template.description : null,
         tags: template.tags as string[], thumbnailUrl: String(template.thumbnailUrl),
         previewUrl: typeof template.previewUrl === "string" ? template.previewUrl : null,
-        structure: template, isPremium: false, sortOrder, isActive: true,
+        structure, isPremium: false, sortOrder, isActive: true,
       },
     });
     console.log(`Imported ${String(template.scene)} template: ${String(template.name)}`);
