@@ -29,10 +29,13 @@
   },
   "create": {
     "eyebrow": "从感受开始", "title": "你在庆祝什么？", "description": "选择你想为之留出空间的时刻。", "noAccount": "无需账户即可开始。准备发布时，我们再请你登录。",
+    "viewTemplates": "浏览模板",
     "scenes": {
       "wedding": { "name": "婚礼", "description": "和最重要的人一起庆祝你的爱情故事。", "examples": ["订婚", "仪式", "宴会"] },
       "birthday": { "name": "生日", "description": "和让这一年闪耀的人一起庆祝新的里程碑。", "examples": ["里程碑", "惊喜派对", "儿童派对"] },
       "business": { "name": "商务活动", "description": "为成长、连接和共同目标相聚。", "examples": ["会议", "发布会", "交流会"] },
+      "graduation": { "name": "毕业聚会", "description": "庆祝一路的努力、成长，以及即将开启的新篇章。", "examples": ["毕业典礼", "派对", "里程碑"] },
+      "housewarming": { "name": "乔迁聚会", "description": "和所爱的人一起，为新生活打开家门。", "examples": ["新家", "晚宴", "开放日"] },
       "other": { "name": "其他聚会", "description": "任何值得相聚的时刻，都可以从这里开始。", "examples": ["宝宝派对", "毕业", "乔迁"] }
     }
   },

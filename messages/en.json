@@ -32,10 +32,13 @@
     "title": "What are you celebrating?",
     "description": "Choose the moment you're making room for.",
     "noAccount": "No account needed to start. We'll ask when you're ready to publish.",
+    "viewTemplates": "View templates",
     "scenes": {
       "wedding": { "name": "Wedding", "description": "Celebrate your love story with those who matter most.", "examples": ["Engagement", "Ceremony", "Reception"] },
       "birthday": { "name": "Birthday", "description": "Mark another year with the people who make it bright.", "examples": ["Milestone", "Surprise", "Kids party"] },
       "business": { "name": "Business event", "description": "Gather for growth, connection, and shared purpose.", "examples": ["Conference", "Launch", "Networking"] },
+      "graduation": { "name": "Graduation", "description": "Celebrate the work, growth, and next chapter ahead.", "examples": ["Commencement", "Party", "Milestone"] },
+      "housewarming": { "name": "Housewarming", "description": "Open the door to a new chapter with the people you love.", "examples": ["New home", "Dinner", "Open house"] },
       "other": { "name": "Other gathering", "description": "Any moment worth coming together for.", "examples": ["Baby shower", "Graduation", "Housewarming"] }
     }
   },

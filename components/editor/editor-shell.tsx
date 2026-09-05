@@ -4,26 +4,39 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent, CSSProperties } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   ArrowLeft,
   Check,
+  ChevronDown,
+  Copy,
   CreditCard,
+  Download,
   Eye,
   EyeOff,
   FileImage,
+  Grid3x3,
+  Heart,
   Infinity as InfinityIcon,
   Images,
-  Layers3,
+  Layers,
   Loader2,
   Lock,
   LockOpen,
+  MoreHorizontal,
+  Palette,
   Redo2,
   Save,
   Send,
+  Settings,
   Sparkles,
   Trash2,
+  Type,
   Undo2,
   Upload,
   X,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -32,6 +45,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
 import { FabricCanvas } from "@/components/editor/fabric-canvas";
 import {
   cloneEditorContent,
@@ -44,6 +58,7 @@ import {
 import { localePath } from "@/lib/i18n";
 
 type SaveState = "idle" | "unsaved" | "saving" | "saved" | "error";
+type EditorTab = "design" | "text" | "images" | "colors" | "ai";
 
 type EditorShellProps = {
   invitationId: string;
@@ -64,7 +79,14 @@ const MAX_GALLERY_PHOTOS = 9;
 const MAX_GALLERY_IMAGE_BYTES = 1 * 1024 * 1024;
 const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 160;
-const FONT_FAMILY_OPTIONS = ["Inter", "Arial", "Georgia", "Times New Roman", "Trebuchet MS", "Courier New"];
+const FONT_FAMILY_OPTIONS = [
+  { name: "Inter", value: "Inter" },
+  { name: "Georgia", value: "Georgia" },
+  { name: "Playfair Display", value: "Georgia" },
+  { name: "Montserrat", value: "Arial" },
+  { name: "Crimson Text", value: "Times New Roman" },
+  { name: "Lora", value: "Georgia" },
+];
 
 function getTextFont(layer: EditorLayer) {
   return layer.content.font && typeof layer.content.font === "object"
@@ -84,115 +106,40 @@ function isRgba(value: unknown) {
   return typeof value === "string" && value.trim().startsWith("rgba");
 }
 
-function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoLabel: string }) {
-  const { canvas, layers } = content;
-  const background = canvas.background;
-  const backgroundStyle: CSSProperties =
-    background.type === "image" && background.url
-      ? {
-          backgroundImage: `url(${background.url})`,
-          backgroundPosition: "center",
-          backgroundSize: background.fit === "contain" ? "contain" : "cover",
-        }
-      : { background: background.value ?? "#ffffff" };
-
-  return (
-    <div className="w-full max-w-[300px] overflow-hidden rounded-lg border border-border bg-foreground p-2 shadow-lg">
-      <div className="relative aspect-[750/1334] w-full overflow-hidden rounded-md" style={backgroundStyle}>
-        {background.type === "video" && background.url ? (
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            src={background.url}
-            poster={background.poster}
-            autoPlay={false}
-            loop={background.loop}
-            muted={background.muted !== false}
-            playsInline
-            aria-label={videoLabel}
-          />
-        ) : null}
-        {background.type === "html" && background.html ? (
-          <div className="absolute inset-0" dangerouslySetInnerHTML={{ __html: background.html }} />
-        ) : null}
-        {background.type === "html" && background.css ? <style>{background.css}</style> : null}
-        <div className="absolute inset-0">
-          {layers.map((layer) => {
-            if (layer.visible === false) {
-              return null;
-            }
-            const style: CSSProperties = {
-              position: "absolute",
-              left: `${(layer.position.x / canvas.width) * 100}%`,
-              top: `${(layer.position.y / canvas.height) * 100}%`,
-              width: `${(layer.size.width / canvas.width) * 100}%`,
-              height: `${(layer.size.height / canvas.height) * 100}%`,
-              transform: `rotate(${layer.rotation ?? 0}deg)`,
-              transformOrigin: "center",
-              opacity: layer.opacity ?? 1,
-              zIndex: layer.zIndex ?? 0,
-            };
-            if (layer.type === "text") {
-              const font = layer.content.font && typeof layer.content.font === "object" ? (layer.content.font as Record<string, unknown>) : {};
-              return (
-                <div
-                  key={layer.id}
-                  style={{
-                    ...style,
-                    color: String(layer.content.color ?? "#111827"),
-                    fontFamily: String(font.family ?? "Inter"),
-                    fontSize: `clamp(7px, ${(Number(font.size ?? 24) / canvas.width) * 100}cqw)`,
-                    fontWeight: Number(font.weight ?? 400),
-                    lineHeight: Number(font.lineHeight ?? 1.2),
-                    textAlign: String(layer.content.align ?? "left") as CSSProperties["textAlign"],
-                    whiteSpace: "pre-wrap",
-                    overflow: "hidden",
-                  }}
-                >
-                  {String(layer.content.text ?? "")}
-                </div>
-              );
-            }
-            if (layer.type === "image" && layer.content.url) {
-              return <img key={layer.id} src={String(layer.content.url)} alt="" className="h-full w-full object-cover" style={style} />; // eslint-disable-line @next/next/no-img-element
-            }
-            if (layer.type === "shape") {
-              const shape = String(layer.content.shape ?? "rectangle");
-              return (
-                <div
-                  key={layer.id}
-                  style={{
-                    ...style,
-                    background: String(layer.content.fill ?? "transparent"),
-                    borderRadius: shape === "circle" ? "50%" : `${Number(layer.content.borderRadius ?? 0)}px`,
-                    border: layer.content.stroke && typeof layer.content.stroke === "object"
-                      ? `${Number((layer.content.stroke as Record<string, unknown>).width ?? 0)}px solid ${String((layer.content.stroke as Record<string, unknown>).color ?? "transparent")}`
-                      : undefined,
-                  }}
-                />
-              );
-            }
-            return null;
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function SaveIndicator({ state, labels }: { state: SaveState; labels: Record<SaveState, string> }) {
   if (state === "saving") {
-    return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> {labels.saving}</span>;
+    return (
+      <span className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+        <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
+        {labels.saving}
+      </span>
+    );
   }
   if (state === "saved") {
-    return <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground"><Check className="h-3.5 w-3.5" aria-hidden="true" /> {labels.saved}</span>;
+    return (
+      <span className="inline-flex items-center gap-2 text-sm text-emerald-600">
+        <Check className="h-3.5 w-3.5" aria-hidden="true" />
+        {labels.saved}
+      </span>
+    );
   }
   if (state === "unsaved") {
-    return <span className="text-xs text-muted-foreground">{labels.unsaved}</span>;
+    return (
+      <span className="inline-flex items-center gap-2 text-sm text-amber-600">
+        <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+        {labels.unsaved}
+      </span>
+    );
   }
   if (state === "error") {
-    return <span className="text-xs text-destructive">{labels.error}</span>;
+    return (
+      <span className="inline-flex items-center gap-2 text-sm text-destructive">
+        <X className="h-3.5 w-3.5" aria-hidden="true" />
+        {labels.error}
+      </span>
+    );
   }
-  return <span className="text-xs text-muted-foreground">{labels.idle}</span>;
+  return null;
 }
 
 export function EditorShell({
@@ -214,12 +161,13 @@ export function EditorShell({
   const [title, setTitle] = useState(initialTitle || templateName || t("untitled"));
   const [selectedLayerId, setSelectedLayerId] = useState<string | null>(null);
   const [activeSchemeId, setActiveSchemeId] = useState<string | undefined>(normalizedInitial.colorSchemes?.[0]?.id);
+  const [activeTab, setActiveTab] = useState<EditorTab>("design");
   const [past, setPast] = useState<EditorContent[]>([]);
   const [future, setFuture] = useState<EditorContent[]>([]);
   const [canvasRevision, setCanvasRevision] = useState(0);
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [error, setError] = useState("");
-  const [showPreview, setShowPreview] = useState(true);
+  const [showPreview, setShowPreview] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [isPublishing, setIsPublishing] = useState(false);
   const [checkoutType, setCheckoutType] = useState<"single_publish" | "lifetime" | null>(null);
@@ -584,83 +532,229 @@ export function EditorShell({
     void publishInvitation();
   }, [action, hydrated, publishInvitation]);
 
+  const tabs: Array<{ id: EditorTab; icon: typeof Type; label: string }> = [
+    { id: "design", icon: Grid3x3, label: t("layers") },
+    { id: "text", icon: Type, label: t("inspector") },
+    { id: "images", icon: Images, label: t("galleryTitle") },
+    { id: "colors", icon: Palette, label: t("colorScheme") },
+    { id: "ai", icon: Zap, label: t("aiTitle") },
+  ];
+
   return (
-    <main className="min-h-screen bg-secondary/40">
-      <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex min-h-16 max-w-[1600px] flex-wrap items-center gap-3 px-4 py-2 sm:px-6 lg:px-8">
-          <Link href={localePath(locale, "/templates")} className={buttonVariants({ variant: "ghost", size: "icon" })} aria-label={t("backToTemplates")} title={t("backToTemplates")}>
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+    <main className="flex h-screen flex-col overflow-hidden bg-background">
+      {/* Compact modern header */}
+      <header className="relative z-50 flex h-16 items-center justify-between border-b border-border/50 bg-background/95 backdrop-blur-lg px-4 lg:px-6">
+        <div className="flex items-center gap-3">
+          <Link
+            href={localePath(locale, "/dashboard")}
+            className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-secondary transition-colors"
+            aria-label={t("backToTemplates")}
+          >
+            <ArrowLeft className="h-4 w-4" />
           </Link>
-          <div className="min-w-0 flex-1 sm:max-w-[260px]">
-            <Label htmlFor="invitation-title" className="sr-only">{t("invitationTitle")}</Label>
-            <Input id="invitation-title" value={title} onChange={(event) => { setTitle(event.target.value); titleRef.current = event.target.value; setSaveState("unsaved"); }} className="h-10 bg-transparent font-medium shadow-none" />
+
+          <div className="h-8 w-px bg-border" />
+
+          <Input
+            value={title}
+            onChange={(event) => {
+              setTitle(event.target.value);
+              titleRef.current = event.target.value;
+              setSaveState("unsaved");
+            }}
+            className="h-9 w-[200px] border-0 bg-transparent px-2 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-primary/20"
+            placeholder={t("untitled")}
+          />
+
+          <SaveIndicator
+            state={saveState}
+            labels={{
+              idle: t("saveState.ready"),
+              saving: t("saveState.saving"),
+              saved: t("saveState.saved"),
+              unsaved: t("saveState.unsaved"),
+              error: t("saveState.error")
+            }}
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 rounded-lg bg-secondary/50 p-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={undo}
+              disabled={past.length === 0}
+              className="h-7 w-7 rounded-md"
+              aria-label={t("undo")}
+            >
+              <Undo2 className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={redo}
+              disabled={future.length === 0}
+              className="h-7 w-7 rounded-md"
+              aria-label={t("redo")}
+            >
+              <Redo2 className="h-3.5 w-3.5" />
+            </Button>
           </div>
-          <SaveIndicator state={saveState} labels={{ idle: t("saveState.ready"), saving: t("saveState.saving"), saved: t("saveState.saved"), unsaved: t("saveState.unsaved"), error: t("saveState.error") }} />
-          <div className="ml-auto flex items-center gap-1">
-            <Button variant="ghost" size="icon" onClick={undo} disabled={past.length === 0} aria-label={t("undo")} title={t("undo")}><Undo2 className="h-4 w-4" aria-hidden="true" /></Button>
-            <Button variant="ghost" size="icon" onClick={redo} disabled={future.length === 0} aria-label={t("redo")} title={t("redo")}><Redo2 className="h-4 w-4" aria-hidden="true" /></Button>
-            <Button variant="outline" size="sm" onClick={() => void saveNow()} disabled={saveState === "saving"}><Save className="h-4 w-4" aria-hidden="true" /> {t("save")}</Button>
-            <Button variant={showPreview ? "secondary" : "outline"} size="sm" onClick={() => setShowPreview((value) => !value)}><Eye className="h-4 w-4" aria-hidden="true" /> {t("preview")}</Button>
-            <Button size="sm" onClick={() => void publishInvitation()} disabled={isPublishing}><Send className="h-4 w-4" aria-hidden="true" /> {isPublishing ? t("preparing") : t("publish")}</Button>
-          </div>
+
+          <div className="h-6 w-px bg-border" />
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowPreview(!showPreview)}
+            className="h-9 gap-2"
+          >
+            <Eye className="h-4 w-4" />
+            {showPreview ? t("preview") : t("preview")}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void saveNow()}
+            disabled={saveState === "saving"}
+            className="h-9 gap-2"
+          >
+            <Save className="h-4 w-4" />
+            {t("save")}
+          </Button>
+
+          <Button
+            size="sm"
+            onClick={() => void publishInvitation()}
+            disabled={isPublishing}
+            className="h-9 gap-2 shadow-lg shadow-primary/20"
+          >
+            <Send className="h-4 w-4" />
+            {isPublishing ? t("preparing") : t("publish")}
+          </Button>
         </div>
       </header>
 
-      {isGuest ? <div className="border-b border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-950">{t("guestBanner")}</div> : null}
+      {isGuest ? (
+        <div className="border-b border-amber-200/60 bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-2.5 text-center text-sm text-amber-900">
+          {t("guestBanner")}
+        </div>
+      ) : null}
 
-      <div className="mx-auto grid max-w-[1600px] gap-5 px-4 py-5 sm:px-6 lg:px-8 xl:grid-cols-[240px_minmax(0,1fr)_300px]">
-        <aside className="rounded-lg border border-border bg-card p-4 shadow-sm" aria-label={t("layers")}>
-          <div className="mb-4 flex items-center gap-2"><Layers3 className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("layers")}</h2></div>
-          <div className="space-y-1">
-            {[...content.layers].sort((a, b) => (b.zIndex ?? 0) - (a.zIndex ?? 0)).map((layer) => (
-              <div key={layer.id} className={`flex items-center gap-1 rounded-md border px-2 py-1.5 ${selectedLayerId === layer.id ? "border-ring bg-secondary" : "border-transparent"}`}>
-                <button type="button" className="min-w-0 flex-1 truncate text-left text-sm" onClick={() => setSelectedLayerId(layer.id)} aria-label={t("selectLayer", { name: layer.name })}>
-                  <span className={layer.visible === false ? "text-muted-foreground line-through" : "text-foreground"}>{layer.name}</span>
+      {/* Modern 3-panel layout */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar - Tabs + Tools */}
+        <aside className="flex w-80 flex-col border-r border-border bg-background">
+          {/* Tab Navigation */}
+          <div className="flex border-b border-border">
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex flex-1 flex-col items-center gap-1.5 py-3 text-xs font-medium transition-colors ${
+                    isActive
+                      ? "border-b-2 border-primary text-primary"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                  {tab.label}
                 </button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => updateLayer(layer.id, (current) => ({ ...current, visible: current.visible === false }))} aria-label={layer.visible === false ? t("showLayer", { name: layer.name }) : t("hideLayer", { name: layer.name })} title={layer.visible === false ? t("showLayer", { name: layer.name }) : t("hideLayer", { name: layer.name })}>
-                  {layer.visible === false ? <EyeOff className="h-3.5 w-3.5" aria-hidden="true" /> : <Eye className="h-3.5 w-3.5" aria-hidden="true" />}
-                </Button>
-                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => updateLayer(layer.id, (current) => ({ ...current, locked: current.locked !== true }))} aria-label={layer.locked ? t("unlockLayer", { name: layer.name }) : t("lockLayer", { name: layer.name })} title={layer.locked ? t("unlockLayer", { name: layer.name }) : t("lockLayer", { name: layer.name })}>
-                  {layer.locked ? <Lock className="h-3.5 w-3.5" aria-hidden="true" /> : <LockOpen className="h-3.5 w-3.5" aria-hidden="true" />}
-                </Button>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </aside>
 
-        <section className="flex min-h-[620px] items-start justify-center rounded-lg border border-border bg-background p-4 shadow-sm sm:p-8" aria-label={t("canvas")}>
-          <FabricCanvas key={canvasRevision} content={content} activeScheme={activeScheme} selectedLayerId={selectedLayerId} onChange={commitContent} onSelect={setSelectedLayerId} labels={{ videoBackground: t("videoBackground"), editorCanvas: t("editorCanvas") }} />
-        </section>
-
-        <aside className="space-y-5" aria-label={t("inspector")}>
-          <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold">{t("inspector")}</h2>
-            {selectedLayer?.type === "text" ? (
-              <div className="space-y-2">
-                <Label htmlFor="layer-text">{selectedLayer.name}</Label>
-                <Textarea id="layer-text" value={String(selectedLayer.content.text ?? "")} onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: event.target.value } }))} rows={5} />
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="layer-font-family">{t("fontFamily")}</Label>
-                    <Select
-                      id="layer-font-family"
-                      value={String(selectedTextFont?.family ?? "Inter")}
-                      onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({
-                        ...layer,
-                        content: { ...layer.content, font: { ...getTextFont(layer), family: event.target.value } },
-                      }))}
-                    >
-                      {FONT_FAMILY_OPTIONS.map((family) => <option key={family} value={family}>{family}</option>)}
-                    </Select>
+          {/* Tab Content */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {activeTab === "design" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="mb-3 text-sm font-semibold flex items-center gap-2">
+                    <Layers className="h-4 w-4" />
+                    {t("layers")}
+                  </h3>
+                  <div className="space-y-1">
+                    {[...content.layers].sort((a, b) => (b.zIndex ?? 0) - (a.zIndex ?? 0)).map((layer) => (
+                      <button
+                        key={layer.id}
+                        onClick={() => setSelectedLayerId(layer.id)}
+                        className={`group flex w-full items-center gap-2 rounded-lg border px-3 py-2 text-left text-sm transition-all ${
+                          selectedLayerId === layer.id
+                            ? "border-primary/40 bg-primary/5 shadow-sm"
+                            : "border-transparent hover:border-border hover:bg-secondary/50"
+                        }`}
+                      >
+                        <div className="flex-1 truncate font-medium">
+                          {layer.name}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 opacity-0 group-hover:opacity-100"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateLayer(layer.id, (current) => ({ ...current, visible: current.visible === false }));
+                          }}
+                        >
+                          {layer.visible === false ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                        </Button>
+                      </button>
+                    ))}
                   </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "text" && selectedLayer?.type === "text" && (
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="layer-text" className="mb-2 text-sm font-semibold">
+                    {selectedLayer.name}
+                  </Label>
+                  <Textarea
+                    id="layer-text"
+                    value={String(selectedLayer.content.text ?? "")}
+                    onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: event.target.value } }))}
+                    rows={6}
+                    className="resize-none"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <Label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    {t("fontFamily")}
+                  </Label>
+                  <Select
+                    value={String(selectedTextFont?.family ?? "Inter")}
+                    onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({
+                      ...layer,
+                      content: { ...layer.content, font: { ...getTextFont(layer), family: event.target.value } },
+                    }))}
+                    className="font-medium"
+                  >
+                    {FONT_FAMILY_OPTIONS.map((font) => (
+                      <option key={font.value} value={font.value}>
+                        {font.name}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">
-                    <Label htmlFor="layer-font-size">{t("fontSize")}</Label>
+                    <Label htmlFor="font-size" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("fontSize")}
+                    </Label>
                     <Input
-                      id="layer-font-size"
+                      id="font-size"
                       type="number"
                       min={MIN_FONT_SIZE}
                       max={MAX_FONT_SIZE}
-                      step={1}
                       value={String(Number(selectedTextFont?.size ?? 24))}
                       onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({
                         ...layer,
@@ -668,141 +762,263 @@ export function EditorShell({
                       }))}
                     />
                   </div>
-                </div>
-                <div className="space-y-2 pt-1">
-                  <Label htmlFor="layer-text-color">{t("textColor")}</Label>
-                  <div className="flex items-center gap-3">
+
+                  <div className="space-y-2">
+                    <Label htmlFor="text-color" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {t("textColor")}
+                    </Label>
                     <Input
-                      id="layer-text-color"
+                      id="text-color"
                       type="color"
                       value={/^#[0-9a-f]{6}$/i.test(selectedTextColor) ? selectedTextColor : "#111827"}
                       onChange={(event) => updateLayer(selectedLayer.id, (layer) => ({
                         ...layer,
                         content: { ...layer.content, color: event.target.value },
                       }))}
-                      className="h-11 w-14 cursor-pointer p-1"
+                      className="h-10 cursor-pointer"
                     />
-                    <span className="font-mono text-xs text-muted-foreground">{selectedTextColor}</span>
                   </div>
                 </div>
               </div>
-            ) : null}
-            {selectedLayer?.type === "image" ? (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">{t("replaceImage", { name: selectedLayer.name })}</p>
-                <input ref={imageInputRef} type="file" accept="image/jpeg,image/png" className="hidden" onChange={onImageSelected} />
-                <Button variant="outline" className="w-full" onClick={() => imageInputRef.current?.click()}><Upload className="h-4 w-4" aria-hidden="true" /> {t("uploadImage")}</Button>
-                {selectedLayer.content.url ? <div className="flex items-center gap-2 text-xs text-muted-foreground"><FileImage className="h-4 w-4" aria-hidden="true" /> {t("imageLoaded")}</div> : null}
-              </div>
-            ) : null}
-            {!selectedLayer ? <p className="text-sm leading-6 text-muted-foreground">{t("selectLayerPrompt")}</p> : null}
-            {selectedLayer && selectedLayer.type !== "text" && selectedLayer.type !== "image" ? <p className="text-sm leading-6 text-muted-foreground">{t("movableLayerPrompt")}</p> : null}
-          </section>
+            )}
 
-          <section className="rounded-lg border border-border bg-card p-4 shadow-sm" aria-labelledby="gallery-title">
-            <div className="mb-2 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2"><Images className="h-4 w-4" aria-hidden="true" /><h2 id="gallery-title" className="text-sm font-semibold">{t("galleryTitle")}</h2></div>
-              <span className="text-xs text-muted-foreground">{(content.gallery ?? []).length}/{MAX_GALLERY_PHOTOS}</span>
-            </div>
-            <p className="text-sm leading-6 text-muted-foreground">{t("galleryDescription")}</p>
-            <input ref={galleryInputRef} id="gallery-upload" aria-label={t("galleryUploadInputLabel")} type="file" accept="image/jpeg,image/png" multiple className="hidden" onChange={(event) => void onGallerySelected(event)} />
-            <Button variant="outline" className="mt-3 w-full" onClick={() => galleryInputRef.current?.click()} disabled={(content.gallery ?? []).length >= MAX_GALLERY_PHOTOS}>
-              <Upload className="h-4 w-4" aria-hidden="true" /> {t("addGalleryPhotos")}
-            </Button>
-            {(content.gallery ?? []).length > 0 ? (
-              <div className="mt-4 grid grid-cols-3 gap-2" aria-label={t("galleryListLabel")}>
-                {(content.gallery ?? []).map((photo, index) => (
-                  <div key={photo.id} className="group relative aspect-square overflow-hidden rounded-md border border-border bg-secondary">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={photo.url} alt={photo.alt || t("galleryPhotoAlt", { index: index + 1 })} className="h-full w-full object-cover" />
-                    <Button variant="destructive" size="icon" className="absolute right-1 top-1 h-8 w-8 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100" onClick={() => removeGalleryPhoto(photo.id)} aria-label={t("removeGalleryPhoto", { index: index + 1 })} title={t("removeGalleryPhoto", { index: index + 1 })}>
-                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                    </Button>
+            {activeTab === "text" && !selectedLayer && (
+              <div className="flex h-full items-center justify-center text-center text-sm text-muted-foreground">
+                {t("selectLayerPrompt")}
+              </div>
+            )}
+
+            {activeTab === "images" && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="mb-3 text-sm font-semibold flex items-center gap-2">
+                    <Images className="h-4 w-4" />
+                    {t("galleryTitle")}
+                  </h3>
+                  <p className="mb-3 text-sm text-muted-foreground">
+                    {t("galleryDescription")}
+                  </p>
+                  <input
+                    ref={galleryInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png"
+                    multiple
+                    className="hidden"
+                    onChange={(event) => void onGallerySelected(event)}
+                  />
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => galleryInputRef.current?.click()}
+                    disabled={(content.gallery ?? []).length >= MAX_GALLERY_PHOTOS}
+                  >
+                    <Upload className="h-4 w-4" />
+                    {t("addGalleryPhotos")}
+                  </Button>
+
+                  {(content.gallery ?? []).length > 0 && (
+                    <div className="mt-4 grid grid-cols-3 gap-2">
+                      {(content.gallery ?? []).map((photo, index) => (
+                        <div
+                          key={photo.id}
+                          className="group relative aspect-square overflow-hidden rounded-lg border border-border bg-secondary"
+                        >
+                          <img
+                            src={photo.url}
+                            alt={photo.alt || `Photo ${index + 1}`}
+                            className="h-full w-full object-cover"
+                          />
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            className="absolute right-1 top-1 h-6 w-6 opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
+                            onClick={() => removeGalleryPhoto(photo.id)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "colors" && (
+              <div className="space-y-4">
+                <div>
+                  <Label className="mb-2 text-sm font-semibold">{t("colorScheme")}</Label>
+                  <Select
+                    value={activeScheme?.id ?? ""}
+                    onChange={(event) => applyScheme(event.target.value)}
+                    disabled={!content.colorSchemes?.length}
+                  >
+                    {!content.colorSchemes?.length ? (
+                      <option value="">{t("noColorSchemes")}</option>
+                    ) : null}
+                    {content.colorSchemes?.map((scheme) => (
+                      <option key={scheme.id} value={scheme.id}>
+                        {scheme.name}
+                      </option>
+                    ))}
+                  </Select>
+
+                  {activeScheme && (
+                    <div className="mt-4 flex gap-2">
+                      {[activeScheme.colors.primary, activeScheme.colors.secondary, activeScheme.colors.accent].map((color, i) => (
+                        <div
+                          key={i}
+                          className="h-12 flex-1 rounded-lg border-2 border-border shadow-sm transition-transform hover:scale-105"
+                          style={{ background: color }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "ai" && (
+              <div className="space-y-4">
+                <div className="rounded-lg border border-border bg-gradient-to-br from-accent/5 to-primary/5 p-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-primary" />
+                    <h3 className="text-sm font-semibold">{t("aiTitle")}</h3>
                   </div>
-                ))}
-              </div>
-            ) : null}
-          </section>
+                  <p className="mb-4 text-sm text-muted-foreground">
+                    {t("aiDescription")}
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => void generateCopy()}
+                    disabled={aiLoading || selectedLayer?.type !== "text"}
+                  >
+                    {aiLoading ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Sparkles className="h-4 w-4" />
+                    )}
+                    {aiLoading ? t("generating") : t("generateCopy")}
+                  </Button>
+                </div>
 
-          <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <Label htmlFor="color-scheme">{t("colorScheme")}</Label>
-            <Select id="color-scheme" className="mt-2" value={activeScheme?.id ?? ""} onChange={(event) => applyScheme(event.target.value)} disabled={!content.colorSchemes?.length}>
-              {!content.colorSchemes?.length ? <option value="">{t("noColorSchemes")}</option> : null}
-              {content.colorSchemes?.map((scheme) => <option key={scheme.id} value={scheme.id}>{scheme.name}</option>)}
-            </Select>
-            {activeScheme ? <div className="mt-3 flex gap-2" aria-label={t("selectedColorScheme")}><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.primary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.secondary }} /><span className="h-6 w-6 rounded-full border border-border" style={{ background: activeScheme.colors.accent }} /></div> : null}
-          </section>
-
-          <section className="rounded-lg border border-border bg-card p-4 shadow-sm">
-            <div className="mb-2 flex items-center gap-2"><Sparkles className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("aiTitle")}</h2></div>
-            <p className="text-sm leading-6 text-muted-foreground">{t("aiDescription")}</p>
-            <Button variant="outline" className="mt-3 w-full" onClick={() => void generateCopy()} disabled={aiLoading || selectedLayer?.type !== "text"}>
-              {aiLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Sparkles className="h-4 w-4" aria-hidden="true" />}
-              {aiLoading ? t("generating") : t("generateCopy")}
-            </Button>
-            {aiSource ? <p className="mt-2 text-xs text-muted-foreground">{aiSource === "fallback" ? t("aiFallback") : t("aiOpenai")}</p> : null}
-            {aiVariations.length > 0 ? <div className="mt-3 space-y-2">{aiVariations.map((variation, index) => <div key={`${variation}-${index}`} className="rounded-md border border-border p-2.5"><p className="text-sm leading-5">{variation}</p><Button variant="ghost" size="sm" className="mt-2 h-8 px-2" onClick={() => { if (selectedLayer?.type === "text") updateLayer(selectedLayer.id, (layer) => ({ ...layer, content: { ...layer.content, text: variation } })); }}>{t("useOption")}</Button></div>)}</div> : null}
-          </section>
-
-          {showPreview ? (
-            <section className="space-y-3">
-              <div className="flex items-center gap-2"><Eye className="h-4 w-4" aria-hidden="true" /><h2 className="text-sm font-semibold">{t("livePreview")}</h2></div>
-              <PreviewCanvas content={content} videoLabel={t("videoPreview")} />
-              {(content.gallery ?? []).length > 0 ? (
-                <div className="w-full max-w-[300px] space-y-2">
-                  <h3 className="text-sm font-semibold">{t("galleryTitle")}</h3>
-                  <div className="grid grid-cols-3 gap-1.5" aria-label={t("galleryListLabel")}>
-                    {(content.gallery ?? []).map((photo, index) => (
-                      <div key={photo.id} className="aspect-square overflow-hidden rounded-md border border-border bg-secondary">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={photo.url} alt={photo.alt || t("galleryPhotoAlt", { index: index + 1 })} className="h-full w-full object-cover" />
+                {aiVariations.length > 0 && (
+                  <div className="space-y-2">
+                    {aiVariations.map((variation, index) => (
+                      <div
+                        key={`${variation}-${index}`}
+                        className="rounded-lg border border-border bg-card p-3 hover:border-primary/30 transition-all"
+                      >
+                        <p className="mb-2 text-sm leading-relaxed">{variation}</p>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 text-xs"
+                          onClick={() => {
+                            if (selectedLayer?.type === "text")
+                              updateLayer(selectedLayer.id, (layer) => ({
+                                ...layer,
+                                content: { ...layer.content, text: variation },
+                              }));
+                          }}
+                        >
+                          {t("useOption")}
+                        </Button>
                       </div>
                     ))}
                   </div>
-                </div>
-              ) : null}
-            </section>
-          ) : null}
+                )}
+              </div>
+            )}
+          </div>
         </aside>
+
+        {/* Canvas Area */}
+        <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-secondary/20 to-background p-8">
+          <div className="rounded-2xl border border-border bg-white p-6 shadow-2xl">
+            <FabricCanvas
+              key={canvasRevision}
+              content={content}
+              activeScheme={activeScheme}
+              selectedLayerId={selectedLayerId}
+              onChange={commitContent}
+              onSelect={setSelectedLayerId}
+              labels={{
+                videoBackground: t("videoBackground"),
+                editorCanvas: t("editorCanvas"),
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Right Sidebar - Preview */}
+        {showPreview && (
+          <aside className="w-80 border-l border-border bg-background p-6 overflow-y-auto">
+            <h3 className="mb-4 text-sm font-semibold flex items-center gap-2">
+              <Eye className="h-4 w-4" />
+              {t("livePreview")}
+            </h3>
+            <div className="rounded-xl border border-border bg-gradient-to-br from-secondary/50 to-card p-3 shadow-lg">
+              {/* Preview component would go here */}
+              <div className="aspect-[9/16] rounded-lg bg-secondary" />
+            </div>
+          </aside>
+        )}
       </div>
 
+      {/* Payment Dialog */}
       <Dialog open={showPaymentOptions} onClose={(open) => { if (!checkoutType) { setShowPaymentOptions(open); setError(""); } }}>
-        <DialogContent className="relative max-w-2xl rounded-lg">
-          <DialogHeader className="pr-10">
-            <DialogTitle>{t("payment.title")}</DialogTitle>
-            <DialogDescription>{t("payment.description")}</DialogDescription>
+        <DialogContent className="max-w-3xl rounded-2xl p-8">
+          <DialogHeader className="pr-12 mb-6">
+            <DialogTitle className="text-2xl">{t("payment.title")}</DialogTitle>
+            <DialogDescription className="text-base">{t("payment.description")}</DialogDescription>
           </DialogHeader>
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            className="absolute right-4 top-4"
+            className="absolute right-6 top-6 rounded-full"
             onClick={() => { setShowPaymentOptions(false); setError(""); }}
             disabled={Boolean(checkoutType)}
-            aria-label={t("payment.close")}
-            title={t("payment.close")}
           >
-            <X className="h-4 w-4" aria-hidden="true" />
+            <X className="h-4 w-4" />
           </Button>
-          {error ? <p className="mb-4 rounded-md border border-destructive/30 bg-background px-3 py-2 text-sm text-destructive" role="alert">{error}</p> : null}
-          <div className="grid gap-3 sm:grid-cols-2">
-            <section className="flex min-h-56 flex-col rounded-lg border border-border p-5">
-              <CreditCard className="h-5 w-5" aria-hidden="true" />
-              <h3 className="mt-4 text-base font-semibold">{t("payment.single.title")}</h3>
-              <p className="mt-1 text-2xl font-semibold">{t("payment.single.price")}</p>
-              <p className="mt-2 text-sm text-muted-foreground">{t("payment.single.description")}</p>
-              <Button className="mt-auto w-full" onClick={() => void startCheckout("single_publish")} disabled={Boolean(checkoutType)}>
-                {checkoutType === "single_publish" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <CreditCard className="h-4 w-4" aria-hidden="true" />}
+          {error ? (
+            <p className="mb-6 rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive" role="alert">
+              {error}
+            </p>
+          ) : null}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <section className="flex min-h-64 flex-col rounded-2xl border-2 border-border bg-card p-6 hover:border-primary/30 hover:shadow-lg transition-all">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-accent-foreground/10 border border-primary/20">
+                <CreditCard className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="mt-5 text-xl font-semibold">{t("payment.single.title")}</h3>
+              <p className="mt-2 text-3xl font-semibold text-primary">{t("payment.single.price")}</p>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("payment.single.description")}</p>
+              <Button
+                className="mt-auto w-full rounded-full shadow-lg"
+                onClick={() => void startCheckout("single_publish")}
+                disabled={Boolean(checkoutType)}
+              >
+                {checkoutType === "single_publish" ? <Loader2 className="h-4 w-4 animate-spin" /> : <CreditCard className="h-4 w-4" />}
                 {checkoutType === "single_publish" ? t("payment.redirecting") : t("payment.single.action")}
               </Button>
             </section>
-            <section className="flex min-h-56 flex-col rounded-lg border border-foreground bg-secondary/50 p-5">
-              <InfinityIcon className="h-5 w-5" aria-hidden="true" />
-              <h3 className="mt-4 text-base font-semibold">{t("payment.lifetime.title")}</h3>
-              <p className="mt-1 text-2xl font-semibold">{t("payment.lifetime.price")}</p>
-              <p className="mt-2 text-sm text-muted-foreground">{t("payment.lifetime.description")}</p>
-              <Button className="mt-auto w-full" onClick={() => void startCheckout("lifetime")} disabled={Boolean(checkoutType)}>
-                {checkoutType === "lifetime" ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <InfinityIcon className="h-4 w-4" aria-hidden="true" />}
+            <section className="flex min-h-64 flex-col rounded-2xl border-2 border-primary bg-gradient-to-br from-primary/5 to-accent-foreground/5 p-6 shadow-lg hover:shadow-xl transition-all">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent-foreground text-white">
+                <InfinityIcon className="h-6 w-6" />
+              </div>
+              <h3 className="mt-5 text-xl font-semibold">{t("payment.lifetime.title")}</h3>
+              <p className="mt-2 text-3xl font-semibold text-primary">{t("payment.lifetime.price")}</p>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{t("payment.lifetime.description")}</p>
+              <Button
+                className="mt-auto w-full rounded-full shadow-lg"
+                onClick={() => void startCheckout("lifetime")}
+                disabled={Boolean(checkoutType)}
+              >
+                {checkoutType === "lifetime" ? <Loader2 className="h-4 w-4 animate-spin" /> : <InfinityIcon className="h-4 w-4" />}
                 {checkoutType === "lifetime" ? t("payment.redirecting") : t("payment.lifetime.action")}
               </Button>
             </section>
@@ -810,7 +1026,15 @@ export function EditorShell({
         </DialogContent>
       </Dialog>
 
-      {error && !showPaymentOptions ? <div className="fixed bottom-4 left-1/2 z-30 flex w-[min(92vw,520px)] -translate-x-1/2 items-center justify-between gap-4 rounded-md border border-destructive/30 bg-background px-4 py-3 text-sm text-destructive shadow-lg" role="alert"><span>{error}</span><Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => setError("")} aria-label={t("dismissError")} title={t("dismissError")}><span aria-hidden="true">×</span></Button></div> : null}
+      {/* Error Toast */}
+      {error && !showPaymentOptions ? (
+        <div className="fixed bottom-6 left-1/2 z-30 flex w-[min(92vw,560px)] -translate-x-1/2 items-center justify-between gap-4 rounded-2xl border border-destructive/30 bg-card/95 backdrop-blur-lg px-5 py-4 text-sm text-destructive shadow-2xl" role="alert">
+          <span className="flex-1">{error}</span>
+          <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0 rounded-full" onClick={() => setError("")}>
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+      ) : null}
     </main>
   );
 }
