@@ -33,8 +33,8 @@ const occasions = [
   { emoji: "🎂", key: "birthday" },
   { emoji: "🎓", key: "graduation" },
   { emoji: "🏠", key: "housewarming" },
-  { emoji: "🎉", key: "party" },
-  { emoji: "👶", key: "baby" },
+  { emoji: "💼", key: "business" },
+  { emoji: "🎊", key: "other" },
 ];
 
 export default async function Home() {
