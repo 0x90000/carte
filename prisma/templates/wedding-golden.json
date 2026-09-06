@@ -3,70 +3,74 @@
   "name": "Gilded Elegance",
   "scene": "wedding",
   "style": "luxury",
-  "description": "Opulent baroque design with ornate golden flourishes, rich textures, and regal ambiance",
-  "tags": ["baroque", "gold", "luxury", "ornate", "regal"],
-  "thumbnailUrl": "/templates/wedding-golden/thumbnail.svg",
-  "previewUrl": "/templates/wedding-golden/preview.svg",
+  "description": "Original gilded elegance artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "baroque",
+    "gold",
+    "luxury",
+    "ornate",
+    "regal"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/gilded-elegance-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/gilded-elegance-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(135deg, #fffbeb 0%, #fef3c7 50%, #fde68a 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/gilded-elegance.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "baroque-frame",
-      "type": "svg",
-      "name": "Baroque Frame",
-      "position": { "x": 40, "y": 80 },
-      "size": { "width": 670, "height": 1174 },
-      "opacity": 0.7,
-      "zIndex": 1,
-      "animation": {
-        "type": "shimmer",
-        "duration": 5000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 670 1174' xmlns='http://www.w3.org/2000/svg'><path d='M50 50 Q50 30, 70 30 L600 30 Q620 30, 620 50 L620 1124 Q620 1144, 600 1144 L70 1144 Q50 1144, 50 1124 Z' fill='none' stroke='#d97706' stroke-width='3'/><path d='M335 50 Q345 35, 355 50' fill='#d97706'/><path d='M335 1124 Q345 1139, 355 1124' fill='#d97706'/><ellipse cx='335' cy='80' rx='40' ry='30' fill='none' stroke='#d97706' stroke-width='2'/><ellipse cx='335' cy='1094' rx='40' ry='30' fill='none' stroke='#d97706' stroke-width='2'/><path d='M100 587 Q80 587, 80 607 Q80 627, 100 627' fill='none' stroke='#d97706' stroke-width='2'/><path d='M570 587 Q590 587, 590 607 Q590 627, 570 627' fill='none' stroke='#d97706' stroke-width='2'/></svg>"
-      }
-    },
-    {
-      "id": "crown-decoration",
-      "type": "svg",
-      "name": "Crown",
-      "position": { "x": 300, "y": 350 },
-      "size": { "width": 150, "height": 100 },
-      "opacity": 0.8,
+      "size": {
+        "width": 470,
+        "height": 36
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "pulse",
-        "duration": 3000,
-        "iterationCount": "infinite"
-      },
       "content": {
-        "svg": "<svg viewBox='0 0 150 100' xmlns='http://www.w3.org/2000/svg'><path d='M20 70 L35 35 L50 60 L75 20 L100 60 L115 35 L130 70 Z' fill='#f59e0b' stroke='#d97706' stroke-width='2'/><rect x='15' y='70' width='120' height='15' fill='#d97706' stroke='#b45309' stroke-width='2'/><circle cx='35' cy='35' r='6' fill='#fbbf24'/><circle cx='75' cy='20' r='8' fill='#fbbf24'/><circle cx='115' cy='35' r='6' fill='#fbbf24'/></svg>"
+        "text": "THE WEDDING OF",
+        "font": {
+          "family": "Manrope",
+          "size": 15,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#816a34",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 140 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 600
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Isabella & Maximilian",
-        "font": { "family": "Playfair Display", "size": 58, "weight": 700, "lineHeight": 1.2 },
-        "color": "#92400e",
+        "text": "Isabella\n&\nMaximilian",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#695426",
         "align": "center"
       }
     },
@@ -74,64 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 790 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 900
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "September 15, 2026\nPalace Grand Hall",
-        "font": { "family": "Cormorant Garamond", "size": 26, "weight": 500, "lineHeight": 1.7 },
-        "color": "#b45309",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#695426",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#816a34"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 100, "y": 980 },
-      "size": { "width": 550, "height": 120 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 1200
+      "position": {
+        "x": 140,
+        "y": 750
       },
-      "content": {
-        "text": "In the grandeur of elegance,\nwe unite our hearts.\nHonor us with your royal presence.",
-        "font": { "family": "Cormorant Garamond", "size": 21, "weight": 400, "lineHeight": 1.7 },
-        "color": "#92400e",
-        "align": "center"
-      }
-    },
-    {
-      "id": "ornate-flourish",
-      "type": "svg",
-      "name": "Golden Flourish",
-      "position": { "x": 150, "y": 700 },
-      "size": { "width": 450, "height": 60 },
-      "opacity": 0.6,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 450 60' xmlns='http://www.w3.org/2000/svg'><path d='M0 30 Q50 10, 100 30 Q150 50, 225 30 Q300 10, 350 30 Q400 50, 450 30' stroke='#d97706' stroke-width='2' fill='none'/><circle cx='225' cy='30' r='8' fill='#f59e0b'/><circle cx='100' cy='30' r='5' fill='#fbbf24'/><circle cx='350' cy='30' r='5' fill='#fbbf24'/></svg>"
+        "text": "Request the pleasure of your company\nas we join our lives in marriage.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#695426",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Isabella & Maximilian", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "September 15, 2026\nPalace Grand Hall", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "In the grandeur of elegance,\nwe unite our hearts.\nHonor us with your royal presence.", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Isabella\n&\nMaximilian",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "September 15, 2026\nPalace Grand Hall",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Request the pleasure of your company\nas we join our lives in marriage.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "golden", "name": "Royal Gold", "colors": { "primary": "#f59e0b", "secondary": "#92400e", "accent": "#fbbf24", "text": "#92400e", "background": "#fffbeb" } },
-    { "id": "amber", "name": "Amber Luxury", "colors": { "primary": "#f97316", "secondary": "#7c2d12", "accent": "#fdba74", "text": "#7c2d12", "background": "#fff7ed" } },
-    { "id": "bronze", "name": "Antique Bronze", "colors": { "primary": "#a16207", "secondary": "#78350f", "accent": "#fde047", "text": "#713f12", "background": "#fefce8" } }
+    {
+      "id": "gilded-elegance",
+      "name": "Gilded Elegance",
+      "colors": {
+        "primary": "#816a34",
+        "secondary": "#695426",
+        "accent": "#816a34",
+        "text": "#695426"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

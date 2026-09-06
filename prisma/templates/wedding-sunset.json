@@ -3,70 +3,74 @@
   "name": "Golden Hour",
   "scene": "wedding",
   "style": "romantic",
-  "description": "Warm sunset colors with golden rays, horizon silhouettes, and romantic twilight ambiance",
-  "tags": ["sunset", "golden", "warm", "romantic", "twilight"],
-  "thumbnailUrl": "/templates/wedding-sunset/thumbnail.svg",
-  "previewUrl": "/templates/wedding-sunset/preview.svg",
+  "description": "Original golden hour artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "sunset",
+    "golden",
+    "warm",
+    "romantic",
+    "twilight"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/golden-hour-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/golden-hour-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(180deg, #fef3c7 0%, #fed7aa 30%, #fdba74 60%, #fb923c 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/golden-hour.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "sun-rays",
-      "type": "svg",
-      "name": "Sun Rays",
-      "position": { "x": 0, "y": 0 },
-      "size": { "width": 750, "height": 400 },
-      "opacity": 0.5,
-      "zIndex": 1,
-      "animation": {
-        "type": "pulse",
-        "duration": 6000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 145
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 750 400' xmlns='http://www.w3.org/2000/svg'><path d='M375 0 L385 400' stroke='#fbbf24' stroke-width='40' opacity='0.2'/><path d='M375 0 L285 400' stroke='#fcd34d' stroke-width='35' opacity='0.15'/><path d='M375 0 L465 400' stroke='#fcd34d' stroke-width='35' opacity='0.15'/><path d='M375 0 L195 400' stroke='#fde68a' stroke-width='30' opacity='0.1'/><path d='M375 0 L555 400' stroke='#fde68a' stroke-width='30' opacity='0.1'/></svg>"
-      }
-    },
-    {
-      "id": "sun-circle",
-      "type": "svg",
-      "name": "Sun",
-      "position": { "x": 300, "y": 150 },
-      "size": { "width": 150, "height": 150 },
-      "opacity": 0.8,
+      "size": {
+        "width": 470,
+        "height": 36
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "pulse",
-        "duration": 4000,
-        "iterationCount": "infinite"
-      },
       "content": {
-        "svg": "<svg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'><circle cx='75' cy='75' r='60' fill='#fbbf24' opacity='0.7'/><circle cx='75' cy='75' r='45' fill='#fcd34d' opacity='0.8'/><circle cx='75' cy='75' r='30' fill='#fef3c7' opacity='0.9'/></svg>"
+        "text": "A golden kind of forever",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 25,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#774028",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 140 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 500
+      "position": {
+        "x": 140,
+        "y": 207
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Emma & Lucas",
-        "font": { "family": "Playfair Display", "size": 68, "weight": 600, "lineHeight": 1.2 },
-        "color": "#7c2d12",
+        "text": "Emma\n&\nLucas",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 66,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#5b321e",
         "align": "center"
       }
     },
@@ -74,81 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 800 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 800
+      "position": {
+        "x": 140,
+        "y": 470
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "August 8, 2026\nSunset Beach Resort",
-        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.6 },
-        "color": "#9a3412",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#5b321e",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 583
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#774028"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 90, "y": 1000 },
-      "size": { "width": 570, "height": 120 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 1100
+      "position": {
+        "x": 140,
+        "y": 610
       },
-      "content": {
-        "text": "As the sun sets over the horizon,\nwe begin our journey together.\nJoin us for this golden moment.",
-        "font": { "family": "Lora", "size": 19, "weight": 400, "lineHeight": 1.7 },
-        "color": "#78350f",
-        "align": "center"
-      }
-    },
-    {
-      "id": "birds-silhouette",
-      "type": "svg",
-      "name": "Flying Birds",
-      "position": { "x": 100, "y": 350 },
-      "size": { "width": 300, "height": 100 },
-      "opacity": 0.6,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "float",
-        "duration": 5000,
-        "iterationCount": "infinite"
-      },
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 300 100' xmlns='http://www.w3.org/2000/svg'><path d='M50 50 Q40 45, 30 50 Q40 55, 50 50 M55 50 Q65 45, 75 50 Q65 55, 55 50' fill='#78350f' opacity='0.7'/><path d='M120 60 Q110 55, 100 60 Q110 65, 120 60 M125 60 Q135 55, 145 60 Q135 65, 125 60' fill='#78350f' opacity='0.6'/><path d='M200 45 Q190 40, 180 45 Q190 50, 200 45 M205 45 Q215 40, 225 45 Q215 50, 205 45' fill='#78350f' opacity='0.7'/></svg>"
-      }
-    },
-    {
-      "id": "horizon-line",
-      "type": "svg",
-      "name": "Horizon",
-      "position": { "x": 0, "y": 1150 },
-      "size": { "width": 750, "height": 184 },
-      "opacity": 0.4,
-      "zIndex": 1,
-      "content": {
-        "svg": "<svg viewBox='0 0 750 184' xmlns='http://www.w3.org/2000/svg'><path d='M0 92 Q187.5 70, 375 92 T750 92' stroke='#ea580c' stroke-width='3' fill='none' opacity='0.6'/><ellipse cx='150' cy='130' rx='60' ry='40' fill='#fb923c' opacity='0.5'/><ellipse cx='375' cy='140' rx='80' ry='50' fill='#f97316' opacity='0.5'/><ellipse cx='600' cy='135' rx='65' ry='45' fill='#fb923c' opacity='0.5'/></svg>"
+        "text": "Join us as we begin our life together.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#5b321e",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Emma & Lucas", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "August 8, 2026\nSunset Beach Resort", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "As the sun sets over the horizon,\nwe begin our journey together.\nJoin us for this golden moment.", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Emma\n&\nLucas",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "August 8, 2026\nSunset Beach Resort",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Join us as we begin our life together.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "sunset", "name": "Sunset Gold", "colors": { "primary": "#f59e0b", "secondary": "#7c2d12", "accent": "#fde68a", "text": "#78350f", "background": "#fed7aa" } },
-    { "id": "coral", "name": "Coral Sunset", "colors": { "primary": "#fb923c", "secondary": "#9a3412", "accent": "#fecaca", "text": "#7c2d12", "background": "#ffedd5" } },
-    { "id": "amber", "name": "Amber Glow", "colors": { "primary": "#fbbf24", "secondary": "#92400e", "accent": "#fef3c7", "text": "#78350f", "background": "#fffbeb" } }
+    {
+      "id": "golden-hour",
+      "name": "Golden Hour",
+      "colors": {
+        "primary": "#774028",
+        "secondary": "#5b321e",
+        "accent": "#774028",
+        "text": "#5b321e"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

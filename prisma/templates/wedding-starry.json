@@ -3,82 +3,74 @@
   "name": "Starry Night",
   "scene": "wedding",
   "style": "romantic",
-  "description": "Celestial night sky theme with twinkling stars, constellations, and cosmic romance",
-  "tags": ["stars", "night", "celestial", "cosmic", "romantic"],
-  "thumbnailUrl": "/templates/wedding-starry/thumbnail.svg",
-  "previewUrl": "/templates/wedding-starry/preview.svg",
+  "description": "Original starry night artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "stars",
+    "night",
+    "celestial",
+    "cosmic",
+    "romantic"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/starry-night-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/starry-night-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(180deg, #0c4a6e 0%, #1e293b 30%, #0f172a 60%, #020617 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/starry-night.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "stars-field",
-      "type": "svg",
-      "name": "Star Field",
-      "position": { "x": 0, "y": 0 },
-      "size": { "width": 750, "height": 1334 },
-      "opacity": 0.8,
-      "zIndex": 1,
-      "animation": {
-        "type": "shimmer",
-        "duration": 4000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 750 1334' xmlns='http://www.w3.org/2000/svg'><circle cx='100' cy='100' r='2' fill='#fff'/><circle cx='250' cy='150' r='1.5' fill='#fff'/><circle cx='400' cy='80' r='2.5' fill='#fff'/><circle cx='600' cy='120' r='1' fill='#fff'/><circle cx='700' cy='200' r='2' fill='#fff'/><circle cx='150' cy='300' r='1.5' fill='#fff'/><circle cx='500' cy='280' r='2' fill='#fff'/><circle cx='650' cy='350' r='1' fill='#fff'/><circle cx='200' cy='450' r='2.5' fill='#fff'/><circle cx='550' cy='480' r='1.5' fill='#fff'/><circle cx='80' cy='600' r='2' fill='#fff'/><circle cx='450' cy='650' r='1' fill='#fff'/><circle cx='680' cy='700' r='2' fill='#fff'/><circle cx='180' cy='800' r='1.5' fill='#fff'/><circle cx='520' cy='850' r='2.5' fill='#fff'/><circle cx='320' cy='950' r='1' fill='#fff'/><circle cx='620' cy='1000' r='2' fill='#fff'/><circle cx='120' cy='1100' r='1.5' fill='#fff'/><circle cx='480' cy='1150' r='2' fill='#fff'/><circle cx='280' cy='1250' r='1' fill='#fff'/></svg>"
-      }
-    },
-    {
-      "id": "moon",
-      "type": "svg",
-      "name": "Moon",
-      "position": { "x": 550, "y": 150 },
-      "size": { "width": 150, "height": 150 },
-      "opacity": 0.9,
+      "size": {
+        "width": 470,
+        "height": 36
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "pulse",
-        "duration": 5000,
-        "iterationCount": "infinite"
-      },
       "content": {
-        "svg": "<svg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'><circle cx='75' cy='75' r='60' fill='#fef3c7' opacity='0.9'/><circle cx='90' cy='70' r='58' fill='#0f172a' opacity='0.3'/><circle cx='60' cy='60' r='8' fill='#d4d4d4' opacity='0.5'/><circle cx='85' cy='80' r='12' fill='#d4d4d4' opacity='0.4'/><circle cx='70' cy='95' r='6' fill='#d4d4d4' opacity='0.5'/></svg>"
-      }
-    },
-    {
-      "id": "constellation",
-      "type": "svg",
-      "name": "Constellation",
-      "position": { "x": 50, "y": 200 },
-      "size": { "width": 300, "height": 250 },
-      "opacity": 0.6,
-      "zIndex": 1,
-      "content": {
-        "svg": "<svg viewBox='0 0 300 250' xmlns='http://www.w3.org/2000/svg'><line x1='50' y1='50' x2='120' y2='80' stroke='#94a3b8' stroke-width='1' opacity='0.5'/><line x1='120' y1='80' x2='180' y2='70' stroke='#94a3b8' stroke-width='1' opacity='0.5'/><line x1='180' y1='70' x2='220' y2='120' stroke='#94a3b8' stroke-width='1' opacity='0.5'/><line x1='220' y1='120' x2='180' y2='180' stroke='#94a3b8' stroke-width='1' opacity='0.5'/><line x1='180' y1='180' x2='100' y2='200' stroke='#94a3b8' stroke-width='1' opacity='0.5'/><circle cx='50' cy='50' r='4' fill='#fbbf24'/><circle cx='120' cy='80' r='3' fill='#fff'/><circle cx='180' cy='70' r='4' fill='#fbbf24'/><circle cx='220' cy='120' r='3' fill='#fff'/><circle cx='180' cy='180' r='4' fill='#fbbf24'/><circle cx='100' cy='200' r='3' fill='#fff'/></svg>"
+        "text": "Written in the stars",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 25,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#d6c59d",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 130 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 600
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Luna & Orion",
-        "font": { "family": "Cinzel", "size": 72, "weight": 600, "lineHeight": 1.2 },
-        "color": "#fef3c7",
+        "text": "Luna\n&\nOrion",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#f0e9d7",
         "align": "center"
       }
     },
@@ -86,81 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 780 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 900
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "November 11, 2026\nStarlight Observatory",
-        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.7 },
-        "color": "#e0e7ff",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#f0e9d7",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#d6c59d"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 90, "y": 970 },
-      "size": { "width": 570, "height": 150 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 1200
+      "position": {
+        "x": 140,
+        "y": 750
       },
-      "content": {
-        "text": "Under the infinite canvas of stars,\nour love story is written in constellations.\nJoin us as we reach for the cosmos together.",
-        "font": { "family": "Lora", "size": 19, "weight": 400, "lineHeight": 1.9 },
-        "color": "#ddd6fe",
-        "align": "center"
-      }
-    },
-    {
-      "id": "shooting-star",
-      "type": "svg",
-      "name": "Shooting Star",
-      "position": { "x": 400, "y": 400 },
-      "size": { "width": 200, "height": 80 },
-      "opacity": 0.7,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "float",
-        "duration": 3000,
-        "iterationCount": "infinite"
-      },
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 200 80' xmlns='http://www.w3.org/2000/svg'><path d='M180 20 L170 25 L165 30 Q140 35, 100 45 Q60 55, 20 60' stroke='#fbbf24' stroke-width='2' fill='none' opacity='0.6'/><path d='M180 20 L170 22 L165 25 Q140 28, 100 35 Q60 42, 20 45' stroke='#fef3c7' stroke-width='1' fill='none' opacity='0.8'/><circle cx='180' cy='20' r='6' fill='#fbbf24'/><circle cx='180' cy='20' r='4' fill='#fef3c7'/></svg>"
-      }
-    },
-    {
-      "id": "bottom-horizon",
-      "type": "svg",
-      "name": "Horizon",
-      "position": { "x": 0, "y": 1200 },
-      "size": { "width": 750, "height": 134 },
-      "opacity": 0.5,
-      "zIndex": 1,
-      "content": {
-        "svg": "<svg viewBox='0 0 750 134' xmlns='http://www.w3.org/2000/svg'><path d='M0 60 Q187.5 40, 375 60 T750 60' stroke='#475569' stroke-width='2' fill='none' opacity='0.6'/><circle cx='100' cy='40' r='1.5' fill='#fbbf24'/><circle cx='300' cy='35' r='2' fill='#fbbf24'/><circle cx='500' cy='38' r='1.5' fill='#fbbf24'/><circle cx='650' cy='42' r='2' fill='#fbbf24'/></svg>"
+        "text": "Under a sky full of stars,\njoin us as we begin our forever.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#f0e9d7",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Luna & Orion", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "November 11, 2026\nStarlight Observatory", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Under the infinite canvas of stars,\nour love story is written in constellations.\nJoin us as we reach for the cosmos together.", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Luna\n&\nOrion",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "November 11, 2026\nStarlight Observatory",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Under a sky full of stars,\njoin us as we begin our forever.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "midnight", "name": "Midnight Sky", "colors": { "primary": "#fbbf24", "secondary": "#0f172a", "accent": "#fef3c7", "text": "#e0e7ff", "background": "#1e293b" } },
-    { "id": "aurora", "name": "Aurora Night", "colors": { "primary": "#8b5cf6", "secondary": "#1e1b4b", "accent": "#c4b5fd", "text": "#ddd6fe", "background": "#312e81" } },
-    { "id": "twilight", "name": "Twilight Blue", "colors": { "primary": "#06b6d4", "secondary": "#0c4a6e", "accent": "#67e8f9", "text": "#e0f2fe", "background": "#164e63" } }
+    {
+      "id": "starry-night",
+      "name": "Starry Night",
+      "colors": {
+        "primary": "#d6c59d",
+        "secondary": "#f0e9d7",
+        "accent": "#d6c59d",
+        "text": "#f0e9d7"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

@@ -3,164 +3,191 @@
   "name": "Pure Minimalist",
   "scene": "wedding",
   "style": "modern",
-  "description": "Clean minimalist design with geometric shapes, monochrome palette, and contemporary typography",
-  "tags": ["minimal", "modern", "clean", "geometric", "contemporary"],
-  "thumbnailUrl": "/templates/wedding-minimal/thumbnail.svg",
-  "previewUrl": "/templates/wedding-minimal/preview.svg",
+  "description": "Original pure minimalist artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "minimal",
+    "modern",
+    "clean",
+    "geometric",
+    "contemporary"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/pure-minimalist-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/pure-minimalist-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/pure-minimalist.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "geometric-circle",
-      "type": "svg",
-      "name": "Circle",
-      "position": { "x": 250, "y": 200 },
-      "size": { "width": 250, "height": 250 },
-      "opacity": 0.15,
-      "zIndex": 1,
-      "animation": {
-        "type": "pulse",
-        "duration": 4000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'><circle cx='125' cy='125' r='120' fill='none' stroke='#000000' stroke-width='2'/><circle cx='125' cy='125' r='90' fill='none' stroke='#000000' stroke-width='1' opacity='0.5'/></svg>"
-      }
-    },
-    {
-      "id": "line-top",
-      "type": "svg",
-      "name": "Top Line",
-      "position": { "x": 200, "y": 480 },
-      "size": { "width": 350, "height": 4 },
-      "opacity": 0.8,
+      "size": {
+        "width": 470,
+        "height": 36
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 300
-      },
       "content": {
-        "svg": "<svg viewBox='0 0 350 4' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='350' height='2' fill='#000000'/></svg>"
+        "text": "WE ARE GETTING MARRIED",
+        "font": {
+          "family": "Manrope",
+          "size": 15,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#715a4d",
+        "align": "left"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 120 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 600
+      "position": {
+        "x": 140,
+        "y": 292
       },
-      "content": {
-        "text": "Alex & Jordan",
-        "font": { "family": "Inter", "size": 64, "weight": 300, "lineHeight": 1.2 },
-        "color": "#000000",
-        "align": "center"
-      }
-    },
-    {
-      "id": "line-bottom",
-      "type": "svg",
-      "name": "Bottom Line",
-      "position": { "x": 200, "y": 696 },
-      "size": { "width": 350, "height": 4 },
-      "opacity": 0.8,
+      "size": {
+        "width": 470,
+        "height": 290
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 900
-      },
+      "variable": "couple_names",
       "content": {
-        "svg": "<svg viewBox='0 0 350 4' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='350' height='2' fill='#000000'/></svg>"
+        "text": "Alex\n&\nJordan",
+        "font": {
+          "family": "Manrope",
+          "size": 58,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#272824",
+        "align": "left"
       }
     },
     {
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 800 },
-      "size": { "width": 550, "height": 80 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 1200
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "04.15.2026\nMODERN ART GALLERY",
-        "font": { "family": "Inter", "size": 18, "weight": 400, "lineHeight": 2.2 },
-        "color": "#333333",
-        "align": "center"
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#272824",
+        "align": "left"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 140,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#715a4d"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 100, "y": 1000 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 1500
+      "position": {
+        "x": 140,
+        "y": 750
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "message",
       "content": {
-        "text": "Join us in celebrating\nthe beginning of our journey",
-        "font": { "family": "Inter", "size": 17, "weight": 300, "lineHeight": 2 },
-        "color": "#666666",
-        "align": "center"
-      }
-    },
-    {
-      "id": "geometric-squares",
-      "type": "svg",
-      "name": "Squares",
-      "position": { "x": 100, "y": 950 },
-      "size": { "width": 550, "height": 30 },
-      "opacity": 0.4,
-      "zIndex": 1,
-      "content": {
-        "svg": "<svg viewBox='0 0 550 30' xmlns='http://www.w3.org/2000/svg'><rect x='250' y='10' width='10' height='10' fill='#000000'/><rect x='270' y='10' width='10' height='10' fill='#000000' opacity='0.6'/><rect x='290' y='10' width='10' height='10' fill='#000000' opacity='0.3'/></svg>"
-      }
-    },
-    {
-      "id": "bottom-geometric",
-      "type": "svg",
-      "name": "Bottom Geometry",
-      "position": { "x": 600, "y": 1100 },
-      "size": { "width": 150, "height": 150 },
-      "opacity": 0.1,
-      "zIndex": 1,
-      "content": {
-        "svg": "<svg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='0' width='150' height='150' fill='none' stroke='#000000' stroke-width='2'/><line x1='0' y1='0' x2='150' y2='150' stroke='#000000' stroke-width='1'/></svg>"
+        "text": "One day. Our people. A lifetime together.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#272824",
+        "align": "left"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Alex & Jordan", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "04.15.2026\nMODERN ART GALLERY", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Join us in celebrating\nthe beginning of our journey", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Alex\n&\nJordan",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "04.15.2026\nMODERN ART GALLERY",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "One day. Our people. A lifetime together.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "monochrome", "name": "Pure Monochrome", "colors": { "primary": "#000000", "secondary": "#333333", "accent": "#666666", "text": "#000000", "background": "#ffffff" } },
-    { "id": "charcoal", "name": "Charcoal Gray", "colors": { "primary": "#2d3748", "secondary": "#1a202c", "accent": "#718096", "text": "#2d3748", "background": "#f7fafc" } },
-    { "id": "navy", "name": "Navy Minimal", "colors": { "primary": "#1e3a8a", "secondary": "#1e40af", "accent": "#60a5fa", "text": "#1e3a8a", "background": "#eff6ff" } }
+    {
+      "id": "pure-minimalist",
+      "name": "Pure Minimalist",
+      "colors": {
+        "primary": "#715a4d",
+        "secondary": "#272824",
+        "accent": "#715a4d",
+        "text": "#272824"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

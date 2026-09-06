@@ -3,70 +3,74 @@
   "name": "Vintage Romance",
   "scene": "wedding",
   "style": "vintage",
-  "description": "Classic vintage aesthetic with sepia tones, ornate borders, and Victorian-inspired typography",
-  "tags": ["vintage", "classic", "ornate", "retro", "elegant"],
-  "thumbnailUrl": "/templates/wedding-vintage/thumbnail.svg",
-  "previewUrl": "/templates/wedding-vintage/preview.svg",
+  "description": "Original vintage romance artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "vintage",
+    "classic",
+    "ornate",
+    "retro",
+    "elegant"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/vintage-romance-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/vintage-romance-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(135deg, #fef3e2 0%, #f5e6d3 50%, #e8d5c4 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/vintage-romance.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "vintage-frame",
-      "type": "svg",
-      "name": "Vintage Frame",
-      "position": { "x": 60, "y": 100 },
-      "size": { "width": 630, "height": 1134 },
-      "opacity": 0.6,
-      "zIndex": 1,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 200
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 630 1134' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='610' height='1114' fill='none' stroke='#6b4423' stroke-width='3' rx='8'/><rect x='25' y='25' width='580' height='1084' fill='none' stroke='#8b6546' stroke-width='1'/><path d='M315 40 Q325 30, 335 40 Q325 50, 315 40' fill='#6b4423'/><path d='M315 1094 Q325 1084, 335 1094 Q325 1104, 315 1094' fill='#6b4423'/><rect x='280' y='50' width='70' height='4' fill='#8b6546' rx='2'/><rect x='280' y='1080' width='70' height='4' fill='#8b6546' rx='2'/></svg>"
-      }
-    },
-    {
-      "id": "vintage-ornament",
-      "type": "svg",
-      "name": "Ornament",
-      "position": { "x": 275, "y": 380 },
-      "size": { "width": 200, "height": 140 },
-      "opacity": 0.7,
+      "size": {
+        "width": 470,
+        "height": 36
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 500
-      },
       "content": {
-        "svg": "<svg viewBox='0 0 200 140' xmlns='http://www.w3.org/2000/svg'><path d='M100 20 Q110 40, 100 60 Q90 40, 100 20' fill='#8b6546'/><path d='M100 60 Q120 70, 140 60 Q120 80, 100 90 Q80 80, 60 60 Q80 70, 100 60' fill='#a0826d'/><ellipse cx='100' cy='70' rx='35' ry='25' fill='none' stroke='#6b4423' stroke-width='2'/><path d='M100 90 Q90 110, 100 130 Q110 110, 100 90' fill='#8b6546'/><circle cx='100' cy='70' r='8' fill='#6b4423'/></svg>"
+        "text": "Together with their families",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 25,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#725356",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 80, "y": 550 },
-      "size": { "width": 590, "height": 140 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 700
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Elizabeth & Thomas",
-        "font": { "family": "Playfair Display", "size": 56, "weight": 600, "lineHeight": 1.3 },
-        "color": "#6b4423",
+        "text": "Elizabeth\n&\nThomas",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#563d3e",
         "align": "center"
       }
     },
@@ -74,76 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 800 },
-      "size": { "width": 550, "height": 120 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 1000
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "The Twenty-Fifth of May\nTwo Thousand Twenty-Six\nVintage Estate Manor",
-        "font": { "family": "Cormorant Garamond", "size": 22, "weight": 500, "lineHeight": 1.7 },
-        "color": "#8b6546",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#563d3e",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#725356"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 100, "y": 1000 },
-      "size": { "width": 550, "height": 120 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 1300
+      "position": {
+        "x": 140,
+        "y": 750
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "message",
       "content": {
-        "text": "Request the honour of your presence\nat the celebration of their marriage",
-        "font": { "family": "Cormorant Garamond", "size": 20, "weight": 400, "lineHeight": 1.8 },
-        "color": "#8b6546",
+        "text": "Request the honour of your presence\nat the celebration of their marriage.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#563d3e",
         "align": "center"
-      }
-    },
-    {
-      "id": "corner-flourish-1",
-      "type": "svg",
-      "name": "Corner Flourish Top",
-      "position": { "x": 80, "y": 720 },
-      "size": { "width": 150, "height": 60 },
-      "opacity": 0.5,
-      "zIndex": 2,
-      "content": {
-        "svg": "<svg viewBox='0 0 150 60' xmlns='http://www.w3.org/2000/svg'><path d='M0 30 Q30 20, 60 30 Q90 40, 120 30 Q135 25, 150 30' stroke='#8b6546' stroke-width='2' fill='none'/><circle cx='60' cy='30' r='4' fill='#a0826d'/><circle cx='30' cy='25' r='2' fill='#8b6546'/><circle cx='90' cy='35' r='2' fill='#8b6546'/></svg>"
-      }
-    },
-    {
-      "id": "corner-flourish-2",
-      "type": "svg",
-      "name": "Corner Flourish Bottom",
-      "position": { "x": 520, "y": 720 },
-      "size": { "width": 150, "height": 60 },
-      "opacity": 0.5,
-      "zIndex": 2,
-      "content": {
-        "svg": "<svg viewBox='0 0 150 60' xmlns='http://www.w3.org/2000/svg'><path d='M150 30 Q120 20, 90 30 Q60 40, 30 30 Q15 25, 0 30' stroke='#8b6546' stroke-width='2' fill='none'/><circle cx='90' cy='30' r='4' fill='#a0826d'/><circle cx='120' cy='25' r='2' fill='#8b6546'/><circle cx='60' cy='35' r='2' fill='#8b6546'/></svg>"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Elizabeth & Thomas", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "The Twenty-Fifth of May\nTwo Thousand Twenty-Six\nVintage Estate Manor", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Request the honour of your presence\nat the celebration of their marriage", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Elizabeth\n&\nThomas",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "The Twenty-Fifth of May\nTwo Thousand Twenty-Six\nVintage Estate Manor",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Request the honour of your presence\nat the celebration of their marriage.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "sepia", "name": "Sepia Vintage", "colors": { "primary": "#8b6546", "secondary": "#6b4423", "accent": "#c9a882", "text": "#6b4423", "background": "#fef3e2" } },
-    { "id": "cream-brown", "name": "Cream & Brown", "colors": { "primary": "#a0826d", "secondary": "#5d4e37", "accent": "#d4c5b0", "text": "#5d4e37", "background": "#faf6ef" } },
-    { "id": "sage-vintage", "name": "Vintage Sage", "colors": { "primary": "#8a9b68", "secondary": "#5a6650", "accent": "#c8d5bb", "text": "#4a5542", "background": "#f5f7f1" } }
+    {
+      "id": "vintage-romance",
+      "name": "Vintage Romance",
+      "colors": {
+        "primary": "#725356",
+        "secondary": "#563d3e",
+        "accent": "#725356",
+        "text": "#563d3e"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

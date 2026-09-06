@@ -3,53 +3,74 @@
   "name": "Romantic Blush",
   "scene": "wedding",
   "style": "romantic",
-  "description": "Soft pink watercolor with floating hearts and elegant script typography",
-  "tags": ["romantic", "pink", "watercolor", "hearts", "elegant"],
-  "thumbnailUrl": "/templates/wedding-romantic/thumbnail.svg",
-  "previewUrl": "/templates/wedding-romantic/preview.svg",
+  "description": "Original romantic blush artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "romantic",
+    "pink",
+    "watercolor",
+    "hearts",
+    "elegant"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/romantic-blush-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/romantic-blush-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/romantic-blush.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "hearts-decoration",
-      "type": "svg",
-      "name": "Floating Hearts",
-      "position": { "x": 50, "y": 200 },
-      "size": { "width": 650, "height": 400 },
-      "opacity": 0.3,
-      "zIndex": 1,
-      "animation": {
-        "type": "float",
-        "duration": 3000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
+      "size": {
+        "width": 470,
+        "height": 36
+      },
+      "zIndex": 2,
       "content": {
-        "svg": "<svg viewBox='0 0 650 400' xmlns='http://www.w3.org/2000/svg'><path d='M325 100 Q300 60, 260 60 Q220 60, 220 100 Q220 140, 325 200 Q430 140, 430 100 Q430 60, 390 60 Q350 60, 325 100 Z' fill='#ec4899' opacity='0.4'/><path d='M150 250 Q135 225, 110 225 Q85 225, 85 250 Q85 275, 150 315 Q215 275, 215 250 Q215 225, 190 225 Q165 225, 150 250 Z' fill='#f472b6' opacity='0.5'/><path d='M500 280 Q485 255, 460 255 Q435 255, 435 280 Q435 305, 500 345 Q565 305, 565 280 Q565 255, 540 255 Q515 255, 500 280 Z' fill='#f9a8d4' opacity='0.6'/></svg>"
+        "text": "Together with our families",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 25,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#99606a",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 120 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 300
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Sarah & Michael",
-        "font": { "family": "Great Vibes", "size": 72, "weight": 400, "lineHeight": 1.2 },
-        "color": "#be185d",
+        "text": "Sarah\n&\nMichael",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#743e46",
         "align": "center"
       }
     },
@@ -57,64 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 750 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1200,
-        "delay": 600
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "June 15, 2026\nRose Garden Estate",
-        "font": { "family": "Cormorant", "size": 28, "weight": 400, "lineHeight": 1.6 },
-        "color": "#9f1239",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#743e46",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#99606a"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 90, "y": 950 },
-      "size": { "width": 570, "height": 150 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1500,
-        "delay": 900
+      "position": {
+        "x": 140,
+        "y": 750
       },
-      "content": {
-        "text": "Together with their families,\ninvite you to celebrate their wedding\nand the beginning of their new journey together",
-        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.8 },
-        "color": "#831843",
-        "align": "center"
-      }
-    },
-    {
-      "id": "bottom-flowers",
-      "type": "svg",
-      "name": "Bottom Floral",
-      "position": { "x": 0, "y": 1150 },
-      "size": { "width": 750, "height": 184 },
-      "opacity": 0.4,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 750 184' xmlns='http://www.w3.org/2000/svg'><ellipse cx='150' cy='140' rx='60' ry='40' fill='#fda4af'/><ellipse cx='220' cy='150' rx='50' ry='35' fill='#fb7185'/><ellipse cx='280' cy='145' rx='55' ry='38' fill='#fda4af'/><ellipse cx='375' cy='155' rx='70' ry='45' fill='#fb7185'/><ellipse cx='470' cy='145' rx='55' ry='38' fill='#fda4af'/><ellipse cx='530' cy='150' rx='50' ry='35' fill='#fb7185'/><ellipse cx='600' cy='140' rx='60' ry='40' fill='#fda4af'/></svg>"
+        "text": "Invite you to celebrate our wedding\nand the beginning of a beautiful forever.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#743e46",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Sarah & Michael", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "June 15, 2026\nRose Garden Estate", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Together with their families,\ninvite you to celebrate their wedding\nand the beginning of their new journey together", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Sarah\n&\nMichael",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "June 15, 2026\nRose Garden Estate",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Invite you to celebrate our wedding\nand the beginning of a beautiful forever.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "blush", "name": "Romantic Blush", "colors": { "primary": "#ec4899", "secondary": "#be185d", "accent": "#fda4af", "text": "#831843", "background": "#fce7f3" } },
-    { "id": "rose", "name": "Deep Rose", "colors": { "primary": "#f43f5e", "secondary": "#be123c", "accent": "#fecdd3", "text": "#881337", "background": "#fff1f2" } },
-    { "id": "lavender", "name": "Soft Lavender", "colors": { "primary": "#c084fc", "secondary": "#7e22ce", "accent": "#e9d5ff", "text": "#581c87", "background": "#faf5ff" } }
+    {
+      "id": "romantic-blush",
+      "name": "Romantic Blush",
+      "colors": {
+        "primary": "#99606a",
+        "secondary": "#743e46",
+        "accent": "#99606a",
+        "text": "#743e46"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

@@ -3,70 +3,74 @@
   "name": "Ocean Waves",
   "scene": "wedding",
   "style": "beach",
-  "description": "Serene ocean-inspired design with flowing waves, nautical elements, and coastal colors",
-  "tags": ["ocean", "beach", "nautical", "coastal", "blue"],
-  "thumbnailUrl": "/templates/wedding-ocean/thumbnail.svg",
-  "previewUrl": "/templates/wedding-ocean/preview.svg",
+  "description": "Original ocean waves artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "ocean",
+    "beach",
+    "nautical",
+    "coastal",
+    "blue"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/ocean-waves-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/ocean-waves-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(180deg, #bfdbfe 0%, #dbeafe 30%, #e0f2fe 60%, #f0f9ff 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/ocean-waves.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "wave-top",
-      "type": "svg",
-      "name": "Top Wave",
-      "position": { "x": 0, "y": 150 },
-      "size": { "width": 750, "height": 200 },
-      "opacity": 0.4,
-      "zIndex": 1,
-      "animation": {
-        "type": "float",
-        "duration": 4000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 750 200' xmlns='http://www.w3.org/2000/svg'><path d='M0 100 Q187.5 50, 375 100 T750 100 L750 200 L0 200 Z' fill='#3b82f6' opacity='0.3'/><path d='M0 130 Q187.5 80, 375 130 T750 130 L750 200 L0 200 Z' fill='#60a5fa' opacity='0.4'/></svg>"
-      }
-    },
-    {
-      "id": "anchor-decoration",
-      "type": "svg",
-      "name": "Anchor",
-      "position": { "x": 325, "y": 380 },
-      "size": { "width": 100, "height": 120 },
-      "opacity": 0.6,
+      "size": {
+        "width": 470,
+        "height": 36
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "swing",
-        "duration": 3000,
-        "iterationCount": "infinite"
-      },
       "content": {
-        "svg": "<svg viewBox='0 0 100 120' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='20' r='12' fill='none' stroke='#1e40af' stroke-width='3'/><line x1='50' y1='32' x2='50' y2='100' stroke='#1e40af' stroke-width='4'/><path d='M30 90 Q30 105, 50 100 Q70 105, 70 90' fill='none' stroke='#1e40af' stroke-width='4'/><line x1='30' y1='90' x2='20' y2='75' stroke='#1e40af' stroke-width='4'/><line x1='70' y1='90' x2='80' y2='75' stroke='#1e40af' stroke-width='4'/><line x1='30' y1='50' x2='70' y2='50' stroke='#1e40af' stroke-width='3'/></svg>"
+        "text": "By the sea, with you",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 25,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#587784",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 120 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 500
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Marina & Sebastian",
-        "font": { "family": "Playfair Display", "size": 62, "weight": 600, "lineHeight": 1.2 },
-        "color": "#1e40af",
+        "text": "Marina\n&\nSebastian",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#335363",
         "align": "center"
       }
     },
@@ -74,64 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 760 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 800
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "July 10, 2026\nSeaside Resort & Marina",
-        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.7 },
-        "color": "#1e3a8a",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#335363",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#587784"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 90, "y": 950 },
-      "size": { "width": 570, "height": 130 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 1100
+      "position": {
+        "x": 140,
+        "y": 750
       },
-      "content": {
-        "text": "Like the eternal ocean tides,\nour love flows endlessly.\nCelebrate with us by the sea.",
-        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.8 },
-        "color": "#1e40af",
-        "align": "center"
-      }
-    },
-    {
-      "id": "wave-bottom",
-      "type": "svg",
-      "name": "Bottom Wave",
-      "position": { "x": 0, "y": 1134 },
-      "size": { "width": 750, "height": 200 },
-      "opacity": 0.5,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 750 200' xmlns='http://www.w3.org/2000/svg'><path d='M0 0 L0 50 Q187.5 100, 375 50 T750 50 L750 0 Z' fill='#60a5fa' opacity='0.4'/><path d='M0 0 L0 80 Q187.5 130, 375 80 T750 80 L750 0 Z' fill='#3b82f6' opacity='0.3'/><circle cx='100' cy='100' r='15' fill='#dbeafe' opacity='0.6'/><circle cx='250' cy='120' r='12' fill='#dbeafe' opacity='0.5'/><circle cx='400' cy='110' r='14' fill='#dbeafe' opacity='0.6'/><circle cx='550' cy='125' r='11' fill='#dbeafe' opacity='0.5'/><circle cx='680' cy='105' r='13' fill='#dbeafe' opacity='0.6'/></svg>"
+        "text": "Together with our families,\nwe invite you to celebrate our wedding.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#335363",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Marina & Sebastian", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "July 10, 2026\nSeaside Resort & Marina", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Like the eternal ocean tides,\nour love flows endlessly.\nCelebrate with us by the sea.", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Marina\n&\nSebastian",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "July 10, 2026\nSeaside Resort & Marina",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Together with our families,\nwe invite you to celebrate our wedding.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "ocean-blue", "name": "Ocean Blue", "colors": { "primary": "#3b82f6", "secondary": "#1e40af", "accent": "#93c5fd", "text": "#1e3a8a", "background": "#dbeafe" } },
-    { "id": "aqua", "name": "Tropical Aqua", "colors": { "primary": "#06b6d4", "secondary": "#0e7490", "accent": "#67e8f9", "text": "#155e75", "background": "#cffafe" } },
-    { "id": "navy-gold", "name": "Navy & Gold", "colors": { "primary": "#1e3a8a", "secondary": "#1e40af", "accent": "#fbbf24", "text": "#1e293b", "background": "#e0e7ff" } }
+    {
+      "id": "ocean-waves",
+      "name": "Ocean Waves",
+      "colors": {
+        "primary": "#587784",
+        "secondary": "#335363",
+        "accent": "#587784",
+        "text": "#335363"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

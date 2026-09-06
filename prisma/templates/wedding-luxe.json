@@ -3,53 +3,74 @@
   "name": "Luxe Noir",
   "scene": "wedding",
   "style": "luxury",
-  "description": "Sophisticated black and gold Art Deco design with geometric patterns and metallic accents",
-  "tags": ["luxury", "gold", "black", "art-deco", "elegant"],
-  "thumbnailUrl": "/templates/wedding-luxe/thumbnail.svg",
-  "previewUrl": "/templates/wedding-luxe/preview.svg",
+  "description": "Original luxe noir artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "luxury",
+    "gold",
+    "black",
+    "art-deco",
+    "elegant"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/luxe-noir-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/luxe-noir-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(135deg, #0c0a09 0%, #1c1917 50%, #292524 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/luxe-noir.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "art-deco-frame",
-      "type": "svg",
-      "name": "Art Deco Frame",
-      "position": { "x": 50, "y": 100 },
-      "size": { "width": 650, "height": 1134 },
-      "opacity": 0.6,
-      "zIndex": 1,
-      "animation": {
-        "type": "shimmer",
-        "duration": 4000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
+      "size": {
+        "width": 470,
+        "height": 36
+      },
+      "zIndex": 2,
       "content": {
-        "svg": "<svg viewBox='0 0 650 1134' xmlns='http://www.w3.org/2000/svg'><rect x='20' y='20' width='610' height='1094' fill='none' stroke='#d4af37' stroke-width='2'/><rect x='30' y='30' width='590' height='1074' fill='none' stroke='#d4af37' stroke-width='1'/><path d='M325 80 L345 120 L385 120 L353 144 L365 184 L325 160 L285 184 L297 144 L265 120 L305 120 Z' fill='#d4af37'/><path d='M325 954 L345 994 L385 994 L353 1018 L365 1058 L325 1034 L285 1058 L297 1018 L265 994 L305 994 Z' fill='#d4af37'/><line x1='50' y1='500' x2='150' y2='500' stroke='#d4af37' stroke-width='1'/><line x1='600' y1='500' x2='700' y2='500' stroke='#d4af37' stroke-width='1'/><line x1='50' y1='634' x2='150' y2='634' stroke='#d4af37' stroke-width='1'/><line x1='600' y1='634' x2='700' y2='634' stroke='#d4af37' stroke-width='1'/></svg>"
+        "text": "THE WEDDING CELEBRATION",
+        "font": {
+          "family": "Manrope",
+          "size": 15,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#d4b673",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 520 },
-      "size": { "width": 600, "height": 140 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 500
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Victoria & Alexander",
-        "font": { "family": "Playfair Display", "size": 64, "weight": 700, "lineHeight": 1.2 },
-        "color": "#d4af37",
+        "text": "Victoria\n&\nAlexander",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#eddbb5",
         "align": "center"
       }
     },
@@ -57,69 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 750 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 800
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "December 31, 2026\nThe Grand Ballroom",
-        "font": { "family": "Montserrat", "size": 24, "weight": 300, "lineHeight": 1.8 },
-        "color": "#e5e5e5",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#eddbb5",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#d4b673"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 100, "y": 930 },
-      "size": { "width": 550, "height": 120 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 1100
+      "position": {
+        "x": 140,
+        "y": 750
       },
-      "content": {
-        "text": "Request the honor of your presence\nat the celebration of their union",
-        "font": { "family": "Lora", "size": 20, "weight": 400, "lineHeight": 1.8 },
-        "color": "#d4af37",
-        "align": "center"
-      }
-    },
-    {
-      "id": "diamond-accent",
-      "type": "svg",
-      "name": "Diamond Accent",
-      "position": { "x": 325, "y": 400 },
-      "size": { "width": 100, "height": 80 },
-      "opacity": 0.8,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
-      "animation": {
-        "type": "pulse",
-        "duration": 2500,
-        "iterationCount": "infinite"
-      },
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 100 80' xmlns='http://www.w3.org/2000/svg'><path d='M50 10 L70 30 L50 70 L30 30 Z' fill='#d4af37'/><path d='M50 10 L70 30 L50 35 Z' fill='#f4e5a1' opacity='0.6'/><path d='M50 10 L30 30 L50 35 Z' fill='#c9a961' opacity='0.4'/></svg>"
+        "text": "Request the pleasure of your company\nas we celebrate our marriage.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#eddbb5",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Victoria & Alexander", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "December 31, 2026\nThe Grand Ballroom", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Request the honor of your presence\nat the celebration of their union", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Victoria\n&\nAlexander",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "December 31, 2026\nThe Grand Ballroom",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Request the pleasure of your company\nas we celebrate our marriage.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "gold-black", "name": "Gold & Black", "colors": { "primary": "#d4af37", "secondary": "#0c0a09", "accent": "#f4e5a1", "text": "#e5e5e5", "background": "#1c1917" } },
-    { "id": "silver-black", "name": "Silver & Black", "colors": { "primary": "#c0c0c0", "secondary": "#000000", "accent": "#e8e8e8", "text": "#f5f5f5", "background": "#1a1a1a" } },
-    { "id": "rose-gold", "name": "Rose Gold & Charcoal", "colors": { "primary": "#b76e79", "secondary": "#2c2c2c", "accent": "#e8c4c9", "text": "#f0f0f0", "background": "#3a3a3a" } }
+    {
+      "id": "luxe-noir",
+      "name": "Luxe Noir",
+      "colors": {
+        "primary": "#d4b673",
+        "secondary": "#eddbb5",
+        "accent": "#d4b673",
+        "text": "#eddbb5"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

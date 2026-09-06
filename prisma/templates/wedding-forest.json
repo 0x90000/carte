@@ -3,82 +3,74 @@
   "name": "Enchanted Forest",
   "scene": "wedding",
   "style": "natural",
-  "description": "Mystical woodland theme with deep greens, forest creatures, and magical atmosphere",
-  "tags": ["forest", "woodland", "mystical", "nature", "green"],
-  "thumbnailUrl": "/templates/wedding-forest/thumbnail.svg",
-  "previewUrl": "/templates/wedding-forest/preview.svg",
+  "description": "Original enchanted forest artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "forest",
+    "woodland",
+    "mystical",
+    "nature",
+    "green"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/enchanted-forest-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/enchanted-forest-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(135deg, #1e3a2e 0%, #2d5016 30%, #3f6212 60%, #4d7c0f 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/enchanted-forest.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "tree-branches",
-      "type": "svg",
-      "name": "Tree Branches",
-      "position": { "x": 0, "y": 0 },
-      "size": { "width": 750, "height": 350 },
-      "opacity": 0.6,
-      "zIndex": 1,
-      "animation": {
-        "type": "swing",
-        "duration": 6000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 750 350' xmlns='http://www.w3.org/2000/svg'><path d='M0 0 L80 120 L60 160 L100 200' stroke='#365314' stroke-width='8' fill='none' opacity='0.7'/><path d='M750 0 L670 120 L690 160 L650 200' stroke='#365314' stroke-width='8' fill='none' opacity='0.7'/><ellipse cx='100' cy='200' rx='30' ry='25' fill='#4d7c0f' opacity='0.6'/><ellipse cx='650' cy='200' rx='30' ry='25' fill='#4d7c0f' opacity='0.6'/><ellipse cx='50' cy='150' rx='20' ry='18' fill='#65a30d' opacity='0.5'/><ellipse cx='700' cy='150' rx='20' ry='18' fill='#65a30d' opacity='0.5'/></svg>"
-      }
-    },
-    {
-      "id": "mushrooms",
-      "type": "svg",
-      "name": "Mushrooms",
-      "position": { "x": 50, "y": 320 },
-      "size": { "width": 200, "height": 100 },
-      "opacity": 0.7,
-      "zIndex": 2,
-      "animation": {
-        "type": "pulse",
-        "duration": 4000,
-        "iterationCount": "infinite"
+      "size": {
+        "width": 470,
+        "height": 36
       },
-      "content": {
-        "svg": "<svg viewBox='0 0 200 100' xmlns='http://www.w3.org/2000/svg'><ellipse cx='50' cy='60' rx='35' ry='30' fill='#dc2626'/><rect x='40' y='60' width='20' height='35' fill='#fef3c7' rx='3'/><circle cx='35' cy='50' r='8' fill='#fef3c7' opacity='0.8'/><circle cx='60' cy='55' r='6' fill='#fef3c7' opacity='0.8'/><ellipse cx='120' cy='70' rx='28' ry='25' fill='#ef4444'/><rect x='112' y='70' width='16' height='28' fill='#fef3c7' rx='2'/><circle cx='110' cy='63' r='6' fill='#fef3c7' opacity='0.8'/><ellipse cx='170' cy='75' rx='22' ry='20' fill='#dc2626'/><rect x='164' y='75' width='12' height='22' fill='#fef3c7' rx='2'/></svg>"
-      }
-    },
-    {
-      "id": "deer-silhouette",
-      "type": "svg",
-      "name": "Deer",
-      "position": { "x": 520, "y": 300 },
-      "size": { "width": 180, "height": 140 },
-      "opacity": 0.5,
       "zIndex": 2,
       "content": {
-        "svg": "<svg viewBox='0 0 180 140' xmlns='http://www.w3.org/2000/svg'><path d='M90 40 L85 20 L80 30 L75 15 L70 35 L90 40 Z' fill='#d97706' opacity='0.8'/><path d='M90 40 L95 20 L100 30 L105 15 L110 35 L90 40 Z' fill='#d97706' opacity='0.8'/><ellipse cx='90' cy='55' rx='20' ry='18' fill='#78350f'/><ellipse cx='90' cy='85' rx='25' ry='30' fill='#78350f'/><line x1='75' y1='110' x2='75' y2='135' stroke='#78350f' stroke-width='4'/><line x1='95' y1='110' x2='95' y2='135' stroke='#78350f' stroke-width='4'/></svg>"
+        "text": "Beneath the canopy",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 25,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#d5c7a4",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 130 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 500
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Aurora & Finn",
-        "font": { "family": "Cinzel", "size": 68, "weight": 600, "lineHeight": 1.2 },
-        "color": "#fef3c7",
+        "text": "Aurora\n&\nFinn",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#f1ebd9",
         "align": "center"
       }
     },
@@ -86,64 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 780 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 800
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "October 31, 2026\nEnchanted Forest Grove",
-        "font": { "family": "Lora", "size": 25, "weight": 400, "lineHeight": 1.7 },
-        "color": "#fde68a",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#f1ebd9",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#d5c7a4"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 90, "y": 970 },
-      "size": { "width": 570, "height": 140 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 2000,
-        "delay": 1100
+      "position": {
+        "x": 140,
+        "y": 750
       },
-      "content": {
-        "text": "In the heart of the ancient woods,\nwhere magic whispers through the trees,\nwe invite you to witness our union.",
-        "font": { "family": "Lora", "size": 19, "weight": 400, "lineHeight": 1.8 },
-        "color": "#fef3c7",
-        "align": "center"
-      }
-    },
-    {
-      "id": "bottom-foliage",
-      "type": "svg",
-      "name": "Bottom Foliage",
-      "position": { "x": 0, "y": 1100 },
-      "size": { "width": 750, "height": 234 },
-      "opacity": 0.6,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 750 234' xmlns='http://www.w3.org/2000/svg'><ellipse cx='100' cy='180' rx='80' ry='50' fill='#3f6212' opacity='0.7'/><ellipse cx='250' cy='190' rx='90' ry='55' fill='#4d7c0f' opacity='0.6'/><ellipse cx='400' cy='185' rx='85' ry='52' fill='#3f6212' opacity='0.7'/><ellipse cx='550' cy='195' rx='95' ry='58' fill='#4d7c0f' opacity='0.6'/><ellipse cx='680' cy='180' rx='70' ry='48' fill='#3f6212' opacity='0.7'/><path d='M0 150 Q100 120, 200 150 Q300 180, 400 150 Q500 120, 600 150 Q700 180, 750 150' stroke='#365314' stroke-width='3' fill='none' opacity='0.5'/></svg>"
+        "text": "Surrounded by the ones we love,\nwe invite you to witness our forever.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#f1ebd9",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Aurora & Finn", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "October 31, 2026\nEnchanted Forest Grove", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "In the heart of the ancient woods,\nwhere magic whispers through the trees,\nwe invite you to witness our union.", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Aurora\n&\nFinn",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "October 31, 2026\nEnchanted Forest Grove",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Surrounded by the ones we love,\nwe invite you to witness our forever.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "forest-green", "name": "Deep Forest", "colors": { "primary": "#4d7c0f", "secondary": "#365314", "accent": "#fef3c7", "text": "#fde68a", "background": "#2d5016" } },
-    { "id": "moss", "name": "Moss & Gold", "colors": { "primary": "#65a30d", "secondary": "#3f6212", "accent": "#fbbf24", "text": "#fef3c7", "background": "#365314" } },
-    { "id": "autumn", "name": "Autumn Woods", "colors": { "primary": "#ea580c", "secondary": "#78350f", "accent": "#fde68a", "text": "#fef3c7", "background": "#431407" } }
+    {
+      "id": "enchanted-forest",
+      "name": "Enchanted Forest",
+      "colors": {
+        "primary": "#d5c7a4",
+        "secondary": "#f1ebd9",
+        "accent": "#d5c7a4",
+        "text": "#f1ebd9"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }

@@ -3,53 +3,74 @@
   "name": "Secret Garden",
   "scene": "wedding",
   "style": "natural",
-  "description": "Lush botanical garden theme with watercolor leaves, vines, and natural green tones",
-  "tags": ["garden", "botanical", "nature", "green", "organic"],
-  "thumbnailUrl": "/templates/wedding-garden/thumbnail.svg",
-  "previewUrl": "/templates/wedding-garden/preview.svg",
+  "description": "Original secret garden artwork with editable wedding typography on a portrait 2:3 canvas.",
+  "tags": [
+    "garden",
+    "botanical",
+    "nature",
+    "green",
+    "organic"
+  ],
+  "thumbnailUrl": "/templates/wedding-art/secret-garden-thumbnail.webp",
+  "previewUrl": "/templates/wedding-art/secret-garden-preview.webp",
   "canvas": {
     "width": 750,
-    "height": 1334,
+    "height": 1125,
     "background": {
-      "type": "color",
-      "gradient": "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%)"
+      "type": "image",
+      "url": "/templates/wedding-art/secret-garden.webp",
+      "fit": "contain"
     }
   },
   "layers": [
     {
-      "id": "top-leaves",
-      "type": "svg",
-      "name": "Top Foliage",
-      "position": { "x": 0, "y": 0 },
-      "size": { "width": 750, "height": 300 },
-      "opacity": 0.5,
-      "zIndex": 1,
-      "animation": {
-        "type": "swing",
-        "duration": 5000,
-        "iterationCount": "infinite"
+      "id": "invitation-heading",
+      "type": "text",
+      "name": "Invitation heading",
+      "position": {
+        "x": 140,
+        "y": 230
       },
+      "size": {
+        "width": 470,
+        "height": 36
+      },
+      "zIndex": 2,
       "content": {
-        "svg": "<svg viewBox='0 0 750 300' xmlns='http://www.w3.org/2000/svg'><ellipse cx='100' cy='50' rx='80' ry='60' fill='#86efac' opacity='0.6'/><ellipse cx='200' cy='80' rx='70' ry='50' fill='#4ade80' opacity='0.5'/><ellipse cx='300' cy='60' rx='90' ry='65' fill='#86efac' opacity='0.6'/><ellipse cx='400' cy='90' rx='75' ry='55' fill='#22c55e' opacity='0.5'/><ellipse cx='500' cy='70' rx='85' ry='60' fill='#86efac' opacity='0.6'/><ellipse cx='600' cy='85' rx='70' ry='50' fill='#4ade80' opacity='0.5'/><ellipse cx='680' cy='65' rx='80' ry='55' fill='#86efac' opacity='0.6'/><path d='M150 120 Q170 100, 190 120 T230 120' stroke='#15803d' stroke-width='3' fill='none' opacity='0.4'/><path d='M450 130 Q470 110, 490 130 T530 130' stroke='#15803d' stroke-width='3' fill='none' opacity='0.4'/></svg>"
+        "text": "Love, in full bloom",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 25,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#627252",
+        "align": "center"
       }
     },
     {
       "id": "couple-names",
       "type": "text",
       "name": "Couple Names",
-      "position": { "x": 75, "y": 550 },
-      "size": { "width": 600, "height": 130 },
-      "variable": "couple_names",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 400
+      "position": {
+        "x": 140,
+        "y": 292
       },
+      "size": {
+        "width": 470,
+        "height": 290
+      },
+      "zIndex": 2,
+      "variable": "couple_names",
       "content": {
-        "text": "Olivia & Ethan",
-        "font": { "family": "Cormorant", "size": 70, "weight": 500, "lineHeight": 1.2 },
-        "color": "#14532d",
+        "text": "Olivia\n&\nEthan",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 74,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#374b38",
         "align": "center"
       }
     },
@@ -57,64 +78,116 @@
       "id": "date-venue",
       "type": "text",
       "name": "Date and Location",
-      "position": { "x": 100, "y": 770 },
-      "size": { "width": 550, "height": 100 },
-      "variable": "event_details",
-      "zIndex": 3,
-      "animation": {
-        "type": "slideUp",
-        "duration": 1500,
-        "delay": 700
+      "position": {
+        "x": 140,
+        "y": 610
       },
+      "size": {
+        "width": 470,
+        "height": 100
+      },
+      "zIndex": 2,
+      "variable": "event_details",
       "content": {
         "text": "May 20, 2026\nBotanical Gardens",
-        "font": { "family": "Lora", "size": 26, "weight": 400, "lineHeight": 1.7 },
-        "color": "#166534",
+        "font": {
+          "family": "Manrope",
+          "size": 19,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#374b38",
         "align": "center"
+      }
+    },
+    {
+      "id": "fine-rule",
+      "type": "shape",
+      "name": "Fine divider",
+      "position": {
+        "x": 345,
+        "y": 723
+      },
+      "size": {
+        "width": 60,
+        "height": 1
+      },
+      "zIndex": 1,
+      "content": {
+        "shape": "rectangle",
+        "fill": "#627252"
       }
     },
     {
       "id": "invitation-text",
       "type": "text",
       "name": "Invitation Message",
-      "position": { "x": 90, "y": 960 },
-      "size": { "width": 570, "height": 140 },
-      "variable": "message",
-      "zIndex": 3,
-      "animation": {
-        "type": "fadeIn",
-        "duration": 1800,
-        "delay": 1000
+      "position": {
+        "x": 140,
+        "y": 750
       },
-      "content": {
-        "text": "Like flowers in a garden,\nlove grows with care and time.\nJoin us as we plant the seeds\nof our future together.",
-        "font": { "family": "Lora", "size": 19, "weight": 400, "lineHeight": 1.8 },
-        "color": "#15803d",
-        "align": "center"
-      }
-    },
-    {
-      "id": "bottom-vines",
-      "type": "svg",
-      "name": "Bottom Vines",
-      "position": { "x": 0, "y": 1100 },
-      "size": { "width": 750, "height": 234 },
-      "opacity": 0.5,
+      "size": {
+        "width": 470,
+        "height": 100
+      },
       "zIndex": 2,
+      "variable": "message",
       "content": {
-        "svg": "<svg viewBox='0 0 750 234' xmlns='http://www.w3.org/2000/svg'><path d='M0 100 Q100 80, 150 100 T300 100 Q400 80, 450 100 T600 100 Q700 80, 750 100' stroke='#22c55e' stroke-width='4' fill='none' opacity='0.6'/><ellipse cx='150' cy='100' rx='25' ry='20' fill='#4ade80' opacity='0.7'/><ellipse cx='300' cy='100' rx='30' ry='22' fill='#86efac' opacity='0.6'/><ellipse cx='450' cy='100' rx='28' ry='21' fill='#4ade80' opacity='0.7'/><ellipse cx='600' cy='100' rx='26' ry='20' fill='#86efac' opacity='0.6'/><ellipse cx='80' cy='150' rx='20' ry='18' fill='#22c55e' opacity='0.5'/><ellipse cx='220' cy='160' rx='22' ry='19' fill='#4ade80' opacity='0.6'/><ellipse cx='380' cy='155' rx='21' ry='18' fill='#22c55e' opacity='0.5'/><ellipse cx='520' cy='165' rx='23' ry='20' fill='#4ade80' opacity='0.6'/><ellipse cx='670' cy='150' rx='20' ry='18' fill='#22c55e' opacity='0.5'/></svg>"
+        "text": "Together with our families,\nwe invite you to our wedding celebration.",
+        "font": {
+          "family": "Cormorant Garamond",
+          "size": 23,
+          "weight": 400,
+          "lineHeight": 1.2
+        },
+        "color": "#374b38",
+        "align": "center"
       }
     }
   ],
   "variables": [
-    { "key": "couple_names", "type": "text", "label": "Couple Names", "defaultValue": "Olivia & Ethan", "validation": { "required": true, "maxLength": 50 } },
-    { "key": "event_details", "type": "text", "label": "Date and Venue", "defaultValue": "May 20, 2026\nBotanical Gardens", "validation": { "required": true } },
-    { "key": "message", "type": "text", "label": "Invitation Message", "defaultValue": "Like flowers in a garden,\nlove grows with care and time.\nJoin us as we plant the seeds\nof our future together.", "aiGenerable": true }
+    {
+      "key": "couple_names",
+      "type": "text",
+      "label": "Couple Names",
+      "defaultValue": "Olivia\n&\nEthan",
+      "validation": {
+        "required": true,
+        "maxLength": 50
+      }
+    },
+    {
+      "key": "event_details",
+      "type": "text",
+      "label": "Date and Venue",
+      "defaultValue": "May 20, 2026\nBotanical Gardens",
+      "validation": {
+        "required": true
+      }
+    },
+    {
+      "key": "message",
+      "type": "text",
+      "label": "Invitation Message",
+      "defaultValue": "Together with our families,\nwe invite you to our wedding celebration.",
+      "aiGenerable": true
+    }
   ],
   "colorSchemes": [
-    { "id": "sage", "name": "Sage Garden", "colors": { "primary": "#22c55e", "secondary": "#14532d", "accent": "#86efac", "text": "#15803d", "background": "#f0fdf4" } },
-    { "id": "eucalyptus", "name": "Eucalyptus", "colors": { "primary": "#10b981", "secondary": "#064e3b", "accent": "#6ee7b7", "text": "#065f46", "background": "#ecfdf5" } },
-    { "id": "olive", "name": "Olive Grove", "colors": { "primary": "#84cc16", "secondary": "#365314", "accent": "#bef264", "text": "#3f6212", "background": "#f7fee7" } }
+    {
+      "id": "secret-garden",
+      "name": "Secret Garden",
+      "colors": {
+        "primary": "#627252",
+        "secondary": "#374b38",
+        "accent": "#627252",
+        "text": "#374b38"
+      }
+    }
   ],
-  "settings": { "allowMusic": true, "allowAnimation": true, "rsvpEnabled": true }
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true
+  }
 }
