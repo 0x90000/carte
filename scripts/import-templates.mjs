@@ -8,6 +8,11 @@ const templatesDirectory = join(root, "..", "prisma", "templates");
 const templateFiles = (await readdir(templatesDirectory))
   .filter((file) => file.endsWith(".json") && file !== "template.schema.json")
   .sort();
+const requestedFiles = process.argv.slice(2);
+for (const file of requestedFiles) {
+  if (!templateFiles.includes(file)) throw new Error(`Unknown template file: ${file}`);
+}
+const selectedFiles = requestedFiles.length ? templateFiles.filter((file) => requestedFiles.includes(file)) : templateFiles;
 const prisma = new PrismaClient();
 
 function assertTemplate(template) {
@@ -23,7 +28,7 @@ function assertTemplate(template) {
 }
 
 try {
-  for (const file of templateFiles) {
+  for (const file of selectedFiles) {
     const template = JSON.parse(await readFile(join(templatesDirectory, file), "utf8"));
     assertTemplate(template);
 

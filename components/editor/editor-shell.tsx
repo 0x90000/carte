@@ -64,7 +64,7 @@ const MAX_GALLERY_PHOTOS = 9;
 const MAX_GALLERY_IMAGE_BYTES = 1 * 1024 * 1024;
 const MIN_FONT_SIZE = 8;
 const MAX_FONT_SIZE = 160;
-const FONT_FAMILY_OPTIONS = ["Inter", "Arial", "Georgia", "Times New Roman", "Trebuchet MS", "Courier New"];
+const FONT_FAMILY_OPTIONS = ["Cormorant Garamond", "Manrope", "Inter", "Arial", "Georgia", "Times New Roman", "Trebuchet MS", "Courier New"];
 
 function getTextFont(layer: EditorLayer) {
   return layer.content.font && typeof layer.content.font === "object"
@@ -100,7 +100,7 @@ function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoL
 
   return (
     <div className="w-full max-w-[300px] overflow-hidden rounded-lg border border-border bg-foreground p-2 shadow-lg">
-      <div className="relative aspect-[750/1334] w-full overflow-hidden rounded-md" style={backgroundStyle}>
+      <div className="relative w-full overflow-hidden rounded-md" style={{ ...backgroundStyle, aspectRatio: `${canvas.width} / ${canvas.height}`, containerType: "inline-size" }}>
         {background.type === "video" && background.url ? (
           <video
             className="absolute inset-0 h-full w-full object-cover"
@@ -149,7 +149,7 @@ function PreviewCanvas({ content, videoLabel }: { content: EditorContent; videoL
                     ...style,
                     color: String(layer.content.color ?? "#111827"),
                     fontFamily: String(font.family ?? "Inter"),
-                    fontSize: `clamp(7px, ${(Number(font.size ?? 24) / canvas.width) * 100}cqw)`,
+                    fontSize: `calc(${(Number(font.size ?? 24) / canvas.width) * 100}cqw)`,
                     fontWeight: Number(font.weight ?? 400),
                     lineHeight: Number(font.lineHeight ?? 1.2),
                     textAlign: String(layer.content.align ?? "left") as CSSProperties["textAlign"],

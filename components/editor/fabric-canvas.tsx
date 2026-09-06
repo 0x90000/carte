@@ -26,6 +26,8 @@ function setLayerId(object: FabricObject, id: string) {
 
 function setObjectState(object: FabricObject, layer: EditorLayer) {
   object.set({
+    originX: "left",
+    originY: "top",
     left: layer.position.x,
     top: layer.position.y,
     angle: layer.rotation ?? 0,
@@ -134,7 +136,7 @@ async function addLayer(canvas: Canvas, layer: EditorLayer) {
     }
   }
 
-  if (object) {
+  if (object && !canvas.disposed && !canvas.destroyed) {
     setObjectState(object, layer);
     canvas.add(object);
   }
@@ -178,8 +180,9 @@ function snapshotCanvas(canvas: Canvas, source: EditorContent): EditorContent {
   };
 }
 
-export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange, onSelect, labels }: FabricCanvasProps) {
+export function FabricCanvas({ content, selectedLayerId, onChange, onSelect, labels }: FabricCanvasProps) {
   const elementRef = useRef<HTMLCanvasElement>(null);
+  const surfaceRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<Canvas | null>(null);
   const contentRef = useRef(content);
   const changeRef = useRef(onChange);
@@ -197,7 +200,7 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
       : { background: "#ffffff" };
 
   useEffect(() => {
-    if (!elementRef.current) {
+    if (!elementRef.current || !surfaceRef.current) {
       return;
     }
 
@@ -210,6 +213,20 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
     });
     canvasRef.current = canvas;
     let disposed = false;
+    loadingRef.current = true;
+
+    // Keep template coordinates intact while fitting Fabric's generated wrapper.
+    const resize = () => {
+      if (disposed || !surfaceRef.current) return;
+      const width = surfaceRef.current.clientWidth;
+      if (width > 0) {
+        canvas.setDimensions({ width: `${width}px`, height: `${width * contentRef.current.canvas.height / contentRef.current.canvas.width}px` }, { cssOnly: true });
+        canvas.calcOffset();
+      }
+    };
+    const observer = new ResizeObserver(resize);
+    observer.observe(surfaceRef.current);
+    resize();
 
     const emitChange = () => {
       if (!loadingRef.current && !disposed) {
@@ -224,7 +241,18 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
     canvas.on("selection:cleared", () => selectRef.current(null));
 
     const load = async () => {
-      for (const layer of contentRef.current.layers) {
+      const layers = [...contentRef.current.layers].sort((a, b) => (a.zIndex ?? 0) - (b.zIndex ?? 0));
+      // Font metrics must be ready before Fabric measures and caches text widths.
+      await Promise.all(layers.filter((layer) => layer.type === "text").map(async (layer) => {
+        const font = layer.content.font as Record<string, unknown> | undefined;
+        try {
+          await document.fonts.load(`${font?.weight ?? 400} ${font?.size ?? 24}px ${JSON.stringify(font?.family ?? "Inter")}`);
+        } catch {
+          // An unavailable custom font can still render with the browser fallback.
+        }
+      }));
+      for (const layer of layers) {
+        if (disposed) return;
         await addLayer(canvas, layer);
       }
       if (!disposed) {
@@ -236,6 +264,7 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
 
     return () => {
       disposed = true;
+      observer.disconnect();
       canvas.dispose();
       canvasRef.current = null;
     };
@@ -259,28 +288,6 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !activeScheme) {
-      return;
-    }
-    const textColor = activeScheme.colors.text;
-    const accent = activeScheme.colors.primary;
-    for (const object of canvas.getObjects()) {
-      const id = layerId(object);
-      const layer = id ? contentRef.current.layers.find((candidate) => candidate.id === id) : undefined;
-      if (!layer) {
-        continue;
-      }
-      if (layer.type === "text") {
-        object.set({ fill: textColor });
-      } else if (layer.type === "shape" && !String(layer.content.fill ?? "").startsWith("rgba")) {
-        object.set({ fill: accent });
-      }
-    }
-    canvas.renderAll();
-  }, [activeScheme]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
     if (!canvas) {
       return;
     }
@@ -298,7 +305,7 @@ export function FabricCanvas({ content, activeScheme, selectedLayerId, onChange,
 
   return (
     <div className="relative mx-auto w-full max-w-[430px] overflow-hidden rounded-lg border border-border bg-secondary shadow-xl" style={{ aspectRatio: `${content.canvas.width} / ${content.canvas.height}` }}>
-      <div className="absolute inset-0 overflow-hidden" style={backgroundStyle}>
+      <div ref={surfaceRef} className="absolute inset-0 overflow-hidden" style={backgroundStyle}>
         {background.type === "video" && background.url ? (
           <video className="absolute inset-0 h-full w-full object-cover" src={background.url} poster={background.poster} autoPlay={false} loop={background.loop} muted={background.muted !== false} playsInline aria-label={labels?.videoBackground ?? "Invitation video background"} />
         ) : null}
