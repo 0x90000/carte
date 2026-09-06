@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Check, Heart, Palette, Sparkles, Star } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { buttonVariants } from "@/components/ui/button";
 import { TemplatePreview } from "@/components/templates/template-preview";
 import { getTemplateStructure, templateBackgroundType } from "@/lib/templates";
 import { localePath } from "@/lib/i18n";
@@ -126,13 +125,13 @@ export default async function TemplateDetailPage({ params }: TemplateDetailProps
               <div className="text-center">
                 <div className="text-2xl font-semibold">{structure.colorSchemes?.length ?? 0}</div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
-                  {t("detail.colors")}
+                  {t("detail.colorways")}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-semibold">{backgroundLabel}</div>
+                <div className="text-sm font-semibold leading-snug break-words">{backgroundLabel}</div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
-                  {t("detail.background")}
+                  {t("detail.backgroundLabel")}
                 </div>
               </div>
             </div>

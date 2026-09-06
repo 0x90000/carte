@@ -10,6 +10,7 @@ const report = path.resolve("test-results/wedding-deployment");
 await mkdir(report, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const drafts = [];
+const previousDrafts = JSON.parse(await readFile(path.join(report, "guest-draft-ids.json"), "utf8").catch(() => "[]"));
 const errors = [];
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1100 } });
@@ -28,7 +29,8 @@ try {
       assert.ok((await sharp(await assetResponse.body()).metadata()).width > 0);
     }
     await page.goto(`${base}/en/templates/${local.id}`);
-    await page.locator(`a[href*="/editor/new?template=${local.id}"]`).click();
+    assert.ok(!(await page.locator("body").innerText()).includes("templates.detail."), "Missing template translations");
+    await page.getByRole("button", { name: "Use this template", exact: true }).click();
     await page.waitForURL(/\/editor\/(?!new)[^/?]+$/, { timeout: 45000 });
     const id = new URL(page.url()).pathname.split("/").at(-1);
     drafts.push(id);
@@ -46,8 +48,12 @@ try {
     const bounds = await lower.boundingBox();
     const frame = await surface.boundingBox();
     assert.ok(Math.abs(bounds.width - frame.width) <= 1 && Math.abs(bounds.height - frame.height) <= 1, `${local.id}: Fabric is cropped`);
-    await surface.screenshot({ path: path.join(report, `${local.id}-canvas.png`) });
-    console.log(`${local.name}: API, 3 images, template entry and nonblank editor OK`);
+    const screenshot = await surface.screenshot({ path: path.join(report, `${local.id}-canvas.png`) });
+    const actual = await sharp(screenshot).resize(375, 563).removeAlpha().blur(1).raw().toBuffer();
+    const expected = await sharp(path.join("public", local.previewUrl)).resize(375, 563).removeAlpha().blur(1).raw().toBuffer();
+    const difference = actual.reduce((sum, value, index) => sum + Math.abs(value - expected[index]), 0) / actual.length;
+    assert.ok(difference < 12, `${local.id}: editor differs from preview (${difference.toFixed(2)}/255)`);
+    console.log(`${local.name}: API, 3 images, editor OK; preview difference ${difference.toFixed(2)}/255`);
   }
 
   await page.getByRole("button", { name: "Select Couple Names", exact: true }).click();
@@ -69,7 +75,7 @@ try {
   assert.deepEqual(errors, []);
   console.log("Text editing, autosave/reload, desktop/mobile: OK");
 } finally {
-  await writeFile(path.join(report, "guest-draft-ids.json"), JSON.stringify(drafts, null, 2));
+  await writeFile(path.join(report, "guest-draft-ids.json"), JSON.stringify([...new Set([...previousDrafts, ...drafts])], null, 2));
   await browser.close();
   console.log(`Temporary guest drafts: ${drafts.join(", ")}`);
 }

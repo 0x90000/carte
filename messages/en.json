@@ -51,6 +51,8 @@
     "styleNames": { "modern": "Modern", "playful": "Playful", "formal": "Formal" },
     "backgroundNames": { "image": "Image background", "html": "Animated background", "video": "Video background", "color": "Color background", "gradient": "Gradient background" },
     "detail": {
+      "metadataTitle": "{name} | Carte",
+      "backgroundLabel": "Background",
       "metadataNotFoundTitle": "Template not found | Carte",
       "metadataSuffix": "template",
       "metadataFallbackDescription": "A considered starting point for your next invitation.",

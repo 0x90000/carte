@@ -48,6 +48,8 @@
     "styleNames": { "modern": "现代", "playful": "活泼", "formal": "正式" },
     "backgroundNames": { "image": "图片背景", "html": "动态背景", "video": "视频背景", "color": "纯色背景", "gradient": "渐变背景" },
     "detail": {
+      "metadataTitle": "{name} | Carte",
+      "backgroundLabel": "背景",
       "metadataNotFoundTitle": "找不到模板 | Carte",
       "metadataSuffix": "模板",
       "metadataFallbackDescription": "从恰到好处的起点开始制作下一份邀请函。",

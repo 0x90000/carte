@@ -629,13 +629,13 @@ export function EditorShell({
             />
           </div>
           <SaveIndicator state={saveState} labels={{ idle: t("saveState.ready"), saving: t("saveState.saving"), saved: t("saveState.saved"), unsaved: t("saveState.unsaved"), error: t("saveState.error") }} />
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex w-full max-w-full items-center justify-end gap-2 sm:w-auto">
             <div className="flex items-center gap-1 rounded-full bg-card border border-border p-1">
               <Button variant="ghost" size="icon" onClick={undo} disabled={past.length === 0} aria-label={t("undo")} title={t("undo")} className="h-8 w-8 rounded-full hover:bg-secondary"><Undo2 className="h-4 w-4" aria-hidden="true" /></Button>
               <Button variant="ghost" size="icon" onClick={redo} disabled={future.length === 0} aria-label={t("redo")} title={t("redo")} className="h-8 w-8 rounded-full hover:bg-secondary"><Redo2 className="h-4 w-4" aria-hidden="true" /></Button>
             </div>
-            <Button variant="outline" size="sm" onClick={() => void saveNow()} disabled={saveState === "saving"} className="rounded-full"><Save className="h-4 w-4" aria-hidden="true" /> {t("save")}</Button>
-            <Button variant={showPreview ? "secondary" : "outline"} size="sm" onClick={() => setShowPreview((value) => !value)} className="rounded-full"><Eye className="h-4 w-4" aria-hidden="true" /> {t("preview")}</Button>
+            <Button variant="outline" size="sm" onClick={() => void saveNow()} disabled={saveState === "saving"} aria-label={t("save")} title={t("save")} className="h-9 w-9 rounded-full p-0 sm:w-auto sm:px-3"><Save className="h-4 w-4" aria-hidden="true" /><span className="hidden sm:inline">{t("save")}</span></Button>
+            <Button variant={showPreview ? "secondary" : "outline"} size="sm" onClick={() => setShowPreview((value) => !value)} aria-label={t("preview")} aria-pressed={showPreview} title={t("preview")} className="h-9 w-9 rounded-full p-0 sm:w-auto sm:px-3"><Eye className="h-4 w-4" aria-hidden="true" /><span className="hidden sm:inline">{t("preview")}</span></Button>
             <Button size="sm" onClick={() => void publishInvitation()} disabled={isPublishing} className="rounded-full shadow-lg shadow-primary/20"><Send className="h-4 w-4" aria-hidden="true" /> {isPublishing ? t("preparing") : t("publish")}</Button>
           </div>
         </div>
