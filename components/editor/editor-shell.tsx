@@ -643,7 +643,7 @@ export function EditorShell({
 
       {isGuest ? <div className="border-b border-amber-200/60 bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-3 text-center text-sm text-amber-900 backdrop-blur">{t("guestBanner")}</div> : null}
 
-      <div className="mx-auto grid max-w-[1800px] gap-6 px-6 py-6 lg:px-8 xl:grid-cols-[280px_minmax(0,1fr)_340px]">
+      <div className="mx-auto grid max-w-[1800px] items-start gap-6 px-6 py-6 lg:px-8 xl:grid-cols-[280px_minmax(0,1fr)_340px]">
         <aside className="rounded-2xl border border-border bg-card/50 backdrop-blur p-5 shadow-sm" aria-label={t("layers")}>
           <div className="mb-5 flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-accent-foreground/10 border border-primary/20">
@@ -668,7 +668,7 @@ export function EditorShell({
           </div>
         </aside>
 
-        <section className="flex min-h-[680px] items-center justify-center rounded-2xl border border-border bg-gradient-to-br from-card/50 to-secondary/30 backdrop-blur p-6 shadow-lg sm:p-10" aria-label={t("canvas")}>
+        <section className="order-first flex min-w-0 items-center justify-center rounded-2xl border border-border bg-gradient-to-br from-card/50 to-secondary/30 backdrop-blur p-6 shadow-lg sm:min-h-[680px] sm:p-10 xl:order-none" aria-label={t("canvas")}>
           <FabricCanvas key={canvasRevision} content={content} activeScheme={activeScheme} selectedLayerId={selectedLayerId} onChange={commitContent} onSelect={setSelectedLayerId} labels={{ videoBackground: t("videoBackground"), editorCanvas: t("editorCanvas") }} />
         </section>
 

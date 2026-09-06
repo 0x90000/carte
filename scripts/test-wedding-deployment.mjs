@@ -47,6 +47,7 @@ try {
     const surface = lower.locator("../..");
     const bounds = await lower.boundingBox();
     const frame = await surface.boundingBox();
+    assert.ok(frame.y >= 0 && frame.y + frame.height <= 1100, `${local.id}: desktop canvas is below the first viewport`);
     assert.ok(Math.abs(bounds.width - frame.width) <= 1 && Math.abs(bounds.height - frame.height) <= 1, `${local.id}: Fabric is cropped`);
     const screenshot = await surface.screenshot({ path: path.join(report, `${local.id}-canvas.png`) });
     const actual = await sharp(screenshot).resize(375, 563).removeAlpha().blur(1).raw().toBuffer();
@@ -65,6 +66,7 @@ try {
   assert.equal(await page.locator("#layer-text").inputValue(), "Amelia\n&\nJames");
   await page.screenshot({ path: path.join(report, "editor-desktop.png"), fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.evaluate(() => window.scrollTo(0, 0));
   const lower = page.locator("canvas.lower-canvas");
   await lower.scrollIntoViewIfNeeded();
   await page.screenshot({ path: path.join(report, "editor-mobile.png"), fullPage: true });
@@ -72,6 +74,7 @@ try {
   assert.equal(overflow, false, "Mobile page overflows horizontally");
   const mobileCanvas = await lower.boundingBox();
   assert.ok(mobileCanvas.width <= 390 && mobileCanvas.width > 150);
+  assert.ok(mobileCanvas.y > 0 && mobileCanvas.y + mobileCanvas.height < 844);
   assert.deepEqual(errors, []);
   console.log("Text editing, autosave/reload, desktop/mobile: OK");
 } finally {
