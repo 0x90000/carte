@@ -7,3 +7,6 @@ node_modules.*
 *.tgz
 README.md
 docs
+tmp
+test-results
+.venv-wedding

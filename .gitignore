@@ -43,3 +43,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local image generation work files
+/tmp/
+/.venv-wedding/
+__pycache__/
+*.pyc
