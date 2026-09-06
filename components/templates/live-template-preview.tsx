@@ -21,10 +21,10 @@ function LegacyTemplatePreview({ content, alt }: { content: EditorContent; alt: 
   </div>;
 }
 
-export function LiveTemplatePreview({ structure, alt }: { structure: unknown; alt: string }) {
+export function LiveTemplatePreview({ structure, alt, locale = "en" }: { structure: unknown; alt: string; locale?: string }) {
   const content = normalizeEditorContent(structure);
   if (content.pageModel === "h5-long-scroll" && content.sections?.length) {
-    return <div className="h-full w-full overflow-auto"><SceneGraphInvitation content={content} previewOnly /></div>;
+    return <div className="h-full w-full overflow-auto"><SceneGraphInvitation content={content} locale={locale} previewOnly /></div>;
   }
   return <LegacyTemplatePreview content={content} alt={alt} />;
 }

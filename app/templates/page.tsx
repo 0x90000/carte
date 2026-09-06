@@ -112,6 +112,7 @@ export default async function TemplatesPage({ searchParams }: TemplatesPageProps
               key={template.id}
               template={template}
               href={localePath(locale, `/templates/${encodeURIComponent(template.id)}`)}
+              locale={locale}
               labels={{
                 sceneNames: sceneLabels,
                 styleNames: styleLabels,

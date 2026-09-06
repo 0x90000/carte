@@ -75,6 +75,7 @@ export default async function TemplateDetailPage({ params }: TemplateDetailProps
               <div className="rounded-3xl border-2 border-border bg-white p-6 shadow-2xl">
                 <TemplatePreview
                   template={template}
+                  locale={locale}
                   labels={{
                     backgroundLabel,
                     previewAlt: t("detail.previewAlt", { name: template.name }),
