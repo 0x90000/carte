@@ -4,6 +4,8 @@ import { invalidateInvitationCache } from "@/lib/public-invitation";
 import {
   LIFETIME_DAILY_PUBLISH_LIMIT,
   PublishInvitationError,
+  isTestPublishBypassEnabled,
+  publishInvitationWithoutPaymentForTest,
   publishInvitationWithLifetimeAccess,
 } from "@/lib/publishing";
 
@@ -21,7 +23,9 @@ export async function POST(_request: Request, context: RouteContext) {
 
   const { id } = await context.params;
   try {
-    const published = await publishInvitationWithLifetimeAccess(session.user.id, id);
+    const published = isTestPublishBypassEnabled()
+      ? await publishInvitationWithoutPaymentForTest(session.user.id, id)
+      : await publishInvitationWithLifetimeAccess(session.user.id, id);
     await invalidateInvitationCache(published.slug);
     return NextResponse.json({ success: true, data: { published: true, ...published } });
   } catch (error) {

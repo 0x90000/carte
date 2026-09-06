@@ -3,11 +3,11 @@ import Link from "next/link";
 import Image from "next/image";
 import QRCode from "qrcode";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, Check, Copy, ExternalLink, Heart, Link2, Mail, MessageSquare, QrCode, Share2 } from "lucide-react";
+import { ArrowLeft, Check, ExternalLink, Heart, Link2, MessageSquare, QrCode, Share2 } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { auth } from "@/auth";
 import { ShareLinkActions } from "@/components/share/share-link-actions";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { localePath } from "@/lib/i18n";
 import { prisma } from "@/lib/prisma";
 
@@ -125,7 +125,7 @@ export default async function SharePage({ params }: SharePageProps) {
               </div>
             </div>
             <div className="text-3xl font-semibold">
-              {invitation._count.rsvps > 0 ? Math.round((invitation._count.rsvps / invitation.viewCount) * 100) : 0}%
+              {invitation.viewCount > 0 ? Math.round((invitation._count.rsvps / invitation.viewCount) * 100) : 0}%
             </div>
             <div className="text-sm text-muted-foreground mt-1">{t("responseRate")}</div>
           </div>

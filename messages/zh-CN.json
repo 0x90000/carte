@@ -393,13 +393,23 @@
     "backDashboard": "控制台",
     "openInvitation": "打开邀请函",
     "eyebrow": "分享邀请函",
+    "published": "已发布",
     "description": "邀请函已上线，可以发送给宾客了。",
+    "viewCount": "浏览次数",
+    "guestCount": "宾客回复",
+    "responseRate": "回复率",
     "publicLink": "公开链接",
+    "sharePrompt": "将这条链接分享给你的宾客。",
     "qrCode": "二维码",
+    "qrCodeDescription": "扫码或保存此二维码，打开你的邀请函。",
     "qrAlt": "{title} 的二维码",
     "scanPrompt": "扫码打开邀请函。",
     "copyLink": "复制链接",
     "copied": "已复制",
-    "share": "分享"
+    "share": "分享",
+    "rsvpsLink": "查看 RSVP 回复",
+    "rsvpsDescription": "查看宾客回复并管理出席名单。",
+    "editLink": "编辑邀请函",
+    "editDescription": "返回编辑器，更新活动详情和设计。"
   }
 }

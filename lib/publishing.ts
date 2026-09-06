@@ -3,6 +3,10 @@ import { prisma } from "@/lib/prisma";
 
 export const LIFETIME_DAILY_PUBLISH_LIMIT = 10;
 
+export function isTestPublishBypassEnabled() {
+  return process.env.TEST_PUBLISH_BYPASS === "1";
+}
+
 export type PublishInvitationErrorCode =
   | "INVITATION_NOT_FOUND"
   | "INVITATION_ALREADY_PUBLISHED"
@@ -117,4 +121,37 @@ export async function publishInvitationWithLifetimeAccess(
   }
 
   throw new Error("Lifetime publishing transaction exhausted retries.");
+}
+
+/** Publish a test invitation without creating payment or lifetime-access records. */
+export async function publishInvitationWithoutPaymentForTest(
+  userId: string,
+  invitationId: string,
+  now = new Date(),
+) {
+  return prisma.$transaction(async (transaction) => {
+    const invitation = await transaction.invitation.findFirst({
+      where: { id: invitationId, userId },
+      select: { id: true, slug: true, status: true, publishedAt: true },
+    });
+    if (!invitation) {
+      throw new PublishInvitationError("INVITATION_NOT_FOUND");
+    }
+    if (invitation.status === "published") {
+      throw new PublishInvitationError("INVITATION_ALREADY_PUBLISHED");
+    }
+
+    const updated = await transaction.invitation.updateMany({
+      where: { id: invitation.id, userId, status: { not: "published" } },
+      data: { status: "published", publishedAt: invitation.publishedAt ?? now },
+    });
+    if (updated.count === 0) {
+      throw new PublishInvitationError("INVITATION_ALREADY_PUBLISHED");
+    }
+
+    return {
+      invitationId: invitation.id,
+      slug: invitation.slug,
+    };
+  });
 }

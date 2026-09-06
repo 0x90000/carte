@@ -396,13 +396,23 @@
     "backDashboard": "Dashboard",
     "openInvitation": "Open invitation",
     "eyebrow": "Share invitation",
+    "published": "Published",
     "description": "Your invitation is live and ready to send.",
+    "viewCount": "Views",
+    "guestCount": "Guest responses",
+    "responseRate": "Response rate",
     "publicLink": "Public link",
+    "sharePrompt": "Share this link with your guests.",
     "qrCode": "QR code",
+    "qrCodeDescription": "Scan or save this code to open your invitation.",
     "qrAlt": "QR code for {title}",
     "scanPrompt": "Scan to open the invitation.",
     "copyLink": "Copy link",
     "copied": "Copied",
-    "share": "Share"
+    "share": "Share",
+    "rsvpsLink": "View RSVP responses",
+    "rsvpsDescription": "See guest responses and manage your attendee list.",
+    "editLink": "Edit invitation",
+    "editDescription": "Return to the editor to update the details and design."
   }
 }
