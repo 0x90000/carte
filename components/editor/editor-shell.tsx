@@ -40,8 +40,10 @@ import {
   type EditorContent,
   type EditorGalleryItem,
   type EditorLayer,
+  isSceneGraphContent,
 } from "@/components/editor/types";
 import { localePath } from "@/lib/i18n";
+import { SceneGraphEditor } from "@/components/editor/scene-graph-editor";
 
 type SaveState = "idle" | "unsaved" | "saving" | "saved" | "error";
 
@@ -643,6 +645,32 @@ export function EditorShell({
 
       {isGuest ? <div className="border-b border-amber-200/60 bg-gradient-to-r from-amber-50 to-orange-50 px-6 py-3 text-center text-sm text-amber-900 backdrop-blur">{t("guestBanner")}</div> : null}
 
+      {isSceneGraphContent(content) ? (
+        <div className="mx-auto max-w-[1800px] px-4 py-4 lg:px-8">
+          <SceneGraphEditor
+            content={content}
+            locale={locale}
+            onChange={(next) => commitContent(next)}
+            labels={{
+              outline: t("sceneGraph.outline"),
+              addSection: t("sceneGraph.addSection"),
+              sectionType: t("sceneGraph.sectionType"),
+              deleteSection: t("sceneGraph.deleteSection"),
+              moveUp: t("sceneGraph.moveUp"),
+              moveDown: t("sceneGraph.moveDown"),
+              hideSection: t("sceneGraph.hideSection"),
+              showSection: t("sceneGraph.showSection"),
+              inspector: t("sceneGraph.inspector"),
+              selectSection: t("sceneGraph.selectSection"),
+              uploadImage: t("sceneGraph.uploadImage"),
+              album: t("sceneGraph.album"),
+              albumLimit: t("sceneGraph.albumLimit"),
+              music: t("sceneGraph.music"),
+              musicPlaceholder: t("sceneGraph.musicPlaceholder"),
+            }}
+          />
+        </div>
+      ) : (
       <div className="mx-auto grid max-w-[1800px] items-start gap-6 px-6 py-6 lg:px-8 xl:grid-cols-[280px_minmax(0,1fr)_340px]">
         <aside className="rounded-2xl border border-border bg-card/50 backdrop-blur p-5 shadow-sm" aria-label={t("layers")}>
           <div className="mb-5 flex items-center gap-2.5">
@@ -845,6 +873,7 @@ export function EditorShell({
           ) : null}
         </aside>
       </div>
+      )}
 
       <Dialog open={showPaymentOptions} onClose={(open) => { if (!checkoutType) { setShowPaymentOptions(open); setError(""); } }}>
         <DialogContent className="relative max-w-3xl rounded-2xl p-8">

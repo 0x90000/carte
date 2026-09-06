@@ -1,8 +1,9 @@
 import type { CSSProperties } from "react";
 import type { Invitation, Template } from "@prisma/client";
 import { getLocale, getTranslations } from "next-intl/server";
-import { normalizeEditorContent, type EditorBackground, type EditorContent, type EditorLayer } from "@/components/editor/types";
+import { isSceneGraphContent, normalizeEditorContent, type EditorBackground, type EditorContent, type EditorLayer } from "@/components/editor/types";
 import { RSVPSection } from "@/components/invitation/rsvp-section";
+import { SceneGraphInvitation } from "@/components/invitation/scene-graph-invitation";
 
 type PublicInvitationData = Pick<Invitation, "id" | "title" | "content" | "eventDate" | "eventLocation" | "slug" | "locale" | "settings"> & {
   template: Pick<Template, "previewUrl" | "name"> | null;
@@ -95,6 +96,9 @@ function InvitationLayer({ layer, canvas }: { layer: EditorLayer; canvas: Editor
 export async function InvitationRenderer({ invitation }: { invitation: PublicInvitationData }) {
   const [locale, t] = await Promise.all([getLocale(), getTranslations("invitation")]);
   const content = normalizeEditorContent(invitation.content) as EditorContent;
+  if (isSceneGraphContent(content)) {
+    return <SceneGraphInvitation content={content} locale={locale} previewOnly={false} invitationSlug={invitation.slug} />;
+  }
   const { canvas, layers, gallery } = content;
   const background = canvas.background;
   const eventDate = invitation.eventDate ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(invitation.eventDate) : undefined;

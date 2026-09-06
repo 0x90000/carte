@@ -1,0 +1,83 @@
+{
+  "templateId": "wedding-0001",
+  "assets": [
+    {
+      "id": "wedding-0001-hero",
+      "path": "template/wedding/0001/assets/wedding-hero.png",
+      "kind": "image",
+      "width": 864,
+      "height": 1821,
+      "bytes": 1927198,
+      "sha256": "98B453D776665F55D0D8026A5CAA82C07AD7EDA5740678332E318DF2D5C97531",
+      "roles": ["hero.background", "gallery.album.items[1].media"],
+      "alt": "暮色花园中的新人肖像",
+      "editable": true,
+      "uploadSlot": "backgroundImage"
+    },
+    {
+      "id": "wedding-0001-floral-detail",
+      "path": "template/wedding/0001/assets/floral-detail.png",
+      "kind": "image",
+      "width": 1122,
+      "height": 1402,
+      "bytes": 1879348,
+      "sha256": "B45C8290F0A847D4D2C7E56557ABAC559E65C893126985FFC7EE5138D554A5A0",
+      "roles": ["gallery.album.items[0].media"],
+      "alt": "象牙白花束与金色婚戒",
+      "editable": true,
+      "uploadSlot": "album"
+    },
+    {
+      "id": "wedding-0001-venue-garden",
+      "path": "template/wedding/0001/assets/venue-garden.png",
+      "kind": "image",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2886855,
+      "sha256": "720309F012FFFB31C16294697CC05704B6C1067231421C107E68936D2DA9607C",
+      "roles": ["gallery.album.items[2].media", "gallery.secondaryImage", "venue.image"],
+      "alt": "蓝调时刻的花园婚礼场地",
+      "editable": true,
+      "uploadSlot": "album-or-venue"
+    },
+    {
+      "id": "wedding-0001-noise-inline",
+      "path": "styles.css:25",
+      "kind": "procedural-texture",
+      "roles": ["effects.noise"],
+      "source": "inline SVG data URL with feTurbulence",
+      "editable": false
+    },
+    {
+      "id": "wedding-0001-petals-css",
+      "path": "styles.css:26-34",
+      "kind": "decoration",
+      "roles": ["effects.petals"],
+      "source": "six CSS spans and petal-fall keyframes",
+      "editable": false
+    },
+    {
+      "id": "wedding-0001-particles-three",
+      "path": "script.js:139-177",
+      "kind": "procedural-animation",
+      "roles": ["effects.particles"],
+      "source": "Three.js PointsMaterial",
+      "editable": true,
+      "uploadSlot": null
+    },
+    {
+      "id": "wedding-0001-music-fallback",
+      "path": "script.js:75-126",
+      "kind": "procedural-audio",
+      "roles": ["music.fallback"],
+      "source": "Web Audio sine oscillator sequence",
+      "editable": false,
+      "uploadSlot": null
+    }
+  ],
+  "librarySlots": {
+    "backgroundImage": { "kind": "image", "accept": ["image/jpeg", "image/png", "image/webp"], "maxBytes": 10485760 },
+    "album": { "kind": "image", "accept": ["image/jpeg", "image/png", "image/webp"], "maxItems": 9, "maxBytesEach": 8388608 },
+    "music": { "kind": "audio", "source": "asset-library", "userUpload": false }
+  }
+}

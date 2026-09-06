@@ -292,6 +292,23 @@
     "useOption": "使用此选项",
     "livePreview": "实时预览",
     "dismissError": "关闭错误提示",
+    "sceneGraph": {
+      "outline": "页面结构",
+      "addSection": "添加分区",
+      "sectionType": "分区类型",
+      "deleteSection": "删除分区",
+      "moveUp": "上移",
+      "moveDown": "下移",
+      "hideSection": "隐藏分区",
+      "showSection": "显示分区",
+      "inspector": "属性",
+      "selectSection": "选择一个分区开始编辑。",
+      "uploadImage": "上传图片",
+      "album": "添加相册图片",
+      "albumLimit": "最多 9 张图片。相册排序拖拽将在下一阶段加入。",
+      "music": "背景音乐",
+      "musicPlaceholder": "从音乐素材库选择（占位）"
+    },
     "errors": {
       "invalidImage": "请选择 JPG 或 PNG 图片。",
       "imageTooLarge": "图片大小不能超过 5 MB。",

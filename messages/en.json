@@ -295,6 +295,23 @@
     "useOption": "Use this option",
     "livePreview": "Live preview",
     "dismissError": "Dismiss error",
+    "sceneGraph": {
+      "outline": "Page structure",
+      "addSection": "Add section",
+      "sectionType": "Section type",
+      "deleteSection": "Delete section",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "hideSection": "Hide section",
+      "showSection": "Show section",
+      "inspector": "Properties",
+      "selectSection": "Select a section to start editing.",
+      "uploadImage": "Upload image",
+      "album": "Add album images",
+      "albumLimit": "Up to 9 images. Drag sorting will be added in the next pass.",
+      "music": "Background music",
+      "musicPlaceholder": "Choose from the music library (placeholder)"
+    },
     "errors": {
       "invalidImage": "Please choose a JPG or PNG image.",
       "imageTooLarge": "Images must be 5 MB or smaller.",

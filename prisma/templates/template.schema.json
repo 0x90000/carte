@@ -12,6 +12,7 @@
     "tags": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
     "thumbnailUrl": { "type": "string", "minLength": 1 },
     "previewUrl": { "type": "string", "minLength": 1 },
+    "pageModel": { "type": "string", "enum": ["canvas", "h5-long-scroll"] },
     "canvas": {
       "type": "object",
       "required": ["width", "height", "background"],
@@ -23,9 +24,20 @@
       "additionalProperties": false
     },
     "layers": { "type": "array", "items": { "type": "object" } },
+    "sections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "name", "data"],
+        "properties": { "id": { "type": "string" }, "type": { "type": "string" }, "name": { "type": "string" }, "visible": { "type": "boolean" }, "locked": { "type": "boolean" }, "data": { "type": "object" } },
+        "additionalProperties": true
+      }
+    },
+    "assets": { "type": "array", "items": { "type": "object" } },
     "variables": { "type": "array", "items": { "type": "object" } },
     "colorSchemes": { "type": "array", "items": { "type": "object" }, "minItems": 1 },
-    "settings": { "type": "object" }
+    "settings": { "type": "object" },
+    "music": { "type": "object" }
   },
   "additionalProperties": false
 }

@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight, Crown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { templateBackgroundType, type TemplateListItem } from "@/lib/templates";
+import { LiveTemplatePreview } from "@/components/templates/live-template-preview";
 
 export type TemplateCardLabels = {
   sceneNames: Record<string, string>;
@@ -15,22 +15,12 @@ export type TemplateCardLabels = {
 
 export function TemplateCard({ template, href, labels }: { template: TemplateListItem & { structure: unknown }; href: string; labels: TemplateCardLabels }) {
   const backgroundType = templateBackgroundType(template);
-  const imageUrl = template.thumbnailUrl || template.previewUrl;
 
   return (
     <Link href={href} className="group block h-full">
       <Card className="h-full overflow-hidden transition-transform duration-150 group-hover:-translate-y-1 group-hover:shadow-lg">
         <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={labels.previewAlt}
-              fill
-              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-              className="object-contain transition-opacity duration-300 group-hover:opacity-95"
-              unoptimized
-            />
-          ) : null}
+          <LiveTemplatePreview structure={template.structure} alt={labels.previewAlt} />
           <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3">
             <span className="rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-foreground backdrop-blur">
               {labels.sceneNames[template.scene] ?? template.scene}

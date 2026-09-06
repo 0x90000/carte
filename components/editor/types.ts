@@ -44,6 +44,37 @@ export type EditorGalleryItem = {
   alt?: string;
 };
 
+export type EditorPageModel = "canvas" | "h5-long-scroll";
+
+export type SceneSectionType =
+  | "hero"
+  | "story"
+  | "gallery"
+  | "celebration"
+  | "venue"
+  | "findUs"
+  | "rsvp"
+  | "footer"
+  | "custom";
+
+export type EditorSceneSection = {
+  id: string;
+  type: SceneSectionType | string;
+  name: string;
+  visible?: boolean;
+  locked?: boolean;
+  data: Record<string, unknown>;
+};
+
+export type EditorAsset = {
+  id: string;
+  kind: "image" | "audio" | "video" | string;
+  url: string;
+  name?: string;
+  alt?: string;
+  placeholder?: boolean;
+};
+
 export type EditorContent = {
   canvas: {
     width: number;
@@ -52,6 +83,9 @@ export type EditorContent = {
   };
   layers: EditorLayer[];
   gallery?: EditorGalleryItem[];
+  pageModel?: EditorPageModel;
+  sections?: EditorSceneSection[];
+  assets?: EditorAsset[];
   variables?: Array<Record<string, unknown>>;
   colorSchemes?: EditorColorScheme[];
   settings?: Record<string, unknown>;
@@ -83,9 +117,43 @@ export function normalizeEditorContent(value: unknown): EditorContent {
       ...(typeof item.alt === "string" && item.alt.trim() ? { alt: item.alt.trim().slice(0, 120) } : {}),
     }))
     : [];
+  const sections = Array.isArray(content.sections)
+    ? content.sections.filter((section): section is EditorSceneSection => Boolean(
+      section
+      && typeof section === "object"
+      && "id" in section
+      && "type" in section
+      && typeof section.id !== "object"
+      && typeof section.type === "string",
+    )).map((section) => ({
+      ...section,
+      id: String(section.id),
+      type: String(section.type),
+      name: typeof section.name === "string" && section.name.trim() ? section.name.trim() : String(section.type),
+      data: section.data && typeof section.data === "object" ? section.data : {},
+    }))
+    : undefined;
+  const assets = Array.isArray(content.assets)
+    ? content.assets.filter((asset): asset is EditorAsset => Boolean(
+      asset
+      && typeof asset === "object"
+      && "id" in asset
+      && "url" in asset
+      && typeof asset.id !== "object"
+      && typeof asset.url === "string"
+      && (asset.url.length > 0 || asset.kind === "audio"),
+    )).map((asset) => ({
+      ...asset,
+      id: String(asset.id),
+      kind: typeof asset.kind === "string" ? asset.kind : "image",
+      url: asset.url,
+    }))
+    : undefined;
 
   return {
     ...content,
+    ...(sections ? { pageModel: content.pageModel === "canvas" ? "canvas" : "h5-long-scroll", sections } : {}),
+    ...(assets ? { assets } : {}),
     canvas: {
       width: typeof canvas.width === "number" ? canvas.width : 750,
       height: typeof canvas.height === "number" ? canvas.height : 1334,
@@ -102,4 +170,8 @@ export function normalizeEditorContent(value: unknown): EditorContent {
       content: layer.content ?? {},
     })),
   };
+}
+
+export function isSceneGraphContent(content: EditorContent) {
+  return content.pageModel === "h5-long-scroll" && Array.isArray(content.sections);
 }

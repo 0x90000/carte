@@ -5,15 +5,19 @@ export const templateScenes = ["wedding", "birthday", "business", "baby", "other
 export type TemplateScene = (typeof templateScenes)[number];
 
 export type TemplateStructure = {
+  pageModel?: "canvas" | "h5-long-scroll";
   canvas?: {
     width?: number;
     height?: number;
     background?: { type?: string; url?: string; poster?: string; fit?: string };
   };
   layers?: Array<{ type?: string; name?: string; content?: Record<string, unknown> }>;
+  sections?: Array<{ id?: string; type?: string; name?: string; visible?: boolean; locked?: boolean; data?: Record<string, unknown> }>;
+  assets?: Array<{ id?: string; kind?: string; url?: string; name?: string; alt?: string }>;
   variables?: Array<{ key?: string; type?: string; label?: string; defaultValue?: unknown }>;
   colorSchemes?: Array<{ id?: string; name?: string; colors?: Record<string, string> }>;
   settings?: Record<string, unknown>;
+  music?: Record<string, unknown>;
 };
 
 export type TemplateListItem = Pick<

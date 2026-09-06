@@ -1,0 +1,53 @@
+{
+  "templateId": "wedding-0001",
+  "palette": {
+    "ink": "#eae8df",
+    "muted": "#a7aca2",
+    "green": "#101917",
+    "green2": "#16221f",
+    "line": "rgba(234, 232, 223, 0.2)",
+    "gold": "#d9b982",
+    "blush": "#d1a69a",
+    "cream": "#efeadf",
+    "galleryBackground": "#e7e2d7",
+    "venueBackground": "#dfe2d8",
+    "rsvpBackground": "#e8e5dc",
+    "brownAccent": "#8c624f",
+    "rsvpAccent": "#9d6c58",
+    "selectionBackground": "#d9b982",
+    "selectionForeground": "#101917"
+  },
+  "typography": {
+    "display": { "family": "Cormorant Garamond", "fallback": ["Noto Serif SC", "serif"], "weights": [300, 400, 500, 600, 700] },
+    "serif": { "family": "Noto Serif SC", "fallback": ["serif"], "weights": [300, 400, 500, 600, 700] },
+    "sans": { "family": "DM Mono", "fallback": ["monospace"], "weights": [400, 500] },
+    "source": "Google Fonts",
+    "bodyWeight": 300,
+    "letterSpacingUnit": "em"
+  },
+  "layout": {
+    "maxContentWidthPx": 1160,
+    "mobileBreakpointPx": 760,
+    "heroMinHeight": "100svh",
+    "sections": { "dark": ["hero", "story", "celebration", "findUs"], "light": ["gallery", "venue", "rsvp"] }
+  },
+  "styleTokens": {
+    "heroImageFit": "cover",
+    "heroImagePosition": "center 62%",
+    "heroSaturation": 0.78,
+    "heroContrast": 1.05,
+    "cornerRadius": 0,
+    "buttonRadius": "999px",
+    "sectionNumbering": true,
+    "richTextItalicColor": "gold-or-brown-by-section"
+  },
+  "motion": {
+    "reveal": { "durationMs": 850, "translateYpx": 22, "intersectionThreshold": 0.14 },
+    "heroBreathe": { "durationSeconds": 16, "scaleFrom": 1.04, "scaleTo": 1.1 },
+    "albumTransitionMs": 720,
+    "albumAutoplayIntervalMs": 6200,
+    "petalFall": { "count": 6, "durationSeconds": [15, 22] },
+    "particleRotation": { "yPerFrame": 0.00022, "xWave": 0.08 },
+    "reducedMotion": "respect-prefers-reduced-motion"
+  }
+}

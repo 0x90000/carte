@@ -1,0 +1,46 @@
+{
+  "id": "wedding-0001",
+  "name": "A Love Letter / 云栖竹径",
+  "scene": "wedding",
+  "style": "editorial-garden",
+  "version": "1.1.0",
+  "source": {
+    "directory": "template/wedding/0001",
+    "files": ["index.html", "styles.css", "script.js"],
+    "assetDirectory": "template/wedding/0001/assets"
+  },
+  "pageModel": {
+    "type": "h5-long-scroll",
+    "sections": ["hero", "story", "gallery", "celebration", "venue", "findUs", "rsvp", "footer"],
+    "legacyCanvas": { "width": 750, "height": 1334, "unit": "px", "note": "仅用于现有编辑器兼容；模板本身是响应式长页面，不是单张海报。" },
+    "mobileFirst": true
+  },
+  "runtime": {
+    "preview": { "mode": "live-page", "requiresJavascript": true, "sameRendererAsPublicPage": true },
+    "externalDependencies": [
+      { "name": "Google Fonts", "url": "https://fonts.googleapis.com", "purpose": "Cormorant Garamond, Noto Serif SC, DM Mono" },
+      { "name": "Lucide UMD", "url": "https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js", "purpose": "navigation and action icons" },
+      { "name": "Three.js", "url": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js", "purpose": "ambient particle field" },
+      { "name": "OpenStreetMap", "url": "https://www.openstreetmap.org", "purpose": "Find Us embedded map and external map link" },
+      { "name": "Amap URI", "url": "https://uri.amap.com", "purpose": "venue navigation link" }
+    ],
+    "accessibility": {
+      "reducedMotion": true,
+      "keyboardAlbumControls": true,
+      "touchAlbumControls": true,
+      "rsvpStatusLiveRegion": true
+    }
+  },
+  "assetPolicy": {
+    "backgroundImage": { "editable": true, "source": "user-upload", "acceptedTypes": ["image/jpeg", "image/png", "image/webp"] },
+    "albumImages": { "editable": true, "source": "user-upload", "minItems": 1, "maxItems": 9 },
+    "venueImage": { "editable": true, "source": "user-upload" },
+    "music": { "editable": true, "source": "asset-library", "userUpload": false },
+    "decorativeNoise": { "editable": false, "source": "inline-css" },
+    "icons": { "editable": false, "source": "lucide" }
+  },
+  "defaultContentFile": "content-schema.json",
+  "editableItemsFile": "editable-items.json",
+  "assetsFile": "assets.json",
+  "themeFile": "theme.json"
+}
