@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import { SceneGraphInvitation } from "@/components/invitation/scene-graph-invitation";
 import { normalizeEditorContent, type EditorContent } from "@/components/editor/types";
-
-type PreviewMode = "scroll" | "fit";
 
 function LegacyTemplatePreview({ content, alt }: { content: EditorContent; alt: string }) {
   const { canvas, layers } = content;
@@ -24,52 +21,10 @@ function LegacyTemplatePreview({ content, alt }: { content: EditorContent; alt: 
   </div>;
 }
 
-function FitScenePreview({ content, locale, alt }: { content: EditorContent; locale: string; alt: string }) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    const viewport = viewportRef.current;
-    const preview = contentRef.current;
-    if (!viewport || !preview) return;
-
-    const updateScale = () => {
-      const availableWidth = viewport.clientWidth;
-      const availableHeight = viewport.clientHeight;
-      const contentWidth = preview.scrollWidth;
-      const contentHeight = preview.scrollHeight;
-      if (!availableWidth || !availableHeight || !contentWidth || !contentHeight) return;
-      setScale(Math.max(0.01, Math.min(1, availableWidth / contentWidth, availableHeight / contentHeight)));
-    };
-
-    updateScale();
-    const observer = new ResizeObserver(updateScale);
-    observer.observe(viewport);
-    observer.observe(preview);
-    const frame = window.requestAnimationFrame(updateScale);
-    return () => {
-      observer.disconnect();
-      window.cancelAnimationFrame(frame);
-    };
-  }, [content]);
-
-  return (
-    <div ref={viewportRef} className="live-template-preview live-template-preview-fit" aria-label={alt}>
-      <div ref={contentRef} className="live-template-preview-content" style={{ transform: `translateX(-50%) scale(${scale})` }}>
-        <SceneGraphInvitation content={content} locale={locale} previewOnly />
-      </div>
-    </div>
-  );
-}
-
-export function LiveTemplatePreview({ structure, alt, locale = "en", mode = "scroll" }: { structure: unknown; alt: string; locale?: string; mode?: PreviewMode }) {
+export function LiveTemplatePreview({ structure, alt, locale = "en" }: { structure: unknown; alt: string; locale?: string }) {
   const content = normalizeEditorContent(structure);
   if (content.pageModel === "h5-long-scroll" && content.sections?.length) {
-    if (mode === "fit") {
-      return <FitScenePreview content={content} locale={locale} alt={alt} />;
-    }
-    return <div className="h-full w-full overflow-auto"><SceneGraphInvitation content={content} locale={locale} previewOnly /></div>;
+    return <div className="live-template-preview-scroll h-full w-full overflow-x-hidden overflow-y-auto" aria-label={alt} tabIndex={0}><SceneGraphInvitation content={content} locale={locale} previewOnly /></div>;
   }
   return <LegacyTemplatePreview content={content} alt={alt} />;
 }

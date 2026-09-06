@@ -19,7 +19,7 @@ export function TemplateCard({ template, href, labels, locale }: { template: Tem
   return (
     <Card className="group h-full overflow-hidden transition-transform duration-150 hover:-translate-y-1 hover:shadow-lg">
       <div className="relative aspect-[4/5] overflow-hidden bg-secondary">
-        <LiveTemplatePreview structure={template.structure} alt={labels.previewAlt} locale={locale} mode="fit" />
+        <LiveTemplatePreview structure={template.structure} alt={labels.previewAlt} locale={locale} />
         <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3">
           <span className="rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-foreground backdrop-blur">
             {labels.sceneNames[template.scene] ?? template.scene}
