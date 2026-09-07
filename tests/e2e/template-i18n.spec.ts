@@ -11,7 +11,7 @@ test("localizes template detail pages and exposes locale SEO metadata", async ({
   await expect(page.getByText("Layers", { exact: true })).toBeVisible();
   await expect(page.getByText("Editable fields", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "All templates", exact: true })).toHaveAttribute("href", "/en/templates");
-  await expect(page.getByRole("link", { name: /Use this template/ })).toHaveAttribute("href", `/en/editor/new?template=${templateId}`);
+  await expect(page.getByRole("button", { name: /Use this template/ })).toBeVisible();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/en/templates/${templateId}$`));
   await expect(page.locator('link[rel="alternate"][hreflang="zh-CN"]')).toHaveAttribute("href", new RegExp(`/zh-CN/templates/${templateId}$`));
 
@@ -26,7 +26,7 @@ test("localizes template detail pages and exposes locale SEO metadata", async ({
   await expect(page.getByText("配色方案", { exact: true })).toBeVisible();
   await expect(page.locator("section").getByText("图片背景", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "全部模板", exact: true })).toHaveAttribute("href", "/zh-CN/templates");
-  await expect(page.getByRole("link", { name: /使用此模板/ })).toHaveAttribute("href", `/zh-CN/editor/new?template=${templateId}`);
+  await expect(page.getByRole("button", { name: /使用此模板/ })).toBeVisible();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/zh-CN/templates/${templateId}$`));
   await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute("href", new RegExp(`/en/templates/${templateId}$`));
 });

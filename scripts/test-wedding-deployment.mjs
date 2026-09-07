@@ -40,10 +40,10 @@ try {
     assert.ok((await response.body()).length > 100, `${asset}: empty deployed asset`);
   }
 
-  await page.goto(`${base}/en/templates/${templateId}`);
+  await page.goto(`${base}/en/templates/${templateId}`, { waitUntil: "domcontentloaded", timeout: 60000 });
   assert.ok(!(await page.locator("body").innerText()).includes("templates.detail."), "Missing template translations");
-  await page.getByRole("link", { name: /Use this template/ }).click();
-  await page.waitForURL(/\/editor\/(?!new)[^/?]+$/, { timeout: 45000 });
+  await page.getByRole("button", { name: /Use this template/ }).click();
+  await page.waitForFunction(() => /\/editor\/(?!new)[^/?]+$/.test(window.location.pathname), undefined, { timeout: 45000 });
   await page.locator(".scene-preview-device").waitFor();
   assert.ok(await page.locator(".scene-preview-device").boundingBox(), "Scene graph preview is not visible");
   await page.screenshot({ path: path.join(report, "editor-desktop.png"), fullPage: true });
