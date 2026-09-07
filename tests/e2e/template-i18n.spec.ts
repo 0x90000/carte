@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 
-const templateId = "3c8b3e51-9a1a-4d42-bd12-fd75a4a5d101";
+const templateId = "d3c0e5f4-0001-4a41-9b07-8c1d4f9b0001";
 
 test("localizes template detail pages and exposes locale SEO metadata", async ({ page }) => {
   test.skip(process.env.I18N_TEST_MODE !== "1", "Set I18N_TEST_MODE=1 to run localized template checks.");
 
   await page.goto(`/en/templates/${templateId}`);
-  await expect(page).toHaveTitle("Modern vows template | Carte");
-  await expect(page.getByRole("heading", { name: "Modern vows", exact: true })).toBeVisible();
+  await expect(page).toHaveTitle("A Love Letter / 云栖竹径 | Carte");
+  await expect(page.getByRole("heading", { name: "A Love Letter / 云栖竹径", exact: true })).toBeVisible();
   await expect(page.getByText("Layers", { exact: true })).toBeVisible();
   await expect(page.getByText("Editable fields", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "All templates", exact: true })).toHaveAttribute("href", "/en/templates");
@@ -16,11 +16,11 @@ test("localizes template detail pages and exposes locale SEO metadata", async ({
   await expect(page.locator('link[rel="alternate"][hreflang="zh-CN"]')).toHaveAttribute("href", new RegExp(`/zh-CN/templates/${templateId}$`));
 
   await page.goto("/zh-CN/templates");
-  await expect(page.locator('section[aria-label="邀请函模板"]').getByText("现代", { exact: true })).toBeVisible();
+  await expect(page.locator('section[aria-label="邀请函模板"]').getByText("A Love Letter / 云栖竹径", { exact: true })).toBeVisible();
 
   await page.goto(`/zh-CN/templates/${templateId}`);
-  await expect(page).toHaveTitle("Modern vows 模板 | Carte");
-  await expect(page.getByRole("heading", { name: "Modern vows", exact: true })).toBeVisible();
+  await expect(page).toHaveTitle("A Love Letter / 云栖竹径 模板 | Carte");
+  await expect(page.getByRole("heading", { name: "A Love Letter / 云栖竹径", exact: true })).toBeVisible();
   await expect(page.getByText("图层", { exact: true })).toBeVisible();
   await expect(page.getByText("可编辑字段", { exact: true })).toBeVisible();
   await expect(page.getByText("配色方案", { exact: true })).toBeVisible();

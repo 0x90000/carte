@@ -66,6 +66,6 @@ async function generatePreview(file) {
   await Promise.all([writeFile(join(directory, "thumbnail.svg"), svg), writeFile(join(directory, "preview.svg"), svg)]);
 }
 
-const files = (await readdir(sourceDir)).filter((file) => file.startsWith("wedding-") && file.endsWith(".json") && file !== "wedding-modern.json");
+const files = (await readdir(sourceDir)).filter((file) => file === "wedding-0001.json");
 await Promise.all(files.map(generatePreview));
 console.log(`Generated previews for ${files.length} wedding templates.`);
