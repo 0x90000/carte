@@ -3,11 +3,12 @@
 /* Media can be user-uploaded data URLs or provider URLs, so this renderer intentionally uses native img elements. */
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, Clock3, Map, Navigation, Volume2, VolumeX } from "lucide-react";
 import { RSVPForm } from "@/components/invitation/rsvp-form";
 import { WeddingVariantInvitation } from "@/components/invitation/wedding-variant-invitation";
+import { useInitialScrollReset } from "@/components/invitation/use-initial-scroll-reset";
 import type { EditorContent, EditorSceneSection } from "@/components/editor/types";
 
 type SceneGraphInvitationProps = {
@@ -157,7 +158,7 @@ function FindUsSection({ data, locale }: { data: UnknownRecord; locale: string }
   const provider = stringValue(localeProvider.provider, stringValue(map.provider, locale === "zh-CN" ? "amap" : "google"));
   const embedUrl = stringValue(localeProvider.embedUrl, stringValue(map.embedUrl, provider === "amap" ? "https://ditu.amap.com" : "https://www.google.com/maps"));
   const externalUrl = stringValue(localeProvider.externalUrl, stringValue(map.externalUrl, embedUrl));
-  return <section id="map" className="scene-section scene-find-us"><div><Kicker value={data.kicker} /><Heading value={data.heading} /><p>{stringValue(data.description)}</p></div><div className="scene-map-frame"><iframe title={stringValue(map.markerLabel, "活动地图")} src={embedUrl} loading="lazy" /><a href={externalUrl} target="_blank" rel="noreferrer" className="scene-map-expand" aria-label={`在新窗口打开${provider}地图`}><Map size={15} aria-hidden="true" /></a></div></section>;
+  return <section id="map" className="scene-section scene-find-us"><div><Kicker value={data.kicker} /><Heading value={data.heading} /><p>{stringValue(data.description)}</p></div><div className="scene-map-frame"><iframe title={stringValue(map.markerLabel, "活动地图")} src={embedUrl} loading="lazy" tabIndex={-1} /><a href={externalUrl} target="_blank" rel="noreferrer" className="scene-map-expand" aria-label={`在新窗口打开${provider}地图`}><Map size={15} aria-hidden="true" /></a></div></section>;
 }
 
 function RsvpSection({ data, previewOnly, invitationSlug }: { data: UnknownRecord; previewOnly: boolean; invitationSlug?: string }) {
@@ -211,11 +212,14 @@ function usePrefersReducedMotion() {
 export function SceneGraphInvitation({ content, locale = "en", previewOnly = true, previewMode, invitationSlug, className = "" }: SceneGraphInvitationProps) {
   const sections = useMemo(() => (content.sections ?? []).filter((section) => section.visible !== false), [content.sections]);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const resetKey = `${previewMode ?? "published"}:${sections.map((section) => section.id).join(",")}`;
+  useInitialScrollReset(rootRef, { resetKey });
   const variantLayout = Number(record(record(content.settings).designVariant).layout);
   if (Number.isInteger(variantLayout) && variantLayout >= 1 && variantLayout <= 10) {
     return <WeddingVariantInvitation content={content} layout={variantLayout} locale={locale} previewOnly={previewOnly} previewMode={previewMode} invitationSlug={invitationSlug} className={className} />;
   }
-  return <div className={`scene-invitation ${previewMode ? `scene-preview-${previewMode}` : ""} ${className}`} data-preview-only={previewOnly ? "true" : "false"} data-preview-mode={previewMode}>
+  return <div ref={rootRef} className={`scene-invitation ${previewMode ? `scene-preview-${previewMode}` : ""} ${className}`} data-preview-only={previewOnly ? "true" : "false"} data-preview-mode={previewMode}>
     <AmbientEffects content={content} />
     {sections.map((section) => {
       const data = sectionData(section);

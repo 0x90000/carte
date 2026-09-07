@@ -7,6 +7,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { CSSProperties, FormEvent, PointerEvent as ReactPointerEvent } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Maximize2, Navigation, Volume2, VolumeX } from "lucide-react";
 import { RSVPForm } from "@/components/invitation/rsvp-form";
+import { useInitialScrollReset } from "@/components/invitation/use-initial-scroll-reset";
 import type { EditorContent, EditorSceneSection } from "@/components/editor/types";
 
 type WeddingVariantInvitationProps = {
@@ -165,7 +166,7 @@ function Details({ content, data, id, locale }: { content: EditorContent; data: 
       <div className="details-copy reveal is-visible"><div className="module-code">{textValue(data.moduleCode, "03 / THE CELEBRATION")}</div><SectionHeading value={data.heading} /><div className="day-list">{events.map((value, index) => { const item = record(value); return <div className="day-item" key={textValue(item.id, String(index))}><div><strong>{textValue(item.time)}</strong><span>{textValue(item.label)}</span></div><p>{[textValue(item.title), textValue(item.description)].filter(Boolean).join(" · ")}</p></div>; })}</div></div>
       {imageUrl ? <div className="detail-image reveal delay-1 is-visible"><img src={imageUrl} alt={textValue(record(media).alt)} style={mediaStyle(media)} /></div> : null}
       <div className="venue-row reveal delay-2 is-visible"><span>{address.map((line, index) => <span key={index}>{index > 0 ? <br /> : null}{textValue(line)}</span>)}</span>{actions.length ? actions.map((value, index) => { const action = record(value); const href = textValue(action.kind) === "navigation" ? externalUrl : textValue(action.href, externalUrl); return <a className={`button ${index > 0 ? "button-quiet" : ""}`} href={href} target="_blank" rel="noreferrer" key={textValue(action.id, String(index))}><Navigation aria-hidden="true" /><span>{textValue(action.label, "导航前往")}</span></a>; }) : <a className="button" href={externalUrl} target="_blank" rel="noreferrer"><Navigation aria-hidden="true" /><span>导航前往</span></a>}</div>
-      <div className="map-frame reveal delay-3 is-visible"><iframe title={textValue(map.markerLabel, "活动地图")} src={embedUrl} loading="lazy" /><a className="map-expand" href={externalUrl} target="_blank" rel="noreferrer" title={`在新窗口打开${provider}地图`}><Maximize2 aria-hidden="true" /></a></div>
+      <div className="map-frame reveal delay-3 is-visible"><iframe title={textValue(map.markerLabel, "活动地图")} src={embedUrl} loading="lazy" tabIndex={-1} /><a className="map-expand" href={externalUrl} target="_blank" rel="noreferrer" title={`在新窗口打开${provider}地图`}><Maximize2 aria-hidden="true" /></a></div>
     </div></section>
   );
 }
@@ -207,6 +208,8 @@ export function WeddingVariantInvitation({ content, layout, locale = "en", previ
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const resetKey = `${layout}:${previewMode ?? "published"}:${sections.map((section) => section.id).join(",")}`;
+  useInitialScrollReset(rootRef, { resetKey });
   useEffect(() => {
     const parent = rootRef.current?.parentElement;
     const target: HTMLElement | Window = parent && getComputedStyle(parent).overflowY !== "visible" ? parent : window;

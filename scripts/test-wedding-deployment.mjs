@@ -36,6 +36,9 @@ try {
 
     await page.goto(`${base}/en/templates/${template.id}`, { waitUntil: "domcontentloaded", timeout: 60000 });
     assert.ok(!(await page.locator("body").innerText()).includes("templates.detail."), `${template.name}: missing template translations`);
+    assert.equal(await page.evaluate(() => window.scrollY), 0, `${template.name}: detail page did not start at the top`);
+    const previewScroll = page.locator(".live-template-preview-scroll");
+    assert.equal(await previewScroll.evaluate((element) => element.scrollTop), 0, `${template.name}: live preview did not start at the hero`);
     const layout = template.settings?.designVariant?.layout;
     if (layout) {
       await page.locator(`.wedding-variant.layout-${layout}`).waitFor({ timeout: 15000 });
@@ -61,6 +64,7 @@ try {
   await page.getByRole("button", { name: /Use this template/ }).click();
   await page.waitForFunction(() => /\/editor\/(?!new)[^/?]+$/.test(window.location.pathname), undefined, { timeout: 45000 });
   await page.locator(".scene-preview-device .wedding-variant.layout-1").waitFor({ timeout: 15000 });
+  assert.equal(await page.locator(".scene-preview-device").evaluate((element) => element.scrollTop), 0, "Editor preview did not start at the hero");
   assert.ok(await page.locator(".scene-preview-device .wedding-variant.layout-1 .hero").boundingBox(), "Scene graph editor preview is not visible");
   const soundToggle = page.locator(".scene-preview-device .sound-toggle");
   await soundToggle.click();
@@ -73,6 +77,7 @@ try {
 
   await page.getByRole("button", { name: /^Mobile$/ }).click();
   await page.locator(".scene-preview-device.is-preview-mobile .wedding-variant.variant-preview-mobile").waitFor({ timeout: 15000 });
+  assert.equal(await page.locator(".scene-preview-device").evaluate((element) => element.scrollTop), 0, "Mobile editor preview did not start at the hero");
   await page.setViewportSize({ width: 390, height: 844 });
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.locator(".scene-preview-device").scrollIntoViewIfNeeded();

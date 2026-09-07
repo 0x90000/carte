@@ -1,8 +1,10 @@
 "use client";
 
+import { useMemo, useRef } from "react";
 import type { CSSProperties } from "react";
 import { SceneGraphInvitation } from "@/components/invitation/scene-graph-invitation";
 import { normalizeEditorContent, type EditorContent } from "@/components/editor/types";
+import { useInitialScrollReset } from "@/components/invitation/use-initial-scroll-reset";
 
 export type PreviewMode = "desktop" | "mobile";
 
@@ -25,8 +27,21 @@ function LegacyTemplatePreview({ content, alt }: { content: EditorContent; alt: 
 
 export function LiveTemplatePreview({ structure, alt, locale = "en", previewMode }: { structure: unknown; alt: string; locale?: string; previewMode?: PreviewMode }) {
   const content = normalizeEditorContent(structure);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const resetKey = useMemo(() => {
+    const sectionIds = content.sections?.map((section) => section.id).join(",") ?? "";
+    const designVariant = content.settings?.designVariant;
+    const layout = designVariant && typeof designVariant === "object"
+      ? String((designVariant as Record<string, unknown>).layout ?? "")
+      : "";
+    return `${content.pageModel}:${layout}:${sectionIds}`;
+  }, [content.pageModel, content.sections, content.settings]);
+  useInitialScrollReset(scrollRef, {
+    enabled: Boolean(content.pageModel === "h5-long-scroll" && content.sections?.length),
+    resetKey: `${resetKey}:${previewMode ?? ""}`,
+  });
   if (content.pageModel === "h5-long-scroll" && content.sections?.length) {
-    return <div className="live-template-preview-scroll h-full w-full overflow-x-hidden overflow-y-auto" aria-label={alt} tabIndex={0}><SceneGraphInvitation content={content} locale={locale} previewOnly previewMode={previewMode} /></div>;
+    return <div ref={scrollRef} className="live-template-preview-scroll h-full w-full overflow-x-hidden overflow-y-auto" aria-label={alt} tabIndex={0}><SceneGraphInvitation content={content} locale={locale} previewOnly previewMode={previewMode} /></div>;
   }
   return <LegacyTemplatePreview content={content} alt={alt} />;
 }
