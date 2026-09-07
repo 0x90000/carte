@@ -40,6 +40,7 @@ try {
     if (layout) {
       await page.locator(`.wedding-variant.layout-${layout}`).waitFor({ timeout: 15000 });
       assert.ok(await page.locator(`.wedding-variant.layout-${layout} .hero`).boundingBox(), `${template.name}: live variant preview is not visible`);
+      await page.locator(".template-preview-viewport").screenshot({ path: path.join(report, `template-layout-${layout}.png`) });
     } else {
       await page.locator(".scene-invitation .scene-hero").waitFor({ timeout: 15000 });
     }
@@ -63,6 +64,8 @@ try {
   assert.ok(await page.locator(".scene-preview-device .wedding-variant.layout-1 .hero").boundingBox(), "Scene graph editor preview is not visible");
   await page.screenshot({ path: path.join(report, "editor-desktop.png"), fullPage: true });
 
+  await page.getByRole("button", { name: /^Mobile$/ }).click();
+  await page.locator(".scene-preview-device.is-preview-mobile .wedding-variant.variant-preview-mobile").waitFor({ timeout: 15000 });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.locator(".scene-preview-device").scrollIntoViewIfNeeded();
