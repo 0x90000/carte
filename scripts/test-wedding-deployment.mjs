@@ -62,6 +62,13 @@ try {
   await page.waitForFunction(() => /\/editor\/(?!new)[^/?]+$/.test(window.location.pathname), undefined, { timeout: 45000 });
   await page.locator(".scene-preview-device .wedding-variant.layout-1").waitFor({ timeout: 15000 });
   assert.ok(await page.locator(".scene-preview-device .wedding-variant.layout-1 .hero").boundingBox(), "Scene graph editor preview is not visible");
+  const soundToggle = page.locator(".scene-preview-device .sound-toggle");
+  await soundToggle.click();
+  assert.equal(await soundToggle.getAttribute("aria-pressed"), "true", "Music control did not expose its playing state");
+  const album = page.locator(".scene-preview-device .album");
+  const activeDotBefore = await album.locator(".album-dot.is-active").getAttribute("aria-label");
+  await album.locator(".album-next").click();
+  assert.notEqual(await album.locator(".album-dot.is-active").getAttribute("aria-label"), activeDotBefore, "Album next control did not change the active slide");
   await page.screenshot({ path: path.join(report, "editor-desktop.png"), fullPage: true });
 
   await page.getByRole("button", { name: /^Mobile$/ }).click();
