@@ -48,7 +48,7 @@
     "allScenes": "All scenes", "allStyles": "All styles", "scene": "Scene", "style": "Style", "apply": "Apply filters", "backScenes": "Back to scenes", "backCarte": "Back to Carte",
     "noMatch": "No templates match those filters.", "tryAnother": "Try another scene or style to see the collection.", "viewAll": "View all templates", "listLabel": "Invitation templates",
     "sceneNames": { "wedding": "Wedding", "birthday": "Birthday", "business": "Business event", "baby": "Baby", "other": "Other gathering" },
-    "styleNames": { "modern": "Modern", "playful": "Playful", "formal": "Formal" },
+    "styleNames": { "modern": "Modern", "playful": "Playful", "formal": "Formal", "jade-moon": "Jade Moon", "rococo-champagne": "Rococo Champagne", "midnight-cinema": "Midnight Cinema", "coastal-pearl": "Coastal Pearl", "terracotta-courtyard": "Terracotta Courtyard", "monochrome-modern": "Monochrome Modern", "sakura-mist": "Sakura Mist", "art-deco-gold": "Art Deco Gold", "lavender-nocturne": "Lavender Nocturne", "wild-meadow": "Wild Meadow" },
     "backgroundNames": { "image": "Image background", "html": "Animated background", "video": "Video background", "color": "Color background", "gradient": "Gradient background" },
     "detail": {
       "metadataTitle": "{name} | Carte",

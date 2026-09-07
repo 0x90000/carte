@@ -121,7 +121,7 @@ export default async function TemplateDetailPage({ params }: TemplateDetailProps
             {/* Stats Grid */}
             <div className="grid grid-cols-3 gap-4 rounded-2xl border border-border bg-card/50 backdrop-blur p-6">
               <div className="text-center">
-                <div className="text-2xl font-semibold">{structure.layers?.length ?? 0}</div>
+                <div className="text-2xl font-semibold">{structure.sections?.length ?? structure.layers?.length ?? 0}</div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
                   {t("detail.layers")}
                 </div>

@@ -1,14 +1,15 @@
 import assert from "node:assert/strict";
-import { mkdir, readFile } from "node:fs/promises";
+import { mkdir, readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { chromium } from "playwright";
 
 const base = process.argv[2];
 assert.ok(base, "Pass the test server URL explicitly.");
 
-const templateId = "d3c0e5f4-0001-4a41-9b07-8c1d4f9b0001";
-const template = JSON.parse(await readFile(path.resolve("prisma/templates/wedding-0001.json"), "utf8"));
-assert.equal(template.id, templateId);
+const templateDirectory = path.resolve("prisma/templates");
+const templateFiles = (await readdir(templateDirectory)).filter((file) => /^wedding-\d{4}\.json$/.test(file)).sort();
+const templates = await Promise.all(templateFiles.map(async (file) => JSON.parse(await readFile(path.join(templateDirectory, file), "utf8"))));
+assert.equal(templates.length, 11, "Expected wedding-0001 through wedding-0011 descriptors");
 
 const report = path.resolve("test-results/wedding-deployment");
 await mkdir(report, { recursive: true });
@@ -20,32 +21,46 @@ try {
   const page = await context.newPage();
   page.on("pageerror", (error) => errors.push(error.message));
 
-  const listResponse = await context.request.get(`${base}/api/templates?scene=wedding`);
+  const listResponse = await context.request.get(`${base}/api/templates?scene=wedding&limit=50`);
   assert.equal(listResponse.status(), 200, "Template list API failed");
-  const listed = (await listResponse.json()).data;
-  assert.equal(listed.length, 1, "More than one active wedding template is deployed");
-  assert.equal(listed[0].id, templateId);
+  const listPayload = await listResponse.json();
+  assert.equal(listPayload.meta.total, templates.length, "Unexpected number of active wedding templates");
+  assert.deepEqual(listPayload.data.map((item) => item.id).sort(), templates.map((template) => template.id).sort(), "Deployed wedding template IDs differ");
 
-  const detailResponse = await context.request.get(`${base}/api/templates/${templateId}`);
-  assert.equal(detailResponse.status(), 200, "Template detail API failed");
-  assert.deepEqual((await detailResponse.json()).data.structure, template, "Deployed structure differs");
+  const assetUrls = new Set();
+  for (const template of templates) {
+    const detailResponse = await context.request.get(`${base}/api/templates/${template.id}`);
+    assert.equal(detailResponse.status(), 200, `${template.name}: template detail API failed`);
+    assert.deepEqual((await detailResponse.json()).data.structure, template, `${template.name}: deployed structure differs`);
+    [template.thumbnailUrl, template.previewUrl, ...template.assets.map((asset) => asset.url)].filter(Boolean).forEach((url) => assetUrls.add(url));
 
-  const oldResponse = await context.request.get(`${base}/api/templates/3c8b3e51-9a1a-4d42-bd12-fd75a4a5d101`);
-  assert.equal(oldResponse.status(), 404, "A removed template is still available");
+    await page.goto(`${base}/en/templates/${template.id}`, { waitUntil: "domcontentloaded", timeout: 60000 });
+    assert.ok(!(await page.locator("body").innerText()).includes("templates.detail."), `${template.name}: missing template translations`);
+    const layout = template.settings?.designVariant?.layout;
+    if (layout) {
+      await page.locator(`.wedding-variant.layout-${layout}`).waitFor({ timeout: 15000 });
+      assert.ok(await page.locator(`.wedding-variant.layout-${layout} .hero`).boundingBox(), `${template.name}: live variant preview is not visible`);
+    } else {
+      await page.locator(".scene-invitation .scene-hero").waitFor({ timeout: 15000 });
+    }
+  }
 
-  const assetUrls = new Set([template.thumbnailUrl, template.previewUrl, ...template.assets.map((asset) => asset.url).filter(Boolean)]);
   for (const asset of assetUrls) {
     const response = await context.request.get(`${base}${asset}`);
     assert.equal(response.status(), 200, `${asset}: missing deployed asset`);
     assert.ok((await response.body()).length > 100, `${asset}: empty deployed asset`);
   }
 
-  await page.goto(`${base}/en/templates/${templateId}`, { waitUntil: "domcontentloaded", timeout: 60000 });
-  assert.ok(!(await page.locator("body").innerText()).includes("templates.detail."), "Missing template translations");
+  const oldResponse = await context.request.get(`${base}/api/templates/3c8b3e51-9a1a-4d42-bd12-fd75a4a5d101`);
+  assert.equal(oldResponse.status(), 404, "A removed template is still available");
+
+  const editorTemplate = templates.find((template) => template.settings?.designVariant?.layout === 1);
+  assert.ok(editorTemplate, "Layout 1 template is missing");
+  await page.goto(`${base}/en/templates/${editorTemplate.id}`, { waitUntil: "domcontentloaded", timeout: 60000 });
   await page.getByRole("button", { name: /Use this template/ }).click();
   await page.waitForFunction(() => /\/editor\/(?!new)[^/?]+$/.test(window.location.pathname), undefined, { timeout: 45000 });
-  await page.locator(".scene-preview-device").waitFor();
-  assert.ok(await page.locator(".scene-preview-device").boundingBox(), "Scene graph preview is not visible");
+  await page.locator(".scene-preview-device .wedding-variant.layout-1").waitFor({ timeout: 15000 });
+  assert.ok(await page.locator(".scene-preview-device .wedding-variant.layout-1 .hero").boundingBox(), "Scene graph editor preview is not visible");
   await page.screenshot({ path: path.join(report, "editor-desktop.png"), fullPage: true });
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -57,7 +72,7 @@ try {
   await page.screenshot({ path: path.join(report, "editor-mobile.png"), fullPage: true });
 
   assert.deepEqual(errors, []);
-  console.log(`${template.name}: API, ${assetUrls.size} assets, scene graph editor, desktop/mobile preview: OK`);
+  console.log(`${templates.length} wedding templates, ${assetUrls.size} assets, live previews, and editor desktop/mobile modes: OK`);
 } finally {
   await browser.close();
 }

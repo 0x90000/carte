@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties, FormEvent } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, Clock3, Map, Navigation, Volume2, VolumeX } from "lucide-react";
 import { RSVPForm } from "@/components/invitation/rsvp-form";
+import { WeddingVariantInvitation } from "@/components/invitation/wedding-variant-invitation";
 import type { EditorContent, EditorSceneSection } from "@/components/editor/types";
 
 type SceneGraphInvitationProps = {
@@ -210,6 +211,10 @@ function usePrefersReducedMotion() {
 export function SceneGraphInvitation({ content, locale = "en", previewOnly = true, previewMode, invitationSlug, className = "" }: SceneGraphInvitationProps) {
   const sections = useMemo(() => (content.sections ?? []).filter((section) => section.visible !== false), [content.sections]);
   const [musicPlaying, setMusicPlaying] = useState(false);
+  const variantLayout = Number(record(record(content.settings).designVariant).layout);
+  if (Number.isInteger(variantLayout) && variantLayout >= 1 && variantLayout <= 10) {
+    return <WeddingVariantInvitation content={content} layout={variantLayout} locale={locale} previewOnly={previewOnly} previewMode={previewMode} invitationSlug={invitationSlug} className={className} />;
+  }
   return <div className={`scene-invitation ${previewMode ? `scene-preview-${previewMode}` : ""} ${className}`} data-preview-only={previewOnly ? "true" : "false"} data-preview-mode={previewMode}>
     <AmbientEffects content={content} />
     {sections.map((section) => {

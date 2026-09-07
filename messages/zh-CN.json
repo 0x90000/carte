@@ -45,7 +45,7 @@
     "allScenes": "全部场景", "allStyles": "全部风格", "scene": "场景", "style": "风格", "apply": "应用筛选", "backScenes": "返回场景", "backCarte": "返回 Carte",
     "noMatch": "没有符合筛选条件的模板。", "tryAnother": "换一个场景或风格，看看其他模板。", "viewAll": "查看全部模板", "listLabel": "邀请函模板",
     "sceneNames": { "wedding": "婚礼", "birthday": "生日", "business": "商务活动", "baby": "宝宝派对", "other": "其他聚会" },
-    "styleNames": { "modern": "现代", "playful": "活泼", "formal": "正式" },
+    "styleNames": { "modern": "现代", "playful": "活泼", "formal": "正式", "jade-moon": "翡翠月夜", "rococo-champagne": "洛可可香槟", "midnight-cinema": "午夜电影", "coastal-pearl": "海岸珍珠", "terracotta-courtyard": "陶土庭院", "monochrome-modern": "黑白现代", "sakura-mist": "樱花薄雾", "art-deco-gold": "装饰艺术金", "lavender-nocturne": "薰衣草夜曲", "wild-meadow": "旷野花园" },
     "backgroundNames": { "image": "图片背景", "html": "动态背景", "video": "视频背景", "color": "纯色背景", "gradient": "渐变背景" },
     "detail": {
       "metadataTitle": "{name} | Carte",

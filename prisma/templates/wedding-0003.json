@@ -1,0 +1,345 @@
+{
+  "id": "d3c0e5f4-0003-4a41-9b07-8c1d4f9b0003",
+  "name": "Rococo Champagne",
+  "scene": "wedding",
+  "style": "rococo-champagne",
+  "description": "A soft rococo wedding invitation in champagne and blush.",
+  "tags": [
+    "wedding",
+    "editorial",
+    "long-scroll",
+    "album",
+    "rococo-champagne"
+  ],
+  "thumbnailUrl": "/templates/wedding-0003/hero-02-rococo-champagne.png",
+  "previewUrl": "/templates/wedding-0003/hero-02-rococo-champagne.png",
+  "pageModel": "h5-long-scroll",
+  "canvas": {
+    "width": 750,
+    "height": 1334,
+    "background": {
+      "type": "color",
+      "value": "#f5eae0"
+    }
+  },
+  "layers": [],
+  "assets": [
+    {
+      "id": "wedding-0003-hero",
+      "kind": "image",
+      "url": "/templates/wedding-0003/hero-02-rococo-champagne.png",
+      "name": "Rococo Champagne hero",
+      "alt": "香槟厅中的新人"
+    },
+    {
+      "id": "wedding-0003-floral-detail",
+      "kind": "image",
+      "url": "/templates/wedding-0001/floral-detail.png",
+      "name": "Floral detail",
+      "alt": "象牙白花束与金色婚戒"
+    },
+    {
+      "id": "wedding-0003-venue-garden",
+      "kind": "image",
+      "url": "/templates/wedding-0001/venue-garden.png",
+      "name": "Venue garden",
+      "alt": "蓝调时刻的花园婚礼场地"
+    },
+    {
+      "id": "music-placeholder-001",
+      "kind": "audio",
+      "url": "",
+      "name": "Music library placeholder"
+    }
+  ],
+  "sections": [
+    {
+      "id": "hero",
+      "type": "hero",
+      "name": "Hero",
+      "data": {
+        "brand": {
+          "monogram": "L & X",
+          "caption": "02 / ROCOCO CHAMPAGNE"
+        },
+        "eyebrow": "A SOFT BEGINNING · ROCOCO",
+        "names": {
+          "partnerA": "林深",
+          "separator": "&",
+          "partnerB": "许棠"
+        },
+        "date": {
+          "value": "2026-10-18",
+          "display": "二〇二六年 · 十月十八日"
+        },
+        "location": {
+          "city": "杭州",
+          "venue": "云栖竹径"
+        },
+        "media": {
+          "assetId": "wedding-0003-hero",
+          "fit": "cover",
+          "position": "center 62%",
+          "alt": "香槟厅中的新人"
+        },
+        "scrollCue": {
+          "label": "SCROLL",
+          "targetSectionId": "story"
+        },
+        "soundControl": {
+          "label": "声音"
+        }
+      }
+    },
+    {
+      "id": "story",
+      "type": "gallery",
+      "name": "Story album",
+      "data": {
+        "moduleCode": "01 / OUR STORY",
+        "label": "A TABLE SET FOR TWO",
+        "heading": {
+          "lines": [
+            "让每一束花，",
+            "都记住今天。"
+          ]
+        },
+        "paragraphs": [
+          "我们把平凡日子里收集的温柔，写成一场晚宴。愿你穿上最喜欢的衣服，和我们共饮一杯香槟。"
+        ],
+        "signature": {
+          "caption": "with all our love",
+          "names": "L & X"
+        },
+        "album": {
+          "autoplay": true,
+          "intervalMs": 6200,
+          "controls": {
+            "arrows": true,
+            "dots": true,
+            "keyboard": true,
+            "touch": true
+          },
+          "items": [
+            {
+              "id": "album-1",
+              "media": {
+                "assetId": "wedding-0003-hero",
+                "fit": "cover",
+                "alt": "香槟厅中的新人"
+              },
+              "caption": "A SOFT BEGINNING · 01"
+            },
+            {
+              "id": "album-2",
+              "media": {
+                "assetId": "wedding-0003-floral-detail",
+                "fit": "cover",
+                "alt": "象牙白花束与金色婚戒"
+              },
+              "caption": "THE DETAILS · 02"
+            },
+            {
+              "id": "album-3",
+              "media": {
+                "assetId": "wedding-0003-venue-garden",
+                "fit": "cover",
+                "alt": "蓝调时刻的花园场地"
+              },
+              "caption": "THE PLACE · 03"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "celebration",
+      "type": "celebration",
+      "name": "Celebration and venue",
+      "data": {
+        "moduleCode": "02 / THE CELEBRATION",
+        "heading": {
+          "lines": [
+            "一场花与光的",
+            "小型庆典。"
+          ]
+        },
+        "events": [
+          {
+            "id": "event-1",
+            "time": "16:30",
+            "label": "ARRIVAL",
+            "title": "花香签到",
+            "description": ""
+          },
+          {
+            "id": "event-2",
+            "time": "17:30",
+            "label": "CEREMONY",
+            "title": "交换誓言",
+            "description": ""
+          },
+          {
+            "id": "event-3",
+            "time": "18:30",
+            "label": "DINNER",
+            "title": "举杯祝酒",
+            "description": ""
+          },
+          {
+            "id": "event-4",
+            "time": "20:30",
+            "label": "AFTER PARTY",
+            "title": "月下派对",
+            "description": ""
+          }
+        ],
+        "image": {
+          "assetId": "wedding-0003-floral-detail",
+          "fit": "cover",
+          "alt": "象牙白花束与金色婚戒"
+        },
+        "address": [
+          "云栖竹径 · 杭州",
+          "杭州市西湖区梅灵南路 8 号"
+        ],
+        "actions": [
+          {
+            "id": "navigate",
+            "label": "导航",
+            "kind": "navigation",
+            "href": "https://uri.amap.com/marker?position=120.0917,30.1804",
+            "icon": "navigation",
+            "target": "new"
+          }
+        ],
+        "map": {
+          "markerLabel": "云栖竹径",
+          "latitude": 30.1804,
+          "longitude": 120.0917,
+          "providers": {
+            "zh-CN": {
+              "provider": "amap",
+              "embedUrl": "https://ditu.amap.com",
+              "externalUrl": "https://uri.amap.com/marker?position=120.0917,30.1804"
+            },
+            "default": {
+              "provider": "google",
+              "embedUrl": "https://www.google.com/maps?q=30.1804,120.0917&output=embed",
+              "externalUrl": "https://www.google.com/maps/search/?api=1&query=30.1804,120.0917"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "rsvp",
+      "type": "rsvp",
+      "name": "RSVP",
+      "data": {
+        "enabled": true,
+        "deadline": "03 / RSVP",
+        "heading": {
+          "lines": [
+            "为你留一席，",
+            "好吗？"
+          ]
+        },
+        "description": "请告诉我们你是否能来，以及同行人数。你的回信会让我们的座位表亮起一盏灯。",
+        "fields": {
+          "name": {
+            "label": "你的名字",
+            "placeholder": "请输入姓名",
+            "required": true
+          },
+          "guests": {
+            "label": "出席人数",
+            "min": 1,
+            "max": 4,
+            "default": 1
+          },
+          "attending": {
+            "label": "出席意愿",
+            "options": [
+              {
+                "value": "yes",
+                "label": "如约而至"
+              },
+              {
+                "value": "no",
+                "label": "遗憾缺席"
+              }
+            ]
+          },
+          "message": {
+            "label": "想对我们说",
+            "placeholder": "写下一句祝福（选填）",
+            "required": false
+          },
+          "submitLabel": "发送回执"
+        },
+        "successMessage": "谢谢你，我们已经收到你的回执。"
+      }
+    },
+    {
+      "id": "footer",
+      "type": "footer",
+      "name": "Footer",
+      "data": {
+        "items": [
+          "LIN SHEN & XU TANG",
+          "ROCOCO CHAMPAGNE / 2026",
+          "WITH LOVE, ALWAYS"
+        ]
+      }
+    }
+  ],
+  "variables": [],
+  "colorSchemes": [
+    {
+      "id": "rococo-champagne",
+      "name": "Rococo Champagne",
+      "colors": {
+        "primary": "#bd8879",
+        "secondary": "#a16d80",
+        "accent": "#fffaf6",
+        "text": "#423237",
+        "background": "#f5eae0"
+      }
+    }
+  ],
+  "effects": {
+    "particles": {
+      "enabled": true,
+      "color": "#bd8879",
+      "countPreview": 12
+    },
+    "petals": {
+      "enabled": false,
+      "count": 0
+    },
+    "noise": {
+      "enabled": true,
+      "opacity": 0.035
+    },
+    "reducedMotion": "system"
+  },
+  "music": {
+    "enabled": true,
+    "source": "asset-library",
+    "assetId": "music-placeholder-001",
+    "userGestureRequired": true
+  },
+  "settings": {
+    "allowMusic": true,
+    "allowAnimation": true,
+    "rsvpEnabled": true,
+    "pageModel": "h5-long-scroll",
+    "previewRsvpOnly": true,
+    "designVariant": {
+      "layout": 2,
+      "label": "02 / ROCOCO CHAMPAGNE",
+      "slug": "rococo-champagne"
+    }
+  }
+}
