@@ -68,6 +68,9 @@
       "included": "Included",
       "previewAlt": "{name} full preview",
       "templatePreviewAlt": "{name} template preview",
+      "previewMode": "Preview device",
+      "desktopPreview": "Desktop",
+      "mobilePreview": "Mobile",
       "features": ["Responsive invitation canvas", "Edit copy, colors, and event details", "Ready for RSVP when you publish"]
     }
   },
@@ -310,7 +313,10 @@
       "album": "Add album images",
       "albumLimit": "Up to 9 images. Drag sorting will be added in the next pass.",
       "music": "Background music",
-      "musicPlaceholder": "Choose from the music library (placeholder)"
+      "musicPlaceholder": "Choose from the music library (placeholder)",
+      "previewMode": "Preview device",
+      "desktopPreview": "Desktop",
+      "mobilePreview": "Mobile"
     },
     "errors": {
       "invalidImage": "Please choose a JPG or PNG image.",

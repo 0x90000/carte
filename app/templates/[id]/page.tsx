@@ -79,6 +79,9 @@ export default async function TemplateDetailPage({ params }: TemplateDetailProps
                   labels={{
                     backgroundLabel,
                     previewAlt: t("detail.previewAlt", { name: template.name }),
+                    previewMode: t("detail.previewMode"),
+                    desktopPreview: t("detail.desktopPreview"),
+                    mobilePreview: t("detail.mobilePreview"),
                   }}
                 />
               </div>

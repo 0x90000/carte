@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { SceneGraphInvitation } from "@/components/invitation/scene-graph-invitation";
+import { PreviewModeToggle } from "@/components/templates/preview-mode-toggle";
+import type { PreviewMode } from "@/components/templates/live-template-preview";
 import type { EditorContent, EditorSceneSection } from "@/components/editor/types";
 
 type SceneGraphEditorProps = {
@@ -31,6 +33,9 @@ type SceneGraphEditorProps = {
     albumLimit: string;
     music: string;
     musicPlaceholder: string;
+    previewMode: string;
+    desktopPreview: string;
+    mobilePreview: string;
   };
 };
 
@@ -99,8 +104,15 @@ export function SceneGraphEditor({ content, locale, onChange, labels }: SceneGra
   const sections = content.sections ?? [];
   const [selectedId, setSelectedId] = useState(sections[0]?.id ?? null);
   const [newType, setNewType] = useState(SECTION_PRESETS[0].type);
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
   const imageInputRef = useRef<HTMLInputElement>(null);
   const selected = sections.find((section) => section.id === selectedId) ?? sections[0];
+
+  useEffect(() => {
+    if (window.matchMedia("(max-width: 760px)").matches) {
+      setPreviewMode("mobile");
+    }
+  }, []);
 
   function commitSections(nextSections: EditorSceneSection[]) {
     onChange({ ...clone(content), pageModel: "h5-long-scroll", sections: nextSections });
@@ -170,7 +182,12 @@ export function SceneGraphEditor({ content, locale, onChange, labels }: SceneGra
       <div className="scene-outline-list">{sections.map((section, index) => <div key={section.id} className={`scene-outline-item ${selected?.id === section.id ? "is-selected" : ""}`}><button type="button" className="scene-outline-select" onClick={() => setSelectedId(section.id)}><span className="scene-outline-index">{String(index + 1).padStart(2, "0")}</span><span><strong>{section.name}</strong><small>{section.type}</small></span></button><div className="scene-outline-actions"><button type="button" onClick={() => moveSection(index, -1)} disabled={index === 0} title={labels.moveUp} aria-label={labels.moveUp}><ArrowUp size={13} /></button><button type="button" onClick={() => moveSection(index, 1)} disabled={index === sections.length - 1} title={labels.moveDown} aria-label={labels.moveDown}><ArrowDown size={13} /></button><button type="button" onClick={() => updateSection({ ...section, visible: section.visible === false })} title={section.visible === false ? labels.showSection : labels.hideSection} aria-label={section.visible === false ? labels.showSection : labels.hideSection}>{section.visible === false ? <EyeOff size={13} /> : <Eye size={13} />}</button><button type="button" onClick={() => deleteSection(section)} disabled={sections.length <= 1} title={labels.deleteSection} aria-label={labels.deleteSection}><Trash2 size={13} /></button></div></div>)}</div>
       <div className="scene-add-section"><Label htmlFor="scene-section-type">{labels.sectionType}</Label><div className="scene-add-row"><Select id="scene-section-type" value={newType} onChange={(event) => setNewType(event.target.value)}>{SECTION_PRESETS.map((preset) => <option key={preset.type} value={preset.type}>{preset.name}</option>)}</Select><Button type="button" size="icon" onClick={addSection} aria-label={labels.addSection} title={labels.addSection}><Plus size={16} aria-hidden="true" /></Button></div></div>
     </aside>
-    <section className="scene-preview-stage" aria-label="Live invitation preview"><div className="scene-preview-device"><SceneGraphInvitation content={content} locale={locale} previewOnly /></div></section>
+    <section className={`scene-preview-stage scene-preview-stage-${previewMode}`} aria-label="Live invitation preview">
+      <div className="scene-preview-toolbar">
+        <PreviewModeToggle mode={previewMode} onChange={setPreviewMode} labels={{ group: labels.previewMode, desktop: labels.desktopPreview, mobile: labels.mobilePreview }} />
+      </div>
+      <div className={`scene-preview-device is-preview-${previewMode}`}><SceneGraphInvitation content={content} locale={locale} previewOnly previewMode={previewMode} /></div>
+    </section>
     <aside className="scene-inspector" aria-label={labels.inspector}><div className="scene-panel-heading"><div><p className="scene-panel-eyebrow">Properties</p><h2>{labels.inspector}</h2></div></div>{selected ? <><p className="scene-inspector-type">{selected.type}</p><SectionFieldEditor section={selected} onChange={updateSection} /><input ref={imageInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => void uploadForSelected(event)} /><Button type="button" variant="outline" className="w-full" onClick={() => selected.type === "gallery" ? document.getElementById("scene-album-upload")?.click() : imageInputRef.current?.click()}><ImagePlus size={15} aria-hidden="true" /> {labels.uploadImage}</Button>{selected.type === "gallery" ? <div className="scene-gallery-manager"><div className="flex items-center justify-between gap-2"><Label>{labels.album}</Label><span className="text-xs text-muted-foreground">{Array.isArray((selected.data.album as Record<string, unknown> | undefined)?.items) ? ((selected.data.album as Record<string, unknown>).items as unknown[]).length : 0}/9</span></div><input id="scene-album-upload" type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" onChange={addAlbumImages} /><p className="text-xs text-muted-foreground">{labels.albumLimit}</p></div> : null}</> : <p className="text-sm text-muted-foreground">{labels.selectSection}</p>}<div className="scene-music-note"><strong>{labels.music}</strong><span>{labels.musicPlaceholder}</span></div></aside>
   </div>;
 }

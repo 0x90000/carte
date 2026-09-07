@@ -4,6 +4,8 @@ import type { CSSProperties } from "react";
 import { SceneGraphInvitation } from "@/components/invitation/scene-graph-invitation";
 import { normalizeEditorContent, type EditorContent } from "@/components/editor/types";
 
+export type PreviewMode = "desktop" | "mobile";
+
 function LegacyTemplatePreview({ content, alt }: { content: EditorContent; alt: string }) {
   const { canvas, layers } = content;
   const background = canvas.background;
@@ -21,10 +23,10 @@ function LegacyTemplatePreview({ content, alt }: { content: EditorContent; alt: 
   </div>;
 }
 
-export function LiveTemplatePreview({ structure, alt, locale = "en" }: { structure: unknown; alt: string; locale?: string }) {
+export function LiveTemplatePreview({ structure, alt, locale = "en", previewMode }: { structure: unknown; alt: string; locale?: string; previewMode?: PreviewMode }) {
   const content = normalizeEditorContent(structure);
   if (content.pageModel === "h5-long-scroll" && content.sections?.length) {
-    return <div className="live-template-preview-scroll h-full w-full overflow-x-hidden overflow-y-auto" aria-label={alt} tabIndex={0}><SceneGraphInvitation content={content} locale={locale} previewOnly /></div>;
+    return <div className="live-template-preview-scroll h-full w-full overflow-x-hidden overflow-y-auto" aria-label={alt} tabIndex={0}><SceneGraphInvitation content={content} locale={locale} previewOnly previewMode={previewMode} /></div>;
   }
   return <LegacyTemplatePreview content={content} alt={alt} />;
 }

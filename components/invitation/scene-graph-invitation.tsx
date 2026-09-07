@@ -13,6 +13,7 @@ type SceneGraphInvitationProps = {
   content: EditorContent;
   locale?: string;
   previewOnly?: boolean;
+  previewMode?: "desktop" | "mobile";
   invitationSlug?: string;
   className?: string;
 };
@@ -206,10 +207,10 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
-export function SceneGraphInvitation({ content, locale = "en", previewOnly = true, invitationSlug, className = "" }: SceneGraphInvitationProps) {
+export function SceneGraphInvitation({ content, locale = "en", previewOnly = true, previewMode, invitationSlug, className = "" }: SceneGraphInvitationProps) {
   const sections = useMemo(() => (content.sections ?? []).filter((section) => section.visible !== false), [content.sections]);
   const [musicPlaying, setMusicPlaying] = useState(false);
-  return <div className={`scene-invitation ${className}`} data-preview-only={previewOnly ? "true" : "false"}>
+  return <div className={`scene-invitation ${previewMode ? `scene-preview-${previewMode}` : ""} ${className}`} data-preview-only={previewOnly ? "true" : "false"} data-preview-mode={previewMode}>
     <AmbientEffects content={content} />
     {sections.map((section) => {
       const data = sectionData(section);

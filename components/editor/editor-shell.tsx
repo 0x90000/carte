@@ -667,6 +667,9 @@ export function EditorShell({
               albumLimit: t("sceneGraph.albumLimit"),
               music: t("sceneGraph.music"),
               musicPlaceholder: t("sceneGraph.musicPlaceholder"),
+              previewMode: t("sceneGraph.previewMode"),
+              desktopPreview: t("sceneGraph.desktopPreview"),
+              mobilePreview: t("sceneGraph.mobilePreview"),
             }}
           />
         </div>
