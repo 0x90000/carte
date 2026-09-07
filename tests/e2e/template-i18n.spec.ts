@@ -19,11 +19,11 @@ test("localizes template detail pages and exposes locale SEO metadata", async ({
   await expect(page.locator('section[aria-label="邀请函模板"]').getByText("A Love Letter / 云栖竹径", { exact: true })).toBeVisible();
 
   await page.goto(`/zh-CN/templates/${templateId}`);
-  await expect(page).toHaveTitle("A Love Letter / 云栖竹径 模板 | Carte");
+  await expect(page).toHaveTitle("A Love Letter / 云栖竹径 | Carte");
   await expect(page.getByRole("heading", { name: "A Love Letter / 云栖竹径", exact: true })).toBeVisible();
   await expect(page.getByText("图层", { exact: true })).toBeVisible();
   await expect(page.getByText("配色方案", { exact: true })).toBeVisible();
-  await expect(page.locator("section").getByText("纯色背景", { exact: true })).toBeVisible();
+  await expect(page.locator(".template-preview-toolbar-label")).toContainText("纯色背景");
   await expect(page.getByRole("link", { name: "全部模板", exact: true })).toHaveAttribute("href", "/zh-CN/templates");
   await expect(page.getByRole("button", { name: /使用此模板/ })).toBeVisible();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/zh-CN/templates/${templateId}$`));
