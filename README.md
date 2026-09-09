@@ -54,6 +54,7 @@ Carte 的目标是把“设计一张邀请函”变成一条可重复的内容�
 
 - 传统画布编辑器基于 Fabric.js，适合自由定位文本、图片、形状和装饰图层。
 - scene graph 编辑器以 section 为单位组织长页面，支持选择、排序、显示/隐藏、删除和新增 section。
+- scene graph 的右侧 Inspector 由模板提供的 `editorSchema` 驱动：字段路径、控件类型、分组、选项、列表上限和媒体上传规则都属于模板描述，不绑定某一种活动场景。
 - 支持编辑标题、正文、日期、地点、颜色方案、图片引用、地图配置和 RSVP 字段。
 - 相册支持用户在浏览器选择图片，最多 9 张；模板数据会在归一化时再次限制为 9 张。
 - 编辑器提供撤销、重做、显式保存和延迟自动保存。
@@ -154,7 +155,7 @@ Client Components 负责：
 
 - `lib/prisma.ts`：复用 PrismaClient，避免开发热重载创建过多连接。
 - `lib/session.ts`：读取和生成访客 session 标识。
-- `lib/templates.ts`：模板场景、结构类型、列表筛选和结构归一化入口。
+- `lib/templates.ts`：模板场景、结构类型、列表筛选和结构归一化入口；同时保留模板 `editorSchema` 的结构类型。
 - `lib/public-invitation.ts`：公开邀请函读取、缓存和失效。
 - `lib/publishing.ts`：发布权限、lifetime 日限额和测试绕过逻辑。
 - `lib/payment.ts`、`lib/stripe.ts`：Stripe webhook、支付幂等和发布事务。
@@ -338,7 +339,36 @@ sequenceDiagram
 }
 ```
 
-当前标准 section 类型包括：`hero`、`story`、`gallery`、`celebration`、`venue`、`findUs`、`rsvp`、`footer` 和 `custom`。编辑器可以新增、删除和重排整个 section；渲染器会忽略 `visible=false` 的 section。`docs/templates/wedding/0001/content-schema.json` 是婚礼内容字段的 JSON Schema，`editable-items.json` 列出每一个可编辑 item 及其控件映射。
+当前婚礼模板使用 `hero`、`story`、`gallery`、`celebration`、`venue`、`findUs`、`rsvp`、`footer` 和 `custom`。这只是当前场景的 section 注册，不是编辑器的固定枚举。其他场景可以在 `editorSchema.sectionTypes` 注册完全不同的 section type 和字段；编辑器可以新增、删除和重排整个 section，渲染器会忽略 `visible=false` 的 section。`docs/templates/wedding/0001/content-schema.json` 是婚礼内容字段的 JSON Schema，`editable-items.json` 列出每一个可编辑 item 及其控件映射。
+
+### 可扩展编辑器 schema
+
+模板可以在顶层 `editorSchema` 中声明自己的编辑面板，不需要修改编辑器组件。`sectionTypes` 以 section type 为 key，每个类型提供 `fields`；字段使用数据路径定位值，`tab` 决定它出现在 `content`、`media`、`style` 或 `behavior` 面板，`kind` 决定控件类型。支持的基础控件包括 `text`、`textarea`、`number`、`boolean`、`select`、`color`、`date`、`url`、`media`、`image-list`、`object-list`、`readonly` 和 `hint`。
+
+```json
+{
+  "editorSchema": {
+    "version": 1,
+    "sectionPresets": [
+      { "type": "speaker", "label": { "en": "Speaker", "zh-CN": "嘉宾" }, "data": { "name": "", "portrait": { "assetId": null } } }
+    ],
+    "sectionTypes": {
+      "speaker": {
+        "label": { "en": "Speaker", "zh-CN": "嘉宾" },
+        "icon": "type",
+        "fields": [
+          { "path": "name", "label": { "en": "Name", "zh-CN": "姓名" }, "kind": "text" },
+          { "path": "bio", "label": { "en": "Bio", "zh-CN": "简介" }, "kind": "textarea" },
+          { "path": "portrait", "label": { "en": "Portrait", "zh-CN": "头像" }, "kind": "media", "tab": "media" },
+          { "path": "featured", "label": { "en": "Featured", "zh-CN": "重点展示" }, "kind": "boolean", "tab": "behavior" }
+        ]
+      }
+    }
+  }
+}
+```
+
+`object-list` 和 `image-list` 通过 `itemFields` 描述每一项，`maxItems` 与 `minItems` 控制数量边界；`label`、`description`、`placeholder` 和选项 label 可以使用 `{ "en": "...", "zh-CN": "..." }`。模板没有 `editorSchema` 时，编辑器会对非婚礼 section 自动推断字符串、数字、布尔值和列表字段，并把已有 section type 作为可复制的兼容 preset，保证旧内容仍可打开和增删；推断模式适合迁移和兜底，正式模板应提交明确 schema。模板 renderer 只需要在对应 DOM 元素输出 `data-editor-section` 和 `data-editor-field`，就能自动获得画布点击选中和双击文字编辑能力。
 
 ### Assets 与可编辑策略
 
@@ -363,7 +393,7 @@ sequenceDiagram
 │  ├─ globals.css               # 全局样式
 │  └─ editor-modern.css         # 编辑器和 scene graph 样式
 ├─ components/
-│  ├─ editor/                   # EditorShell、Fabric、scene graph、类型归一化
+│  ├─ editor/                   # EditorShell、Fabric、scene graph、schema renderer、类型归一化
 │  ├─ invitation/               # 公开邀请函、RSVP、长页面 renderer
 │  ├─ templates/                # 模板卡片、live preview、预览模式切换
 │  ├─ dashboard/                # 邀请函、支付、邮件和 RSVP 管理

@@ -36,6 +36,52 @@
     "assets": { "type": "array", "items": { "type": "object" } },
     "variables": { "type": "array", "items": { "type": "object" } },
     "colorSchemes": { "type": "array", "items": { "type": "object" }, "minItems": 1 },
+    "editorSchema": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "version": { "const": 1 },
+        "sectionTypes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["fields"],
+            "properties": {
+              "label": { "oneOf": [{ "type": "string" }, { "type": "object", "additionalProperties": { "type": "string" } }] },
+              "icon": { "type": "string" },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["path", "label"],
+                  "properties": {
+                    "path": { "type": "string", "minLength": 1 },
+                    "label": { "oneOf": [{ "type": "string" }, { "type": "object", "additionalProperties": { "type": "string" } }] },
+                    "tab": { "enum": ["content", "media", "style", "behavior"] },
+                    "kind": { "enum": ["text", "textarea", "number", "boolean", "select", "color", "date", "url", "media", "image-list", "object-list", "readonly", "hint"] },
+                    "description": { "oneOf": [{ "type": "string" }, { "type": "object", "additionalProperties": { "type": "string" } }] },
+                    "placeholder": { "oneOf": [{ "type": "string" }, { "type": "object", "additionalProperties": { "type": "string" } }] },
+                    "defaultValue": {},
+                    "options": { "type": "array", "items": { "type": "object", "required": ["value", "label"], "properties": { "value": { "type": "string" }, "label": { "oneOf": [{ "type": "string" }, { "type": "object", "additionalProperties": { "type": "string" } }] } }, "additionalProperties": false } },
+                    "itemLabel": { "oneOf": [{ "type": "string" }, { "type": "object", "additionalProperties": { "type": "string" } }] },
+                    "itemFields": { "type": "array", "items": { "$ref": "#/properties/editorSchema/properties/sectionTypes/additionalProperties/properties/fields/items" } },
+                    "maxItems": { "type": "integer", "minimum": 0 },
+                    "minItems": { "type": "integer", "minimum": 0 },
+                    "multiline": { "type": "boolean" },
+                    "uploadPath": { "type": "string" },
+                    "accept": { "type": "string" }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "sectionPresets": { "type": "array", "items": { "type": "object", "required": ["type", "label", "data"], "properties": { "type": { "type": "string" }, "label": { "oneOf": [{ "type": "string" }, { "type": "object", "additionalProperties": { "type": "string" } }] }, "data": { "type": "object" } }, "additionalProperties": false } }
+      },
+      "additionalProperties": false
+    },
     "settings": { "type": "object" },
     "music": { "type": "object" }
   },

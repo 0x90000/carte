@@ -66,6 +66,49 @@ export type EditorSceneSection = {
   data: Record<string, unknown>;
 };
 
+export type EditorSchemaTab = "content" | "media" | "style" | "behavior";
+
+export type EditorSchemaOption = {
+  value: string;
+  label: string | Record<string, string>;
+};
+
+export type EditorSchemaField = {
+  path: string;
+  label: string | Record<string, string>;
+  tab?: EditorSchemaTab;
+  kind?: "text" | "textarea" | "number" | "boolean" | "select" | "color" | "date" | "url" | "media" | "image-list" | "object-list" | "readonly" | "hint";
+  description?: string | Record<string, string>;
+  placeholder?: string | Record<string, string>;
+  defaultValue?: unknown;
+  options?: EditorSchemaOption[];
+  itemLabel?: string | Record<string, string>;
+  itemFields?: EditorSchemaField[];
+  maxItems?: number;
+  minItems?: number;
+  multiline?: boolean;
+  uploadPath?: string;
+  accept?: string;
+};
+
+export type EditorSchemaSection = {
+  label?: string | Record<string, string>;
+  icon?: string;
+  fields: EditorSchemaField[];
+};
+
+export type EditorSchemaPreset = {
+  type: string;
+  label: string | Record<string, string>;
+  data: Record<string, unknown>;
+};
+
+export type EditorSchema = {
+  version: 1;
+  sectionTypes?: Record<string, EditorSchemaSection>;
+  sectionPresets?: EditorSchemaPreset[];
+};
+
 export type EditorAsset = {
   id: string;
   kind: "image" | "audio" | "video" | string;
@@ -89,6 +132,7 @@ export type EditorContent = {
   variables?: Array<Record<string, unknown>>;
   colorSchemes?: EditorColorScheme[];
   settings?: Record<string, unknown>;
+  editorSchema?: EditorSchema;
   [key: string]: unknown;
 };
 

@@ -4,7 +4,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties, FormEvent } from "react";
+import type { CSSProperties, FormEvent, ReactNode } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, Clock3, Map, Navigation, Volume2, VolumeX } from "lucide-react";
 import { RSVPForm } from "@/components/invitation/rsvp-form";
 import { WeddingVariantInvitation } from "@/components/invitation/wedding-variant-invitation";
@@ -62,18 +62,18 @@ function Kicker({ value }: { value: unknown }) {
   );
 }
 
-function Heading({ value, className = "" }: { value: unknown; className?: string }) {
+function Heading({ value, className = "", editorField }: { value: unknown; className?: string; editorField?: string }) {
   const content = lines(value);
-  return <h2 className={`scene-heading ${className}`}>{content.map((line, index) => <span key={`${line}-${index}`} className={index === content.length - 1 ? "scene-heading-accent" : ""}>{line}</span>)}</h2>;
+  return <h2 className={`scene-heading ${className}`}>{content.map((line, index) => <span key={`${line}-${index}`} className={index === content.length - 1 ? "scene-heading-accent" : ""} data-editor-field={editorField ? `${editorField}.lines.${index}` : undefined}>{line}</span>)}</h2>;
 }
 
-function HeroSection({ content, data, onMusicToggle, musicPlaying }: { content: EditorContent; data: UnknownRecord; onMusicToggle: () => void; musicPlaying: boolean }) {
+function HeroSection({ content, data, id, onMusicToggle, musicPlaying }: { content: EditorContent; data: UnknownRecord; id: string; onMusicToggle: () => void; musicPlaying: boolean }) {
   const names = record(data.names);
   const location = record(data.location);
   const media = resolveMedia(content, data.media);
   const scrollCue = record(data.scrollCue);
   return (
-    <section id="hero" className="scene-section scene-hero">
+    <section id={id} className="scene-section scene-hero" data-editor-section={id}>
       {media ? <img className="scene-hero-media" src={media} alt={stringValue(record(data.media).alt)} /> : null}
       <div className="scene-hero-vignette" aria-hidden="true" />
       <div className="scene-hero-glow" aria-hidden="true" />
@@ -84,33 +84,33 @@ function HeroSection({ content, data, onMusicToggle, musicPlaying }: { content: 
         </button>
       </div>
       <div className="scene-hero-copy">
-        <p className="scene-eyebrow">{stringValue(data.eyebrow)}</p>
-        <h1><span>{stringValue(names.partnerA)}</span><em>{stringValue(names.separator, "&")}</em><span>{stringValue(names.partnerB)}</span></h1>
-        <p className="scene-hero-date">{stringValue(record(data.date).display, stringValue(data.date))}</p>
+        <p className="scene-eyebrow" data-editor-field="eyebrow">{stringValue(data.eyebrow)}</p>
+        <h1><span data-editor-field="names.partnerA">{stringValue(names.partnerA)}</span><em data-editor-field="names.separator">{stringValue(names.separator, "&")}</em><span data-editor-field="names.partnerB">{stringValue(names.partnerB)}</span></h1>
+        <p className="scene-hero-date" data-editor-field="date.display">{stringValue(record(data.date).display, stringValue(data.date))}</p>
         <div className="scene-hero-rule"><span /><span>✦</span><span /></div>
-        <p className="scene-hero-location">{[stringValue(location.city), stringValue(location.venue)].filter(Boolean).join(" · ")}</p>
+        <p className="scene-hero-location"><span data-editor-field="location.city">{stringValue(location.city)}</span>{location.city && location.venue ? " · " : null}<span data-editor-field="location.venue">{stringValue(location.venue)}</span></p>
       </div>
-      <a className="scene-scroll-cue" href={`#${stringValue(scrollCue.targetSectionId, "story")}`}><span>{stringValue(scrollCue.label, "SCROLL TO EXPLORE")}</span><ArrowDown size={15} aria-hidden="true" /></a>
+      <a className="scene-scroll-cue" href={`#${stringValue(scrollCue.targetSectionId, "story")}`}><span data-editor-field="scrollCue.label">{stringValue(scrollCue.label, "SCROLL TO EXPLORE")}</span><ArrowDown size={15} aria-hidden="true" /></a>
     </section>
   );
 }
 
-function StorySection({ data }: { data: UnknownRecord }) {
+function StorySection({ data, id }: { data: UnknownRecord; id: string }) {
   const stats = Array.isArray(data.stats) ? data.stats : [];
   const paragraphs = Array.isArray(data.paragraphs) ? data.paragraphs : [];
   return (
-    <section id="story" className="scene-section scene-story">
+    <section id={id} className="scene-section scene-story" data-editor-section={id}>
       <Kicker value={data.kicker} />
       <div className="scene-story-grid">
-        <div><p className="scene-micro-label">{stringValue(data.label)}</p><Heading value={data.heading} /></div>
-        <div className="scene-story-copy">{paragraphs.map((paragraph, index) => <p key={`${String(paragraph)}-${index}`}>{stringValue(paragraph)}</p>)}<div className="scene-signature"><span>{stringValue(record(data.signature).caption)}</span><strong>{stringValue(record(data.signature).names)}</strong></div></div>
+        <div><p className="scene-micro-label" data-editor-field="label">{stringValue(data.label)}</p><Heading value={data.heading} editorField="heading" /></div>
+        <div className="scene-story-copy">{paragraphs.map((paragraph, index) => <p key={`${String(paragraph)}-${index}`} data-editor-field={`paragraphs.${index}`}>{stringValue(paragraph)}</p>)}<div className="scene-signature"><span data-editor-field="signature.caption">{stringValue(record(data.signature).caption)}</span><strong data-editor-field="signature.names">{stringValue(record(data.signature).names)}</strong></div></div>
       </div>
       <div className="scene-story-stats">{stats.map((stat, index) => <div key={index}><strong>{stringValue(record(stat).value)}</strong><span>{stringValue(record(stat).label)}</span></div>)}</div>
     </section>
   );
 }
 
-function GallerySection({ content, data }: { content: EditorContent; data: UnknownRecord }) {
+function GallerySection({ content, data, id }: { content: EditorContent; data: UnknownRecord; id: string }) {
   const album = record(data.album);
   const items = Array.isArray(album.items) ? album.items : [];
   const [active, setActive] = useState(0);
@@ -127,41 +127,41 @@ function GallerySection({ content, data }: { content: EditorContent; data: Unkno
   const current = record(items[safeIndex]);
   const currentMedia = resolveMedia(content, current.media);
   return (
-    <section className="scene-section scene-gallery">
+    <section id={id} className="scene-section scene-gallery" data-editor-section={id}>
       <div className="scene-album" tabIndex={0} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)} onKeyDown={(event) => { if (event.key === "ArrowLeft") move(-1); if (event.key === "ArrowRight") move(1); }} onPointerDown={(event) => setStartX(event.clientX)} onPointerUp={(event) => { if (startX === null) return; const delta = event.clientX - startX; setStartX(null); if (Math.abs(delta) > 45) move(delta < 0 ? 1 : -1); }}>
-        {currentMedia ? <img src={currentMedia} alt={stringValue(record(current.media).alt, stringValue(current.caption))} /> : <div className="scene-album-empty">添加相册图片</div>}
-        <div className="scene-album-caption">{stringValue(current.caption)}</div>
+        {currentMedia ? <img src={currentMedia} alt={stringValue(record(current.media).alt, stringValue(current.caption))} data-editor-field={`album.items.${safeIndex}.media`} /> : <div className="scene-album-empty">添加相册图片</div>}
+        <div className="scene-album-caption" data-editor-field={`album.items.${safeIndex}.caption`}>{stringValue(current.caption)}</div>
         {items.length > 1 ? <><button type="button" className="scene-album-control scene-album-prev" onClick={() => move(-1)} aria-label="上一张"><ArrowLeft size={16} aria-hidden="true" /></button><button type="button" className="scene-album-control scene-album-next" onClick={() => move(1)} aria-label="下一张"><ArrowRight size={16} aria-hidden="true" /></button></> : null}
         {items.length > 1 ? <div className="scene-album-dots" role="tablist" aria-label="选择相册图片">{items.map((item, index) => <button type="button" key={stringValue(record(item).id, String(index))} className={index === safeIndex ? "is-active" : ""} onClick={() => setActive(index)} role="tab" aria-selected={index === safeIndex} aria-label={`查看第 ${index + 1} 张`} />)}</div> : null}
       </div>
-      <div className="scene-gallery-copy"><p className="scene-micro-label">{stringValue(data.label)}</p><Heading value={data.heading} /><span className="scene-gallery-index">{stringValue(data.indexLabel)}</span></div>
-      {resolveMedia(content, data.secondaryImage) ? <img className="scene-gallery-secondary" src={resolveMedia(content, data.secondaryImage)} alt={stringValue(record(data.secondaryImage).alt)} /> : null}
+      <div className="scene-gallery-copy"><p className="scene-micro-label" data-editor-field="label">{stringValue(data.label)}</p><Heading value={data.heading} editorField="heading" /><span className="scene-gallery-index" data-editor-field="indexLabel">{stringValue(data.indexLabel)}</span></div>
+      {resolveMedia(content, data.secondaryImage) ? <img className="scene-gallery-secondary" src={resolveMedia(content, data.secondaryImage)} alt={stringValue(record(data.secondaryImage).alt)} data-editor-field="secondaryImage" /> : null}
     </section>
   );
 }
 
-function CelebrationSection({ data }: { data: UnknownRecord }) {
+function CelebrationSection({ data, id }: { data: UnknownRecord; id: string }) {
   const events = Array.isArray(data.events) ? data.events : [];
-  return <section id="schedule" className="scene-section scene-celebration"><Kicker value={data.kicker} /><div className="scene-celebration-head"><div><p className="scene-micro-label">{stringValue(data.dateLabel)}</p><Heading value={data.heading} /></div><p>{stringValue(data.intro)}</p></div><div className="scene-timeline">{events.map((event, index) => { const item = record(event); return <article key={stringValue(item.id, String(index))}><div className="scene-timeline-time"><strong>{stringValue(item.time)}</strong><span>{stringValue(item.label)}</span></div><div className="scene-timeline-dot" /><div><h3>{stringValue(item.title)}</h3><p>{stringValue(item.description)}</p></div></article>; })}</div></section>;
+  return <section id={id} className="scene-section scene-celebration" data-editor-section={id}><Kicker value={data.kicker} /><div className="scene-celebration-head"><div><p className="scene-micro-label" data-editor-field="dateLabel">{stringValue(data.dateLabel)}</p><Heading value={data.heading} editorField="heading" /></div><p data-editor-field="intro">{stringValue(data.intro)}</p></div><div className="scene-timeline">{events.map((event, index) => { const item = record(event); return <article key={stringValue(item.id, String(index))}><div className="scene-timeline-time"><strong data-editor-field={`events.${index}.time`}>{stringValue(item.time)}</strong><span data-editor-field={`events.${index}.label`}>{stringValue(item.label)}</span></div><div className="scene-timeline-dot" /><div><h3 data-editor-field={`events.${index}.title`}>{stringValue(item.title)}</h3><p data-editor-field={`events.${index}.description`}>{stringValue(item.description)}</p></div></article>; })}</div></section>;
 }
 
-function VenueSection({ content, data }: { content: EditorContent; data: UnknownRecord }) {
+function VenueSection({ content, data, id }: { content: EditorContent; data: UnknownRecord; id: string }) {
   const actions = Array.isArray(data.actions) ? data.actions : [];
   const meta = Array.isArray(data.meta) ? data.meta : [];
-  return <section id="venue" className="scene-section scene-venue"><div className="scene-venue-image">{resolveMedia(content, data.image) ? <img src={resolveMedia(content, data.image)} alt={stringValue(record(data.image).alt)} /> : null}<span>{stringValue(data.photoLabel)}</span></div><div className="scene-venue-copy"><Kicker value={data.kicker} /><Heading value={data.title} /> <p className="scene-venue-address">{(Array.isArray(data.address) ? data.address : []).map((line) => <span key={String(line)}>{stringValue(line)}</span>)}</p><div className="scene-actions">{actions.map((action, index) => { const item = record(action); return <a key={stringValue(item.id, String(index))} href={stringValue(item.href, "#map")} target={item.target === "new" ? "_blank" : undefined} rel={item.target === "new" ? "noreferrer" : undefined} className={index === 0 ? "scene-button scene-button-primary" : "scene-button scene-button-quiet"}>{item.icon === "navigation" ? <Navigation size={14} aria-hidden="true" /> : <Map size={14} aria-hidden="true" />}{stringValue(item.label)}</a>; })}</div><div className="scene-venue-meta">{meta.map((item, index) => <span key={index}>{record(item).icon === "clock-3" ? <Clock3 size={13} aria-hidden="true" /> : <Navigation size={13} aria-hidden="true" />}{stringValue(record(item).text)}</span>)}</div></div></section>;
+  return <section id={id} className="scene-section scene-venue" data-editor-section={id}><div className="scene-venue-image">{resolveMedia(content, data.image) ? <img src={resolveMedia(content, data.image)} alt={stringValue(record(data.image).alt)} data-editor-field="image" /> : null}<span data-editor-field="photoLabel">{stringValue(data.photoLabel)}</span></div><div className="scene-venue-copy"><Kicker value={data.kicker} /><Heading value={data.title} editorField="title" /> <p className="scene-venue-address">{(Array.isArray(data.address) ? data.address : []).map((line, index) => <span key={`${String(line)}-${index}`} data-editor-field={`address.${index}`}>{stringValue(line)}</span>)}</p><div className="scene-actions">{actions.map((action, index) => { const item = record(action); return <a key={stringValue(item.id, String(index))} href={stringValue(item.href, "#map")} target={item.target === "new" ? "_blank" : undefined} rel={item.target === "new" ? "noreferrer" : undefined} className={index === 0 ? "scene-button scene-button-primary" : "scene-button scene-button-quiet"}>{item.icon === "navigation" ? <Navigation size={14} aria-hidden="true" /> : <Map size={14} aria-hidden="true" />}{stringValue(item.label)}</a>; })}</div><div className="scene-venue-meta">{meta.map((item, index) => <span key={index}>{record(item).icon === "clock-3" ? <Clock3 size={13} aria-hidden="true" /> : <Navigation size={13} aria-hidden="true" />}{stringValue(record(item).text)}</span>)}</div></div></section>;
 }
 
-function FindUsSection({ data, locale }: { data: UnknownRecord; locale: string }) {
+function FindUsSection({ data, id, locale }: { data: UnknownRecord; id: string; locale: string }) {
   const map = record(data.map);
   const providers = record(map.providers);
   const localeProvider = record(providers[locale] ?? providers.default);
   const provider = stringValue(localeProvider.provider, stringValue(map.provider, locale === "zh-CN" ? "amap" : "google"));
   const embedUrl = stringValue(localeProvider.embedUrl, stringValue(map.embedUrl, provider === "amap" ? "https://ditu.amap.com" : "https://www.google.com/maps"));
   const externalUrl = stringValue(localeProvider.externalUrl, stringValue(map.externalUrl, embedUrl));
-  return <section id="map" className="scene-section scene-find-us"><div><Kicker value={data.kicker} /><Heading value={data.heading} /><p>{stringValue(data.description)}</p></div><div className="scene-map-frame"><iframe title={stringValue(map.markerLabel, "活动地图")} src={embedUrl} loading="lazy" tabIndex={-1} /><a href={externalUrl} target="_blank" rel="noreferrer" className="scene-map-expand" aria-label={`在新窗口打开${provider}地图`}><Map size={15} aria-hidden="true" /></a></div></section>;
+  return <section id={id} className="scene-section scene-find-us" data-editor-section={id}><div><Kicker value={data.kicker} /><Heading value={data.heading} editorField="heading" /><p data-editor-field="description">{stringValue(data.description)}</p></div><div className="scene-map-frame"><iframe title={stringValue(map.markerLabel, "活动地图")} src={embedUrl} loading="lazy" tabIndex={-1} /><a href={externalUrl} target="_blank" rel="noreferrer" className="scene-map-expand" aria-label={`在新窗口打开${provider}地图`}><Map size={15} aria-hidden="true" /></a></div></section>;
 }
 
-function RsvpSection({ data, previewOnly, invitationSlug }: { data: UnknownRecord; previewOnly: boolean; invitationSlug?: string }) {
+function RsvpSection({ data, id, previewOnly, invitationSlug }: { data: UnknownRecord; id: string; previewOnly: boolean; invitationSlug?: string }) {
   const [submitted, setSubmitted] = useState(false);
   const fields = record(data.fields);
   const nameField = record(fields.name);
@@ -170,18 +170,18 @@ function RsvpSection({ data, previewOnly, invitationSlug }: { data: UnknownRecor
   const messageField = record(fields.message);
   const attendanceOptions: unknown[] = Array.isArray(attendingField.options) ? attendingField.options : [{ value: "yes", label: "如约而至" }, { value: "no", label: "遗憾缺席" }];
   function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setSubmitted(true); }
-  return <section id="rsvp" className="scene-section scene-rsvp"><div className="scene-rsvp-copy"><p className="scene-micro-label">{stringValue(data.deadline)}</p><Heading value={data.heading} /><p>{stringValue(data.description)}</p></div>{previewOnly || !invitationSlug ? (submitted ? <div className="scene-rsvp-success" role="status">{stringValue(data.successMessage, "谢谢你，我们已经收到你的回执。")}</div> : <form className="scene-rsvp-form" onSubmit={submit}><label><span>{stringValue(nameField.label, "姓名")}</span><input name="name" placeholder={stringValue(nameField.placeholder)} required={nameField.required !== false} /></label><label><span>{stringValue(guestsField.label, "出席人数")}</span><select name="guests" defaultValue={String(guestsField.default ?? 1)}>{Array.from({ length: Math.max(1, Number(guestsField.max ?? 4)) }, (_, index) => <option key={index + 1} value={index + 1}>{index + 1} 位</option>)}</select></label><fieldset><legend>{stringValue(attendingField.label, "出席意愿")}</legend><div className="scene-choice-row">{attendanceOptions.map((option: unknown, index: number) => <label key={index}><input type="radio" name="attending" value={stringValue(record(option).value)} defaultChecked={index === 0} /><span>{stringValue(record(option).label)}</span></label>)}</div></fieldset><label><span>{stringValue(messageField.label, "想对我们说")}</span><textarea name="message" rows={2} placeholder={stringValue(messageField.placeholder)} /></label><button type="submit" className="scene-button scene-button-primary">{stringValue(fields.submitLabel, "发送回执")}</button></form>) : <RSVPForm invitationSlug={invitationSlug} />}</section>;
+  return <section id={id} className="scene-section scene-rsvp" data-editor-section={id}><div className="scene-rsvp-copy"><p className="scene-micro-label" data-editor-field="deadline">{stringValue(data.deadline)}</p><Heading value={data.heading} editorField="heading" /><p data-editor-field="description">{stringValue(data.description)}</p></div>{previewOnly || !invitationSlug ? (submitted ? <div className="scene-rsvp-success" role="status">{stringValue(data.successMessage, "谢谢你，我们已经收到你的回执。")}</div> : <form className="scene-rsvp-form" onSubmit={submit}><label><span>{stringValue(nameField.label, "姓名")}</span><input name="name" placeholder={stringValue(nameField.placeholder)} required={nameField.required !== false} /></label><label><span>{stringValue(guestsField.label, "出席人数")}</span><select name="guests" defaultValue={String(guestsField.default ?? 1)}>{Array.from({ length: Math.max(1, Number(guestsField.max ?? 4)) }, (_, index) => <option key={index + 1} value={index + 1}>{index + 1} 位</option>)}</select></label><fieldset><legend>{stringValue(attendingField.label, "出席意愿")}</legend><div className="scene-choice-row">{attendanceOptions.map((option: unknown, index: number) => <label key={index}><input type="radio" name="attending" value={stringValue(record(option).value)} defaultChecked={index === 0} /><span>{stringValue(record(option).label)}</span></label>)}</div></fieldset><label><span>{stringValue(messageField.label, "想对我们说")}</span><textarea name="message" rows={2} placeholder={stringValue(messageField.placeholder)} /></label><button type="submit" className="scene-button scene-button-primary">{stringValue(fields.submitLabel, "发送回执")}</button></form>) : <RSVPForm invitationSlug={invitationSlug} />}</section>;
 }
 
-function FooterSection({ data }: { data: UnknownRecord }) {
+function FooterSection({ data, id }: { data: UnknownRecord; id: string }) {
   const items = Array.isArray(data.items) ? data.items : [];
-  return <footer className="scene-footer">{items.map((item, index) => <span key={index}>{stringValue(item)}</span>)}</footer>;
+  return <footer id={id} className="scene-footer" data-editor-section={id}>{items.map((item, index) => <span key={index} data-editor-field={`items.${index}`}>{stringValue(item)}</span>)}</footer>;
 }
 
 function GenericSection({ section }: { section: EditorSceneSection }) {
   const data = sectionData(section);
   const body = Array.isArray(data.paragraphs) ? data.paragraphs : [data.body ?? data.description ?? data.text];
-  return <section id={section.id} className="scene-section scene-generic"><p className="scene-micro-label">{section.type}</p><Heading value={data.heading ?? data.title ?? { lines: [section.name] }} />{body.filter(Boolean).map((item, index) => <p key={index}>{stringValue(item)}</p>)}</section>;
+  return <section id={section.id} className="scene-section scene-generic"><p className="scene-micro-label">{section.type}</p><Heading value={data.heading ?? data.title ?? { lines: [section.name] }} editorField={data.heading ? "heading" : data.title ? "title" : undefined} />{body.filter(Boolean).map((item, index) => <p key={index} data-editor-field={Array.isArray(data.paragraphs) ? `paragraphs.${index}` : data.body ? "body" : data.description ? "description" : "text"}>{stringValue(item)}</p>)}</section>;
 }
 
 function AmbientEffects({ content }: { content: EditorContent }) {
@@ -223,15 +223,17 @@ export function SceneGraphInvitation({ content, locale = "en", previewOnly = tru
     <AmbientEffects content={content} />
     {sections.map((section) => {
       const data = sectionData(section);
-      if (section.type === "hero") return <HeroSection key={section.id} content={content} data={data} onMusicToggle={() => setMusicPlaying((value) => !value)} musicPlaying={musicPlaying} />;
-      if (section.type === "story") return <StorySection key={section.id} data={data} />;
-      if (section.type === "gallery") return <GallerySection key={section.id} content={content} data={data} />;
-      if (section.type === "celebration") return <CelebrationSection key={section.id} data={data} />;
-      if (section.type === "venue") return <VenueSection key={section.id} content={content} data={data} />;
-      if (section.type === "findUs") return <FindUsSection key={section.id} data={data} locale={locale} />;
-      if (section.type === "rsvp" && Boolean(data.enabled ?? true)) return <RsvpSection key={section.id} data={data} previewOnly={previewOnly} invitationSlug={invitationSlug} />;
-      if (section.type === "footer") return <FooterSection key={section.id} data={data} />;
-      return <GenericSection key={section.id} section={section} />;
+      let rendered: ReactNode;
+      if (section.type === "hero") rendered = <HeroSection content={content} data={data} id={section.id} onMusicToggle={() => setMusicPlaying((value) => !value)} musicPlaying={musicPlaying} />;
+      else if (section.type === "story") rendered = <StorySection data={data} id={section.id} />;
+      else if (section.type === "gallery") rendered = <GallerySection content={content} data={data} id={section.id} />;
+      else if (section.type === "celebration") rendered = <CelebrationSection data={data} id={section.id} />;
+      else if (section.type === "venue") rendered = <VenueSection content={content} data={data} id={section.id} />;
+      else if (section.type === "findUs") rendered = <FindUsSection data={data} id={section.id} locale={locale} />;
+      else if (section.type === "rsvp" && Boolean(data.enabled ?? true)) rendered = <RsvpSection data={data} id={section.id} previewOnly={previewOnly} invitationSlug={invitationSlug} />;
+      else if (section.type === "footer") rendered = <FooterSection data={data} id={section.id} />;
+      else rendered = <GenericSection section={section} />;
+      return <div key={section.id} data-editor-section={section.id} className="scene-editor-section-target">{rendered}</div>;
     })}
   </div>;
 }

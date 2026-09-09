@@ -1,4 +1,5 @@
 import type { Prisma, Template } from "@prisma/client";
+import type { EditorSchema } from "@/components/editor/types";
 import { prisma } from "@/lib/prisma";
 
 export const templateScenes = ["wedding", "birthday", "business", "baby", "other"] as const;
@@ -16,6 +17,7 @@ export type TemplateStructure = {
   assets?: Array<{ id?: string; kind?: string; url?: string; name?: string; alt?: string }>;
   variables?: Array<{ key?: string; type?: string; label?: string; defaultValue?: unknown }>;
   colorSchemes?: Array<{ id?: string; name?: string; colors?: Record<string, string> }>;
+  editorSchema?: EditorSchema;
   settings?: Record<string, unknown>;
   music?: Record<string, unknown>;
 };

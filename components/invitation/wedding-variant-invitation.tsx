@@ -4,7 +4,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import type { CSSProperties, FormEvent, PointerEvent as ReactPointerEvent } from "react";
+import type { CSSProperties, FormEvent, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Maximize2, Navigation, Volume2, VolumeX } from "lucide-react";
 import { RSVPForm } from "@/components/invitation/rsvp-form";
 import { useInitialScrollReset } from "@/components/invitation/use-initial-scroll-reset";
@@ -53,9 +53,9 @@ function mediaStyle(value: unknown): CSSProperties {
   };
 }
 
-function SectionHeading({ value }: { value: unknown }) {
+function SectionHeading({ value, editorField }: { value: unknown; editorField?: string }) {
   const headingLines = textLines(value);
-  return <h2>{headingLines.map((line, index) => <span key={`${line}-${index}`}>{index > 0 ? <br /> : null}{index === headingLines.length - 1 ? <em>{line}</em> : line}</span>)}</h2>;
+  return <h2>{headingLines.map((line, index) => <span key={`${line}-${index}`} data-editor-field={editorField ? `${editorField}.lines.${index}` : undefined}>{index > 0 ? <br /> : null}{index === headingLines.length - 1 ? <em>{line}</em> : line}</span>)}</h2>;
 }
 
 function ThemeProps({ layout }: { layout: number }) {
@@ -79,7 +79,7 @@ function VariantParticles({ content }: { content: EditorContent }) {
   return <div className="variant-particles" aria-hidden="true">{Array.from({ length: count }, (_, index) => <i key={index} style={{ "--variant-particle-x": `${(index * 37 + 11) % 100}%`, "--variant-particle-y": `${(index * 61 + 7) % 100}%`, "--variant-particle-delay": `${(index % 8) * -1.25}s` } as CSSProperties} />)}</div>;
 }
 
-function Hero({ content, data, layout, edition }: { content: EditorContent; data: UnknownRecord; layout: number; edition: string }) {
+function Hero({ content, data, id, layout, edition }: { content: EditorContent; data: UnknownRecord; id: string; layout: number; edition: string }) {
   const names = record(data.names);
   const location = record(data.location);
   const media = data.media;
@@ -87,16 +87,16 @@ function Hero({ content, data, layout, edition }: { content: EditorContent; data
   const scrollCue = record(data.scrollCue);
   const heroStyle = heroUrl ? { "--hero": `url(${JSON.stringify(heroUrl)})`, "--hero-position": textValue(record(media).position, "center 62%") } as CSSProperties : undefined;
   return (
-    <section className="module hero" id="hero" style={heroStyle}>
+    <section className="module hero" id={id} style={heroStyle} data-editor-section={id}>
       <div className="hero-content">
-        <p className="hero-kicker reveal is-visible">{textValue(data.eyebrow)}</p>
-        <h1 className="reveal delay-1 is-visible">{textValue(names.partnerA)} <span>{textValue(names.separator, "&")}</span> {textValue(names.partnerB)}</h1>
-        <p className="hero-date reveal delay-2 is-visible">{textValue(record(data.date).display, textValue(data.date))}</p>
+        <p className="hero-kicker reveal is-visible" data-editor-field="eyebrow">{textValue(data.eyebrow)}</p>
+        <h1 className="reveal delay-1 is-visible"><span data-editor-field="names.partnerA">{textValue(names.partnerA)}</span> <span data-editor-field="names.separator">{textValue(names.separator, "&")}</span> <span data-editor-field="names.partnerB">{textValue(names.partnerB)}</span></h1>
+        <p className="hero-date reveal delay-2 is-visible" data-editor-field="date.display">{textValue(record(data.date).display, textValue(data.date))}</p>
         <div className="hero-ornament reveal delay-2 is-visible"><b>✦</b></div>
-        <p className="hero-location reveal delay-3 is-visible">{[textValue(location.city), textValue(location.venue)].filter(Boolean).join(" · ")}</p>
+        <p className="hero-location reveal delay-3 is-visible"><span data-editor-field="location.city">{textValue(location.city)}</span>{location.city && location.venue ? " · " : null}<span data-editor-field="location.venue">{textValue(location.venue)}</span></p>
       </div>
       <ThemeProps layout={layout} />
-      <a className="scroll-cue" href={`#${textValue(scrollCue.targetSectionId, "story")}`}><span>{textValue(scrollCue.label, "SCROLL")}</span><span>↓</span></a>
+      <a className="scroll-cue" href={`#${textValue(scrollCue.targetSectionId, "story")}`}><span data-editor-field="scrollCue.label">{textValue(scrollCue.label, "SCROLL")}</span><span>↓</span></a>
       <div className="hero-rail">01 / A LOVE LETTER</div>
       <span className="sr-only">{edition}</span>
     </section>
@@ -131,7 +131,7 @@ function Album({ content, album }: { content: EditorContent; album: UnknownRecor
   function finishSwipe(event: ReactPointerEvent<HTMLDivElement>) { if (startX.current == null) return; const delta = event.clientX - startX.current; startX.current = null; if (Math.abs(delta) > 44) move(delta < 0 ? 1 : -1); }
   return (
     <div className="album reveal delay-1 is-visible" tabIndex={0} role="region" aria-roledescription="carousel" aria-label={`故事相册，第 ${safeActive + 1} 张，共 ${items.length} 张`} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocusCapture={() => setPaused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false); }} onKeyDown={(event) => { if (event.key === "ArrowLeft") { event.preventDefault(); move(-1); } if (event.key === "ArrowRight") { event.preventDefault(); move(1); } }} onPointerDown={(event) => { startX.current = event.clientX; }} onPointerUp={finishSwipe} onPointerCancel={() => { startX.current = null; }}>
-      <div className="album-viewport"><div className="album-track" style={{ transform: `translate3d(${-safeActive * 100}%,0,0)` }}>{items.map((value, index) => { const item = record(value); const media = item.media; const url = resolveMedia(content, media); return <figure className="album-slide" key={textValue(item.id, String(index))} aria-hidden={index !== safeActive}>{url ? <img src={url} alt={textValue(record(media).alt, textValue(item.caption))} style={mediaStyle(media)} /> : <span className="album-empty">添加相册图片</span>}<figcaption>{textValue(item.caption)}</figcaption></figure>; })}</div></div>
+      <div className="album-viewport"><div className="album-track" style={{ transform: `translate3d(${-safeActive * 100}%,0,0)` }}>{items.map((value, index) => { const item = record(value); const media = item.media; const url = resolveMedia(content, media); return <figure className="album-slide" key={textValue(item.id, String(index))} aria-hidden={index !== safeActive}>{url ? <img src={url} alt={textValue(record(media).alt, textValue(item.caption))} style={mediaStyle(media)} data-editor-field={`album.items.${index}.media`} /> : <span className="album-empty">添加相册图片</span>}<figcaption data-editor-field={`album.items.${index}.caption`}>{textValue(item.caption)}</figcaption></figure>; })}</div></div>
       {items.length > 1 ? <><button className="album-control album-prev" type="button" onClick={() => move(-1)} aria-label="上一张"><ArrowLeft aria-hidden="true" /></button><button className="album-control album-next" type="button" onClick={() => move(1)} aria-label="下一张"><ArrowRight aria-hidden="true" /></button><div className="album-dots" role="tablist" aria-label="选择相册图片">{items.map((value, index) => <button className={`album-dot ${index === safeActive ? "is-active" : ""}`} type="button" key={textValue(record(value).id, String(index))} role="tab" aria-selected={index === safeActive} aria-label={`查看第 ${index + 1} 张`} onClick={() => setActive(index)} />)}</div></> : null}
     </div>
   );
@@ -140,7 +140,7 @@ function Album({ content, album }: { content: EditorContent; album: UnknownRecor
 function Story({ content, data, id }: { content: EditorContent; data: UnknownRecord; id: string }) {
   const paragraphs = Array.isArray(data.paragraphs) ? data.paragraphs : [];
   const signature = record(data.signature);
-  return <section className="module story" id={id}><div className="wrap"><div className="module-code reveal is-visible">{textValue(data.moduleCode, "02 / STORY ALBUM")}</div><div className="story-layout"><Album content={content} album={record(data.album)} /><div className="story-copy reveal is-visible"><p className="eyebrow">{textValue(data.label)}</p><SectionHeading value={data.heading} />{paragraphs.map((paragraph, index) => <p key={index}>{textValue(paragraph)}</p>)}<div className="story-signature"><span>{textValue(signature.caption)}</span><strong>{textValue(signature.names)}</strong></div></div></div></div></section>;
+  return <section className="module story" id={id} data-editor-section={id}><div className="wrap"><div className="module-code reveal is-visible">{textValue(data.moduleCode, "02 / STORY ALBUM")}</div><div className="story-layout"><Album content={content} album={record(data.album)} /><div className="story-copy reveal is-visible"><p className="eyebrow" data-editor-field="label">{textValue(data.label)}</p><SectionHeading value={data.heading} editorField="heading" />{paragraphs.map((paragraph, index) => <p key={index} data-editor-field={`paragraphs.${index}`}>{textValue(paragraph)}</p>)}<div className="story-signature"><span data-editor-field="signature.caption">{textValue(signature.caption)}</span><strong data-editor-field="signature.names">{textValue(signature.names)}</strong></div></div></div></div></section>;
 }
 
 function mapDetails(data: UnknownRecord, locale: string) {
@@ -162,10 +162,10 @@ function Details({ content, data, id, locale }: { content: EditorContent; data: 
   const imageUrl = resolveMedia(content, media);
   const { map, provider, embedUrl, externalUrl } = mapDetails(data, locale);
   return (
-    <section className="module details" id={id}><div className="details-inner">
-      <div className="details-copy reveal is-visible"><div className="module-code">{textValue(data.moduleCode, "03 / THE CELEBRATION")}</div><SectionHeading value={data.heading} /><div className="day-list">{events.map((value, index) => { const item = record(value); return <div className="day-item" key={textValue(item.id, String(index))}><div><strong>{textValue(item.time)}</strong><span>{textValue(item.label)}</span></div><p>{[textValue(item.title), textValue(item.description)].filter(Boolean).join(" · ")}</p></div>; })}</div></div>
-      {imageUrl ? <div className="detail-image reveal delay-1 is-visible"><img src={imageUrl} alt={textValue(record(media).alt)} style={mediaStyle(media)} /></div> : null}
-      <div className="venue-row reveal delay-2 is-visible"><span>{address.map((line, index) => <span key={index}>{index > 0 ? <br /> : null}{textValue(line)}</span>)}</span>{actions.length ? actions.map((value, index) => { const action = record(value); const href = textValue(action.kind) === "navigation" ? externalUrl : textValue(action.href, externalUrl); return <a className={`button ${index > 0 ? "button-quiet" : ""}`} href={href} target="_blank" rel="noreferrer" key={textValue(action.id, String(index))}><Navigation aria-hidden="true" /><span>{textValue(action.label, "导航前往")}</span></a>; }) : <a className="button" href={externalUrl} target="_blank" rel="noreferrer"><Navigation aria-hidden="true" /><span>导航前往</span></a>}</div>
+    <section className="module details" id={id} data-editor-section={id}><div className="details-inner">
+      <div className="details-copy reveal is-visible"><div className="module-code" data-editor-field="moduleCode">{textValue(data.moduleCode, "03 / THE CELEBRATION")}</div><SectionHeading value={data.heading} editorField="heading" /><div className="day-list">{events.map((value, index) => { const item = record(value); return <div className="day-item" key={textValue(item.id, String(index))}><div><strong data-editor-field={`events.${index}.time`}>{textValue(item.time)}</strong><span data-editor-field={`events.${index}.label`}>{textValue(item.label)}</span></div><p><span data-editor-field={`events.${index}.title`}>{textValue(item.title)}</span>{item.title && item.description ? " · " : null}<span data-editor-field={`events.${index}.description`}>{textValue(item.description)}</span></p></div>; })}</div></div>
+      {imageUrl ? <div className="detail-image reveal delay-1 is-visible"><img src={imageUrl} alt={textValue(record(media).alt)} style={mediaStyle(media)} data-editor-field="image" /></div> : null}
+      <div className="venue-row reveal delay-2 is-visible"><span>{address.map((line, index) => <span key={index} data-editor-field={`address.${index}`}>{index > 0 ? <br /> : null}{textValue(line)}</span>)}</span>{actions.length ? actions.map((value, index) => { const action = record(value); const href = textValue(action.kind) === "navigation" ? externalUrl : textValue(action.href, externalUrl); return <a className={`button ${index > 0 ? "button-quiet" : ""}`} href={href} target="_blank" rel="noreferrer" key={textValue(action.id, String(index))}><Navigation aria-hidden="true" /><span data-editor-field={`actions.${index}.label`}>{textValue(action.label, "导航前往")}</span></a>; }) : <a className="button" href={externalUrl} target="_blank" rel="noreferrer"><Navigation aria-hidden="true" /><span>导航前往</span></a>}</div>
       <div className="map-frame reveal delay-3 is-visible"><iframe title={textValue(map.markerLabel, "活动地图")} src={embedUrl} loading="lazy" tabIndex={-1} /><a className="map-expand" href={externalUrl} target="_blank" rel="noreferrer" title={`在新窗口打开${provider}地图`}><Maximize2 aria-hidden="true" /></a></div>
     </div></section>
   );
@@ -186,18 +186,18 @@ function PreviewReplyForm({ data }: { data: UnknownRecord }) {
 }
 
 function Reply({ data, id, previewOnly, invitationSlug }: { data: UnknownRecord; id: string; previewOnly: boolean; invitationSlug?: string }) {
-  return <section className="module reply" id={id}><div className="reply-inner"><div className="reply-copy reveal is-visible"><div className="module-code">{textValue(data.deadline, "04 / RSVP")}</div><SectionHeading value={data.heading} /><p>{textValue(data.description)}</p></div>{previewOnly || !invitationSlug ? <PreviewReplyForm data={data} /> : <div className="variant-live-rsvp"><RSVPForm invitationSlug={invitationSlug} /></div>}</div></section>;
+  return <section className="module reply" id={id} data-editor-section={id}><div className="reply-inner"><div className="reply-copy reveal is-visible"><div className="module-code" data-editor-field="deadline">{textValue(data.deadline, "04 / RSVP")}</div><SectionHeading value={data.heading} editorField="heading" /><p data-editor-field="description">{textValue(data.description)}</p></div>{previewOnly || !invitationSlug ? <PreviewReplyForm data={data} /> : <div className="variant-live-rsvp"><RSVPForm invitationSlug={invitationSlug} /></div>}</div></section>;
 }
 
 function GenericSection({ section }: { section: EditorSceneSection }) {
   const data = record(section.data);
   const paragraphs = Array.isArray(data.paragraphs) ? data.paragraphs : [data.body ?? data.description ?? data.text].filter(Boolean);
-  return <section className="module story" id={section.id}><div className="wrap"><div className="module-code">{section.type.toUpperCase()}</div><div className="story-copy"><SectionHeading value={data.heading ?? data.title ?? { lines: [section.name] }} />{paragraphs.map((paragraph, index) => <p key={index}>{textValue(paragraph)}</p>)}</div></div></section>;
+  return <section className="module story" id={section.id}><div className="wrap"><div className="module-code">{section.type.toUpperCase()}</div><div className="story-copy"><SectionHeading value={data.heading ?? data.title ?? { lines: [section.name] }} editorField={data.heading ? "heading" : data.title ? "title" : undefined} />{paragraphs.map((paragraph, index) => <p key={index} data-editor-field={Array.isArray(data.paragraphs) ? `paragraphs.${index}` : data.body ? "body" : data.description ? "description" : "text"}>{textValue(paragraph)}</p>)}</div></div></section>;
 }
 
-function Footer({ data }: { data: UnknownRecord }) {
+function Footer({ data, id }: { data: UnknownRecord; id: string }) {
   const items = Array.isArray(data.items) ? data.items : [];
-  return <footer className="footer">{items.map((item, index) => <span key={index}>{textValue(item)}</span>)}</footer>;
+  return <footer id={id} className="footer" data-editor-section={id}>{items.map((item, index) => <span key={index} data-editor-field={`items.${index}`}>{textValue(item)}</span>)}</footer>;
 }
 
 export function WeddingVariantInvitation({ content, layout, locale = "en", previewOnly = true, previewMode, invitationSlug, className = "" }: WeddingVariantInvitationProps) {
@@ -221,7 +221,7 @@ export function WeddingVariantInvitation({ content, layout, locale = "en", previ
   return (
     <div ref={rootRef} className={`wedding-variant layout-${layout} ${previewMode ? `variant-preview-${previewMode}` : ""} ${className}`} data-preview-only={previewOnly ? "true" : "false"} data-preview-mode={previewMode}>
       <div className="shell"><VariantParticles content={content} /><div className="grain" aria-hidden="true" /><header className={`topbar ${scrolled ? "is-scrolled" : ""}`}><a className="back" href="#story">THE INVITATION</a><span className="edition">{edition}</span><button className={`sound-toggle ${musicPlaying ? "is-playing" : ""}`} type="button" onClick={() => setMusicPlaying((playing) => !playing)} aria-pressed={musicPlaying} title={musicPlaying ? "关闭背景音乐" : "播放背景音乐"}>{musicPlaying ? <VolumeX aria-hidden="true" /> : <Volume2 aria-hidden="true" />}<span className="sound-label">{musicPlaying ? "静音" : textValue(record(record(hero?.data).soundControl).label, "声音")}</span></button></header>
-        <main>{sections.map((section) => { const data = record(section.data); if (section.type === "hero") return <Hero key={section.id} content={content} data={data} layout={layout} edition={edition} />; if (section.type === "gallery") return <Story key={section.id} content={content} data={data} id={section.id} />; if (section.type === "celebration") return <Details key={section.id} content={content} data={data} id={section.id} locale={locale} />; if (section.type === "rsvp" && data.enabled !== false) return <Reply key={section.id} data={data} id={section.id} previewOnly={previewOnly} invitationSlug={invitationSlug} />; if (section.type === "footer") return <Footer key={section.id} data={data} />; return <GenericSection key={section.id} section={section} />; })}</main>
+        <main>{sections.map((section) => { const data = record(section.data); let rendered: ReactNode; if (section.type === "hero") rendered = <Hero content={content} data={data} id={section.id} layout={layout} edition={edition} />; else if (section.type === "gallery") rendered = <Story content={content} data={data} id={section.id} />; else if (section.type === "celebration") rendered = <Details content={content} data={data} id={section.id} locale={locale} />; else if (section.type === "rsvp" && data.enabled !== false) rendered = <Reply data={data} id={section.id} previewOnly={previewOnly} invitationSlug={invitationSlug} />; else if (section.type === "footer") rendered = <Footer data={data} id={section.id} />; else rendered = <GenericSection section={section} />; return <div key={section.id} data-editor-section={section.id} className="scene-editor-section-target">{rendered}</div>; })}</main>
       </div>
     </div>
   );
